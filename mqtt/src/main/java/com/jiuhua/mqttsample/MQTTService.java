@@ -32,8 +32,8 @@ public class MQTTService extends Service {
     private String host = "tcp://106.13.114.16:1883";// wyybaiducloud
     private String userName = "admin";
     private String passWord = "password";
-    private static String myTopic = "86518/JYCFGC/6-2-3401/HandT";      //要订阅的主题
-    private String clientId = "androidId-big";//客户端标识
+    private static String myTopic = "86518/XYSH/11-1-601/HandT";      //要订阅的主题
+    private String clientId = "androidId-XYSH11-1-601";//客户端标识
     private IGetMessageCallBack IGetMessageCallBack;//将在什么地方使用？mqttcallback实例当中改写原来的方法
 
 
@@ -141,7 +141,7 @@ public class MQTTService extends Service {
             try {
                 // ***订阅myTopic话题***
                 client.subscribe(myTopic,0);//订阅的主题质量要求必须传到。
-                client.subscribe("86518/JYCFGC/6-2-3401/Room1", 1);//可以订阅多个主题，消息混在一起，需要注意处理
+                client.subscribe("86518/XYSH/11-1-601/Room1", 1);//可以订阅多个主题，消息混在一起，需要注意处理
             } catch (MqttException e) {
                 e.printStackTrace();
             }
