@@ -6,8 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,8 +17,6 @@ import android.widget.TextView;
 import com.jiuhua.mqttsample.IGetMessageCallBack;
 import com.jiuhua.mqttsample.MQTTService;
 import com.jiuhua.mqttsample.MyServiceConnection;
-
-import java.text.BreakIterator;
 
 import static java.lang.String.valueOf;
 
@@ -78,7 +76,7 @@ public class RoomActivity extends AppCompatActivity implements IGetMessageCallBa
         Intent intentServer = new Intent(this, MQTTService.class);//传递信息
         bindService(intentServer, serviceConnection, Context.BIND_AUTO_CREATE);//绑定服务
 
-        MQTTService.publish("86518/XYSH/11-1-601/Room"+roomID,"Room"+roomID+"feedback", 1, true);
+        MQTTService.publish("86518/JYCFGC/6-2-3401Room"+roomID,"Room"+roomID+"feedback", 1, true);
     }
 
     @Override
@@ -108,7 +106,7 @@ public class RoomActivity extends AppCompatActivity implements IGetMessageCallBa
 
         switch (v.getId()) {
             case R.id.manual_off:
-                MQTTService.publish("86518/XYSH/11-1-601/Room"+roomID,
+                MQTTService.publish("86518/JYCFGC/6-2-3401/Room"+roomID,
                         "Room"+roomID+"turn-offfloor", 1, true);
                 btManualOff.setBackgroundColor(Color.parseColor("#00FF00"));//设置手动停止按钮背景为绿色
                 btManualOn.setBackgroundColor(Color.argb(20,0,0,0));//设置手动的按钮背景为灰色
@@ -121,7 +119,7 @@ public class RoomActivity extends AppCompatActivity implements IGetMessageCallBa
                 builder.setPositiveButton("设置", new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        MQTTService.publish("86518/XYSH/11-1-601/Room"+roomID,
+                        MQTTService.publish("86518/JYCFGC/6-2-3401/Room"+roomID,
                                 valueOf(settingTemperature)+"Room"+roomID+"set_temp", 1, true);
                     }
                 });
@@ -143,14 +141,14 @@ public class RoomActivity extends AppCompatActivity implements IGetMessageCallBa
                 dialog.setView(dialogView);
                 dialog.show();
                 //先开阀，再考虑温度，是不是应该开。
-                MQTTService.publish("86518/XYSH/11-1-601/Room"+roomID,"Room"+roomID+"manual-onfloor", 1, true);
+                MQTTService.publish("86518/JYCFGC/6-2-3401/Room"+roomID,"Room"+roomID+"manual-onfloor", 1, true);
                 btManualOff.setBackgroundColor(Color.argb(20,0,0,0));//设置手动停止按钮背景为绿色
                 btManualOn.setBackgroundColor(Color.parseColor("#00FF00"));//设置手动的按钮背景为灰色
                 btAutomation.setBackgroundColor(Color.argb(20,0,0,0));//设置自动按钮的背景为灰色
                 btFeast.setBackgroundColor(Color.argb(20,0,0,0));//设置宴会按钮的背景为灰色
                 break;
             case R.id.automation:
-                MQTTService.publish("86518/XYSH/11-1-601/Room"+roomID,
+                MQTTService.publish("86518/JYCFGC/6-2-3401/Room"+roomID,
                         "Room"+roomID+"automationfloor", 1, true);
                 btManualOff.setBackgroundColor(Color.argb(20,0,0,0));//设置手动停止按钮背景为绿色
                 btManualOn.setBackgroundColor(Color.argb(20,0,0,0));//设置手动的按钮背景为灰色
@@ -158,7 +156,7 @@ public class RoomActivity extends AppCompatActivity implements IGetMessageCallBa
                 btFeast.setBackgroundColor(Color.argb(20,0,0,0));//设置宴会按钮的背景为灰色
                 break;
             case R.id.feast:
-                MQTTService.publish("86518/XYSH/11-1-601/Room"+roomID,
+                MQTTService.publish("86518/JYCFGC/6-2-3401/Room"+roomID,
                         "Room"+roomID+"feast", 1, true);
                 btManualOff.setBackgroundColor(Color.argb(20,0,0,0));//设置手动停止按钮背景为绿色
                 btManualOn.setBackgroundColor(Color.argb(20,0,0,0));//设置手动的按钮背景为灰色

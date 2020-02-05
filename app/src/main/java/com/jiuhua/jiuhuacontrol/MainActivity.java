@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements IGetMessageCallBa
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+        //TODO 要通过全局对象来传递数据，getApplication()
         //从存储器中读取数据：各个房间的名字
         //这个放在开始的部分，利用线程，不耽误其他线程
         SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
@@ -307,17 +308,23 @@ public class MainActivity extends AppCompatActivity implements IGetMessageCallBa
         super.onDestroy();
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//
-//        MQTTService.publish("86518/JYCFGC/6-2-3401/Room1","feedback", 1, true);
-//        MQTTService.publish("86518/JYCFGC/6-2-3401/Room2","feedback", 1, true);
-//        MQTTService.publish("86518/JYCFGC/6-2-3401/Room3","feedback", 1, true);
-//        MQTTService.publish("86518/JYCFGC/6-2-3401/Room4","feedback", 1, true);
-//        MQTTService.publish("86518/JYCFGC/6-2-3401/Room5","feedback", 1, true);
-//        MQTTService.publish("86518/JYCFGC/6-2-3401/Room6","feedback", 1, true);
-//        MQTTService.publish("86518/JYCFGC/6-2-3401/Room7","feedback", 1, true);
-//        MQTTService.publish("86518/JYCFGC/6-2-3401/Room8","feedback", 1, true);
-//    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        MQTTService.publish("86518/JYCFGC/6-2-3401/Room1","feedback", 1, true);
+        MQTTService.publish("86518/JYCFGC/6-2-3401/Room2","feedback", 1, true);
+        MQTTService.publish("86518/JYCFGC/6-2-3401/Room3","feedback", 1, true);
+        MQTTService.publish("86518/JYCFGC/6-2-3401/Room4","feedback", 1, true);
+        MQTTService.publish("86518/JYCFGC/6-2-3401/Room5","feedback", 1, true);
+        MQTTService.publish("86518/JYCFGC/6-2-3401/Room6","feedback", 1, true);
+        MQTTService.publish("86518/JYCFGC/6-2-3401/Room7","feedback", 1, true);
+        MQTTService.publish("86518/JYCFGC/6-2-3401/Room8","feedback", 1, true);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //在这里onPause 存储数据 或者 发送模块反馈命令是不是更好？？
+    }
 }

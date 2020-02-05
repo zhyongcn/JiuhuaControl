@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -458,16 +458,16 @@ public class timerSettingActivity extends AppCompatActivity implements View.OnCl
                         }
                     }
                 }
-                //Toast.makeText(timerSettingActivity.this, periodString[0], Toast.LENGTH_SHORT).show();//最后要去掉
+                Toast.makeText(timerSettingActivity.this, periodString[0], Toast.LENGTH_SHORT).show();//最后要去掉
                 //结尾加上标识符便于模块区分
-                MQTTService.publish("86518/XYSH/11-1-601/Room1", periodString[0].concat("Room1winterperoid"), 1, false);
-                MQTTService.publish("86518/XYSH/11-1-601/Room2", periodString[1].concat("Room2winterperoid"), 1, false);
-                MQTTService.publish("86518/XYSH/11-1-601/Room3", periodString[2].concat("Room3winterperoid"), 1, false);
-                MQTTService.publish("86518/XYSH/11-1-601/Room4", periodString[3].concat("Room4winterperoid"), 1, false);
-                MQTTService.publish("86518/XYSH/11-1-601/Room5", periodString[4].concat("Room5winterperoid"), 1, false);
-                MQTTService.publish("86518/XYSH/11-1-601/Room6", periodString[5].concat("Room6winterperoid"), 1, false);
-                MQTTService.publish("86518/XYSH/11-1-601/Room7", periodString[6].concat("Room7winterperoid"), 1, false);
-                MQTTService.publish("86518/XYSH/11-1-601/Room8", periodString[7].concat("Room8winterperoid"), 1, false);
+                MQTTService.publish("86518/JYCFGC/6-2-3401/Room1", periodString[0].concat("Room1winterperoid"), 1, false);
+                MQTTService.publish("86518/JYCFGC/6-2-3401/Room1", periodString[1].concat("Room2winterperoid"), 1, false);
+                MQTTService.publish("86518/JYCFGC/6-2-3401/Room3", periodString[2].concat("Room3winterperoid"), 1, false);
+                MQTTService.publish("86518/JYCFGC/6-2-3401/Room4", periodString[3].concat("Room4winterperoid"), 1, false);
+                MQTTService.publish("86518/JYCFGC/6-2-3401/Room5", periodString[4].concat("Room5winterperoid"), 1, false);
+                MQTTService.publish("86518/JYCFGC/6-2-3401/Room6", periodString[5].concat("Room6winterperoid"), 1, false);
+                MQTTService.publish("86518/JYCFGC/6-2-3401/Room7", periodString[6].concat("Room7winterperoid"), 1, false);
+                MQTTService.publish("86518/JYCFGC/6-2-3401/Room8", periodString[7].concat("Room8winterperoid"), 1, false);
 
                 SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
                 editor.putString("Room1peroid_S", periodString[0]);
