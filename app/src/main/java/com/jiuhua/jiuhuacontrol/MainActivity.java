@@ -178,16 +178,6 @@ public class MainActivity extends AppCompatActivity implements IGetMessageCallBa
         Intent intent = new Intent(this, MQTTService.class);
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
         startService(intent);
-
-//        MQTTService.publish("86518/JYCFGC/6-2-3401/Room1","feedback", 1, true);
-//        MQTTService.publish("86518/JYCFGC/6-2-3401/Room2","feedback", 1, true);
-//        MQTTService.publish("86518/JYCFGC/6-2-3401/Room3","feedback", 1, true);
-//        MQTTService.publish("86518/JYCFGC/6-2-3401/Room4","feedback", 1, true);
-//        MQTTService.publish("86518/JYCFGC/6-2-3401/Room5","feedback", 1, true);
-//        MQTTService.publish("86518/JYCFGC/6-2-3401/Room6","feedback", 1, true);
-//        MQTTService.publish("86518/JYCFGC/6-2-3401/Room7","feedback", 1, true);
-//        MQTTService.publish("86518/JYCFGC/6-2-3401/Room8","feedback", 1, true);
-
     }
 
     //右上角的目录的设置
@@ -325,6 +315,6 @@ public class MainActivity extends AppCompatActivity implements IGetMessageCallBa
     @Override
     protected void onPause() {
         super.onPause();
-        //在这里onPause 存储数据 或者 发送模块反馈命令是不是更好？？
+        //在这里onPause 存储数据
     }
 }
