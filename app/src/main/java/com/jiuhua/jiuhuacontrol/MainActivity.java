@@ -4,13 +4,14 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.espressif.iot.esptouch.demo_activity.EsptouchDemoActivity;
 import com.jiuhua.mqttsample.IGetMessageCallBack;
@@ -48,14 +49,14 @@ public class MainActivity extends AppCompatActivity implements IGetMessageCallBa
         //从存储器中读取数据：各个房间的名字
         //这个放在开始的部分，利用线程，不耽误其他线程
         SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
-        room1name = sharedPreferences.getString("room1name","");
-        room2name = sharedPreferences.getString("room2name","");
-        room3name = sharedPreferences.getString("room3name","");
-        room4name = sharedPreferences.getString("room4name","");
-        room5name = sharedPreferences.getString("room5name","");
-        room6name = sharedPreferences.getString("room6name","");
-        room7name = sharedPreferences.getString("room7name","");
-        room8name = sharedPreferences.getString("room8name","");
+        room1name = sharedPreferences.getString("room1name", "");
+        room2name = sharedPreferences.getString("room2name", "");
+        room3name = sharedPreferences.getString("room3name", "");
+        room4name = sharedPreferences.getString("room4name", "");
+        room5name = sharedPreferences.getString("room5name", "");
+        room6name = sharedPreferences.getString("room6name", "");
+        room7name = sharedPreferences.getString("room7name", "");
+        room8name = sharedPreferences.getString("room8name", "");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -63,31 +64,31 @@ public class MainActivity extends AppCompatActivity implements IGetMessageCallBa
         //拿到各个按钮的实例，定义了视图中的一系列按钮
         Button button1 = findViewById(R.id.button1);
         Button button2 = findViewById(R.id.button2);
-        buttonA =  findViewById(R.id.buttonA);
-        buttonB =  findViewById(R.id.buttonB);
-        buttonC =  findViewById(R.id.buttonC);
-        buttonD =  findViewById(R.id.buttonD);
-        buttonE =  findViewById(R.id.buttonE);
-        buttonF =  findViewById(R.id.buttonF);
-        buttonG =  findViewById(R.id.buttonG);
-        buttonH =  findViewById(R.id.buttonH);
+        buttonA = findViewById(R.id.buttonA);
+        buttonB = findViewById(R.id.buttonB);
+        buttonC = findViewById(R.id.buttonC);
+        buttonD = findViewById(R.id.buttonD);
+        buttonE = findViewById(R.id.buttonE);
+        buttonF = findViewById(R.id.buttonF);
+        buttonG = findViewById(R.id.buttonG);
+        buttonH = findViewById(R.id.buttonH);
 
         //如果房间名称是空的，让这个按钮不可见
-        if(room1name=="") buttonA.setVisibility(View.INVISIBLE);
-        if(room2name=="") buttonB.setVisibility(View.INVISIBLE);
-        if(room3name=="") buttonC.setVisibility(View.INVISIBLE);
-        if(room4name=="") buttonD.setVisibility(View.INVISIBLE);
-        if(room5name=="") buttonE.setVisibility(View.INVISIBLE);
-        if(room6name=="") buttonF.setVisibility(View.INVISIBLE);
-        if(room7name=="") buttonG.setVisibility(View.INVISIBLE);
-        if(room8name=="") buttonH.setVisibility(View.INVISIBLE);
+        if (room1name.equals("")) buttonA.setVisibility(View.INVISIBLE);
+        if (room2name.equals("")) buttonB.setVisibility(View.INVISIBLE);
+        if (room3name.equals("")) buttonC.setVisibility(View.INVISIBLE);
+        if (room4name.equals("")) buttonD.setVisibility(View.INVISIBLE);
+        if (room5name.equals("")) buttonE.setVisibility(View.INVISIBLE);
+        if (room6name.equals("")) buttonF.setVisibility(View.INVISIBLE);
+        if (room7name.equals("")) buttonG.setVisibility(View.INVISIBLE);
+        if (room8name.equals("")) buttonH.setVisibility(View.INVISIBLE);
 
         //刷新按钮的功能实现
         //TODO 是否可以只刷新service？
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,MainActivity.class);
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
                 startActivity(intent);
                 onDestroy();
             }
@@ -205,89 +206,121 @@ public class MainActivity extends AppCompatActivity implements IGetMessageCallBa
                 break;
             case R.id.check_version:
                 //Intent intent4 = new Intent(MainActivity.this, );
-                Toast.makeText(this, "开发中，敬请期待。。。",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "开发中，敬请期待。。。", Toast.LENGTH_SHORT).show();
                 break;
         }
         return true;
     }
 
-    String room1temperature="";
-    String room1humidity="";
-    String room2temperature="";
-    String room2humidity="";
-    String room3temperature="";
-    String room3humidity="";
-    String room4temperature="";
-    String room4humidity="";
-    String room5temperature="";
-    String room5humidity="";
-    String room6temperature="";
-    String room6humidity="";
-    String room7temperature="";
-    String room7humidity="";
-    String room8temperature="";
-    String room8humidity="";
+    String room1temperature = "";
+    String room1humidity = "";
+    String room2temperature = "";
+    String room2humidity = "";
+    String room3temperature = "";
+    String room3humidity = "";
+    String room4temperature = "";
+    String room4humidity = "";
+    String room5temperature = "";
+    String room5humidity = "";
+    String room6temperature = "";
+    String room6humidity = "";
+    String room7temperature = "";
+    String room7humidity = "";
+    String room8temperature = "";
+    String room8humidity = "";
     //定义运行状态
-    String room1states="状态未知";
-    String room2states="状态未知";
-    String room3states="状态未知";
-    String room4states="状态未知";
-    String room5states="状态未知";
-    String room6states="状态未知";
-    String room7states="状态未知";
-    String room8states="";
+    String room1states = "状态未知";
+    String room2states = "状态未知";
+    String room3states = "状态未知";
+    String room4states = "状态未知";
+    String room5states = "状态未知";
+    String room6states = "状态未知";
+    String room7states = "状态未知";
+    String room8states = "";
 
 
     @SuppressLint("SetTextI18n")
     @Override
     public void setMessage(String message) {
         //依据message字符串最后一位决定房间号，倒数第二位决定温湿度C为温度，H为湿度。
-        if(message.contains("C1")) room1temperature = message.replace("C1", "C");
-        if(message.contains("RH1")) room1humidity = message.replace("RH1", "RH");
-        if(message.contains("C2")) room2temperature = message.replace("C2", "C");
-        if(message.contains("RH2")) room2humidity = message.replace("RH2", "RH");
-        if(message.contains("C3")) room3temperature = message.replace("C3", "C");
-        if(message.contains("RH3")) room3humidity = message.replace("RH3", "RH");
-        if(message.contains("C4")) room4temperature = message.replace("C4", "C");
-        if(message.contains("RH4")) room4humidity = message.replace("RH4", "RH");
-        if(message.contains("C5")) room5temperature = message.replace("C5", "C");
-        if(message.contains("RH5")) room5humidity = message.replace("RH5", "RH");
-        if(message.contains("C6")) room6temperature = message.replace("C6", "C");
-        if(message.contains("RH6")) room6humidity = message.replace("RH6", "RH");
-        if(message.contains("C7")) room7temperature = message.replace("C7", "C");
-        if(message.contains("RH7")) room7humidity = message.replace("RH7", "RH");
-        if(message.contains("C8")) room8temperature = message.replace("C8", "C");
-        if(message.contains("RH8")) room8humidity = message.replace("RH8", "RH");
+        if (message.contains("C1")) room1temperature = message.replace("C1", "C");
+        if (message.contains("RH1")) room1humidity = message.replace("RH1", "RH");
+        if (message.contains("C2")) room2temperature = message.replace("C2", "C");
+        if (message.contains("RH2")) room2humidity = message.replace("RH2", "RH");
+        if (message.contains("C3")) room3temperature = message.replace("C3", "C");
+        if (message.contains("RH3")) room3humidity = message.replace("RH3", "RH");
+        if (message.contains("C4")) room4temperature = message.replace("C4", "C");
+        if (message.contains("RH4")) room4humidity = message.replace("RH4", "RH");
+        if (message.contains("C5")) room5temperature = message.replace("C5", "C");
+        if (message.contains("RH5")) room5humidity = message.replace("RH5", "RH");
+        if (message.contains("C6")) room6temperature = message.replace("C6", "C");
+        if (message.contains("RH6")) room6humidity = message.replace("RH6", "RH");
+        if (message.contains("C7")) room7temperature = message.replace("C7", "C");
+        if (message.contains("RH7")) room7humidity = message.replace("RH7", "RH");
+        if (message.contains("C8")) room8temperature = message.replace("C8", "C");
+        if (message.contains("RH8")) room8humidity = message.replace("RH8", "RH");
 
         //运行状态需要反馈回来
-        if(message.contains("valveonRoom1")) {room1states = "正在运行";}
-        if(message.contains("valveonRoom2")) {room2states = "正在运行";}
-        if(message.contains("valveonRoom3")) {room3states = "正在运行";}
-        if(message.contains("valveonRoom4")) {room4states = "正在运行";}
-        if(message.contains("valveonRoom5")) {room5states = "正在运行";}
-        if(message.contains("valveonRoom6")) {room6states = "正在运行";}
-        if(message.contains("valveonRoom7")) {room7states = "正在运行";}
-        if(message.contains("valveonRoom8")) {room8states = "正在运行";}
+        if (message.contains("valveonRoom1")) {
+            room1states = "正在运行";
+        }
+        if (message.contains("valveonRoom2")) {
+            room2states = "正在运行";
+        }
+        if (message.contains("valveonRoom3")) {
+            room3states = "正在运行";
+        }
+        if (message.contains("valveonRoom4")) {
+            room4states = "正在运行";
+        }
+        if (message.contains("valveonRoom5")) {
+            room5states = "正在运行";
+        }
+        if (message.contains("valveonRoom6")) {
+            room6states = "正在运行";
+        }
+        if (message.contains("valveonRoom7")) {
+            room7states = "正在运行";
+        }
+        if (message.contains("valveonRoom8")) {
+            room8states = "正在运行";
+        }
 
-        if(message.contains("valveoffRoom1")) {room1states = "停止运行";}
-        if(message.contains("valveoffRoom2")) {room2states = "停止运行";}
-        if(message.contains("valveoffRoom3")) {room3states = "停止运行";}
-        if(message.contains("valveoffRoom4")) {room4states = "停止运行";}
-        if(message.contains("valveoffRoom5")) {room5states = "停止运行";}
-        if(message.contains("valveoffRoom6")) {room6states = "停止运行";}
-        if(message.contains("valveoffRoom7")) {room7states = "停止运行";}
-        if(message.contains("valveoffRoom8")) {room8states = "停止运行";}
+        if (message.contains("valveoffRoom1")) {
+            room1states = "停止运行";
+        }
+        if (message.contains("valveoffRoom2")) {
+            room2states = "停止运行";
+        }
+        if (message.contains("valveoffRoom3")) {
+            room3states = "停止运行";
+        }
+        if (message.contains("valveoffRoom4")) {
+            room4states = "停止运行";
+        }
+        if (message.contains("valveoffRoom5")) {
+            room5states = "停止运行";
+        }
+        if (message.contains("valveoffRoom6")) {
+            room6states = "停止运行";
+        }
+        if (message.contains("valveoffRoom7")) {
+            room7states = "停止运行";
+        }
+        if (message.contains("valveoffRoom8")) {
+            room8states = "停止运行";
+        }
 
 
         //设置显示的文字
-        buttonA.setText("\n"+ room1name +"\n\n"+ room1temperature +"\n\n" + room1humidity +"\n\n"+room1states+"\n");
-        buttonB.setText("\n"+ room2name +"\n\n"+ room2temperature +"\n\n" + room2humidity +"\n\n"+room2states+"\n");
-        buttonC.setText("\n"+ room3name +"\n\n"+ room3temperature +"\n\n" + room3humidity +"\n\n"+room3states+"\n");
-        buttonD.setText("\n"+ room4name +"\n\n"+ room4temperature +"\n\n" + room4humidity +"\n\n"+room4states+"\n");
-        buttonE.setText("\n"+ room5name +"\n\n"+ room5temperature +"\n\n" + room5humidity +"\n\n"+room5states+"\n");
-        buttonF.setText("\n"+ room6name +"\n\n"+ room6temperature +"\n\n" + room6humidity +"\n\n"+room6states+"\n");
-        buttonG.setText("\n"+ room7name +"\n\n"+ room7temperature +"\n\n" + room7humidity +"\n\n"+room7states+"\n");
-        buttonH.setText("\n"+ room8name +"\n\n"+ room8temperature +"\n\n" + room8humidity +"\n\n"+room8states+"\n");
+        buttonA.setText("\n" + room1name + "\n\n" + room1temperature + "\n\n" + room1humidity + "\n\n" + room1states + "\n");
+        buttonB.setText("\n" + room2name + "\n\n" + room2temperature + "\n\n" + room2humidity + "\n\n" + room2states + "\n");
+        buttonC.setText("\n" + room3name + "\n\n" + room3temperature + "\n\n" + room3humidity + "\n\n" + room3states + "\n");
+        buttonD.setText("\n" + room4name + "\n\n" + room4temperature + "\n\n" + room4humidity + "\n\n" + room4states + "\n");
+        buttonE.setText("\n" + room5name + "\n\n" + room5temperature + "\n\n" + room5humidity + "\n\n" + room5states + "\n");
+        buttonF.setText("\n" + room6name + "\n\n" + room6temperature + "\n\n" + room6humidity + "\n\n" + room6states + "\n");
+        buttonG.setText("\n" + room7name + "\n\n" + room7temperature + "\n\n" + room7humidity + "\n\n" + room7states + "\n");
+        buttonH.setText("\n" + room8name + "\n\n" + room8temperature + "\n\n" + room8humidity + "\n\n" + room8states + "\n");
         mqttService = serviceConnection.getMqttService();//服务连接实例 的 获得服务的方法
 //        mqttService.toCreateNotification(message);//服务的发布消息的方法
     }
@@ -302,14 +335,14 @@ public class MainActivity extends AppCompatActivity implements IGetMessageCallBa
     protected void onResume() {
         super.onResume();
 
-        MQTTService.publish("86518/JYCFGC/6-2-3401/Room1","feedback", 1, true);
-        MQTTService.publish("86518/JYCFGC/6-2-3401/Room2","feedback", 1, true);
-        MQTTService.publish("86518/JYCFGC/6-2-3401/Room3","feedback", 1, true);
-        MQTTService.publish("86518/JYCFGC/6-2-3401/Room4","feedback", 1, true);
-        MQTTService.publish("86518/JYCFGC/6-2-3401/Room5","feedback", 1, true);
-        MQTTService.publish("86518/JYCFGC/6-2-3401/Room6","feedback", 1, true);
-        MQTTService.publish("86518/JYCFGC/6-2-3401/Room7","feedback", 1, true);
-        MQTTService.publish("86518/JYCFGC/6-2-3401/Room8","feedback", 1, true);
+        MQTTService.publish("86518/JYCFGC/6-2-3401/Room1", "feedback", 1, true);
+        MQTTService.publish("86518/JYCFGC/6-2-3401/Room2", "feedback", 1, true);
+        MQTTService.publish("86518/JYCFGC/6-2-3401/Room3", "feedback", 1, true);
+        MQTTService.publish("86518/JYCFGC/6-2-3401/Room4", "feedback", 1, true);
+        MQTTService.publish("86518/JYCFGC/6-2-3401/Room5", "feedback", 1, true);
+        MQTTService.publish("86518/JYCFGC/6-2-3401/Room6", "feedback", 1, true);
+        MQTTService.publish("86518/JYCFGC/6-2-3401/Room7", "feedback", 1, true);
+        MQTTService.publish("86518/JYCFGC/6-2-3401/Room8", "feedback", 1, true);
     }
 
     @Override

@@ -14,5 +14,10 @@
     <string name="textview5name">开发中（敬请期待）</string>
     <string name="textview6name">室外温度等等</string>
     <string name="textview7name">定时设置</string>
+    <string name="button_inhome">在家</string>
+    <string name="button_outhome">离家</string>
+    <string name="button_is_confort">舒适/经济</string>
+    <string name="button_is_sleep">起床/睡觉</string>
+    <string name="image">底纹图片</string>
 
 </resources>

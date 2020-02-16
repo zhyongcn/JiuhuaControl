@@ -44,7 +44,7 @@
             android:text="@string/textview3name"
             android:textSize="20dp" />
         <LinearLayout
-            android:id="@+id/roomstate"
+            android:id="@+id/roomStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
