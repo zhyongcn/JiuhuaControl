@@ -335,7 +335,7 @@ public class MainActivity extends AppCompatActivity implements IGetMessageCallBa
     protected void onResume() {
         super.onResume();
 
-        MQTTService.publish("86518/JYCFGC/6-2-3401/Room1", "feedback", 1, true);
+        MQTTService.publish("86518/JYCFGC/6-2-3401/RoomDB", "feedback", 1, true);
         MQTTService.publish("86518/JYCFGC/6-2-3401/Room2", "feedback", 1, true);
         MQTTService.publish("86518/JYCFGC/6-2-3401/Room3", "feedback", 1, true);
         MQTTService.publish("86518/JYCFGC/6-2-3401/Room4", "feedback", 1, true);

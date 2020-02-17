@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 public class HomepageAdapter extends RecyclerView.Adapter <HomepageAdapter.MyViewHolder> {
 
     public HomepageAdapter() {
@@ -27,15 +28,15 @@ public class HomepageAdapter extends RecyclerView.Adapter <HomepageAdapter.MyVie
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //调用roomactivity
-                //Intent intent =
+                //invoking RoomActivity
+
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return 10;
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {

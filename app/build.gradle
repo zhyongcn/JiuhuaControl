@@ -31,4 +31,14 @@ dependencies {
     implementation project(':esptouch')
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation project(':mqtt')
+
+    //使用Room必须要添加的依赖
+    def room_version = "2.2.3"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+    // Test helpers
+    testImplementation "androidx.room:room-testing:$room_version"
+
+    implementation 'androidx.cardview:cardview:1.0.0'     //使用View Model 必须添加，可以半自动添加
+
 }

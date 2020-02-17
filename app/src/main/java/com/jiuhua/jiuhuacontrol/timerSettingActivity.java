@@ -439,7 +439,7 @@ public class timerSettingActivity extends AppCompatActivity implements View.OnCl
 //                    periodString[i] = periodString[i].concat("]");//加上 方括号
 //                }
 //                Toast.makeText(timerSettingActivity.this, periodString[0], Toast.LENGTH_SHORT).show();//  最后要去掉
-//                MQTTService.publish("86518/JYCFGC/6-2-3401/Room1", periodString[0], 1, false);
+//                MQTTService.publish("86518/JYCFGC/6-2-3401/RoomDB", periodString[0], 1, false);
 //                MQTTService.publish("86518/JYCFGC/6-2-3401/Room2", periodString[1], 1, false);
 //                MQTTService.publish("86518/JYCFGC/6-2-3401/Room3", periodString[2], 1, false);
 //                MQTTService.publish("86518/JYCFGC/6-2-3401/Room4", periodString[3], 1, false);
@@ -460,8 +460,8 @@ public class timerSettingActivity extends AppCompatActivity implements View.OnCl
                 }
                 Toast.makeText(timerSettingActivity.this, periodString[0], Toast.LENGTH_SHORT).show();//最后要去掉
                 //结尾加上标识符便于模块区分
-                MQTTService.publish("86518/JYCFGC/6-2-3401/Room1", periodString[0].concat("Room1winterperoid"), 1, false);
-                MQTTService.publish("86518/JYCFGC/6-2-3401/Room1", periodString[1].concat("Room2winterperoid"), 1, false);
+                MQTTService.publish("86518/JYCFGC/6-2-3401/RoomDB", periodString[0].concat("Room1winterperoid"), 1, false);
+                MQTTService.publish("86518/JYCFGC/6-2-3401/RoomDB", periodString[1].concat("Room2winterperoid"), 1, false);
                 MQTTService.publish("86518/JYCFGC/6-2-3401/Room3", periodString[2].concat("Room3winterperoid"), 1, false);
                 MQTTService.publish("86518/JYCFGC/6-2-3401/Room4", periodString[3].concat("Room4winterperoid"), 1, false);
                 MQTTService.publish("86518/JYCFGC/6-2-3401/Room5", periodString[4].concat("Room5winterperoid"), 1, false);

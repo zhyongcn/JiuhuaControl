@@ -1,29 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="8dp"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/roomName"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:text="客厅" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/roomStatus"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:text="设备状态：未运行" />
+        <TextView
+            android:id="@+id/roomName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="客厅"
+            tools:text="客厅" />
 
-    <TextView
-        android:id="@+id/roomTemp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:text="当前温度 18  C" />
+        <TextView
+            android:id="@+id/roomStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="未运行"
+            tools:text="未运行" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/roomTemp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="当前温度 18  C"
+            tools:text="当前温度 18  C" />
+
+        <TextView
+            android:id="@+id/roomHumidity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="当前湿度  50%"
+            tools:text="当前湿度  50%" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
