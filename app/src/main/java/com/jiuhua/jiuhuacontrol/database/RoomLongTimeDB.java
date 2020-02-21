@@ -1,4 +1,4 @@
-package com.jiuhua.jiuhuacontrol;
+package com.jiuhua.jiuhuacontrol.database;
 
 
 /*这张表把room表的数据一小时一次加平均，*/
@@ -16,7 +16,7 @@ import androidx.room.PrimaryKey;
 public class RoomLongTimeDB {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
     @ColumnInfo(name = " timestamp")
     private long timeStamp;   //小时的时间戳
     @ColumnInfo(name = "room_name_id")
@@ -36,11 +36,11 @@ public class RoomLongTimeDB {
     @ColumnInfo(name = "coil_valve_minute")
     private boolean coilValveMinute;  //两通阀打开时间  0--60分钟
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

@@ -1,4 +1,4 @@
-package com.jiuhua.jiuhuacontrol;
+package com.jiuhua.jiuhuacontrol.database;
 
 import android.content.Context;
 
@@ -7,18 +7,16 @@ import androidx.room.RoomDatabase;
 
 @Database(entities = {RoomDB.class, RoomNameDB.class, RoomLongTimeDB.class}, version = 1,
         exportSchema = false)
-public abstract class RoomsDatabase extends RoomDatabase {
-    private static RoomsDatabase INSTANCE;
+public abstract class MyRoomsDatabase extends RoomDatabase {
+    private static MyRoomsDatabase INSTANCE;
 
-    static synchronized RoomsDatabase getInstance(Context context) {
+    public static synchronized MyRoomsDatabase getDatabase(Context context) {
         if(INSTANCE == null) {
             INSTANCE = androidx.room.Room.databaseBuilder(context.getApplicationContext(),
-                    RoomsDatabase.class, "rooms_database").build();
+                    MyRoomsDatabase.class, "rooms_database").build();
         }
         return INSTANCE;
     }
 
-    public static RoomDao getRoomDao() {
-        return null;
-    }
+    public abstract  RoomDao getRoomDao(); //这个是抽象方法
 }

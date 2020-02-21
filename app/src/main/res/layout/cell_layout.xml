@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,11 +8,14 @@
     android:layout_marginStart="8dp"
     android:layout_marginTop="8dp"
     android:layout_marginEnd="8dp"
+    android:background="#00351D1D"
+    android:backgroundTint="#00322424"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#33FFEB3B"
         android:orientation="vertical">
 
         <TextView
@@ -19,6 +23,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="客厅"
+            android:textColor="#000000"
+            android:textStyle="bold"
             tools:text="客厅" />
 
         <TextView
@@ -26,6 +32,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="未运行"
+            android:textColor="#000000"
+            android:textStyle="bold"
             tools:text="未运行" />
 
         <TextView
@@ -33,13 +41,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="当前温度 18  C"
+            android:textColor="#000000"
+            android:textStyle="bold"
             tools:text="当前温度 18  C" />
 
         <TextView
             android:id="@+id/roomHumidity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="当前湿度  50%"
+            android:textColor="#000000"
+            android:textStyle="bold"
             tools:text="当前湿度  50%" />
 
     </LinearLayout>

@@ -1,4 +1,4 @@
-package com.jiuhua.jiuhuacontrol;
+package com.jiuhua.jiuhuacontrol.room;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

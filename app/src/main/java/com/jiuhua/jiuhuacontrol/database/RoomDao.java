@@ -1,7 +1,8 @@
-package com.jiuhua.jiuhuacontrol;
+package com.jiuhua.jiuhuacontrol.database;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Index;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -19,8 +20,11 @@ public interface RoomDao {
     @Insert
     void insertRoomLongTimeDB(RoomLongTimeDB...roomLongTimeDBS);
 
+    @Query("DELETE FROM ROOMNAMEDB")
+    void deleteAllRoomsName();
+
     @Query("SELECT * FROM roomnamedb")
-    public List<RoomNameDB> loadAllRoomName();
+    public LiveData<List<RoomNameDB>> loadAllRoomName();
 
     //提取最大id的条目
     @Query("SELECT * FROM RoomDB ORDER BY ID DESC LIMIT 8")

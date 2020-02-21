@@ -1,4 +1,4 @@
-package com.jiuhua.jiuhuacontrol;
+package com.jiuhua.jiuhuacontrol.database;
 
 /*这张表的数据一分钟一次，存储上限为三个月*/
 import androidx.room.ColumnInfo;
@@ -12,7 +12,7 @@ indices = {@Index(value = {"room_name_id"} ) } )
 public class RoomDB {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
     @ColumnInfo(name = " timestamp")
     private long timeStamp;   //直接使用UNIX时间
     @ColumnInfo(name = "room_name_id")
@@ -46,11 +46,11 @@ public class RoomDB {
         this.coilValveOpen = coilValveOpen;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

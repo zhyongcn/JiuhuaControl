@@ -1,7 +1,8 @@
-package com.jiuhua.jiuhuacontrol;
+package com.jiuhua.jiuhuacontrol.database;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity
@@ -13,6 +14,11 @@ public class RoomNameDB {
     private String roomName;
 
     public RoomNameDB() {
+    }
+
+    @Ignore
+    public RoomNameDB(String roomName) {
+        this.roomName = roomName;
     }
 
     public RoomNameDB(int id, String roomName) {

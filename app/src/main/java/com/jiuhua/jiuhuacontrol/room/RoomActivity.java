@@ -1,4 +1,4 @@
-package com.jiuhua.jiuhuacontrol;
+package com.jiuhua.jiuhuacontrol.room;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -6,14 +6,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.jiuhua.jiuhuacontrol.R;
 import com.jiuhua.mqttsample.IGetMessageCallBack;
 import com.jiuhua.mqttsample.MQTTService;
 import com.jiuhua.mqttsample.MyServiceConnection;
