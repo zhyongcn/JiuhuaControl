@@ -1,41 +1,56 @@
 package com.jiuhua.jiuhuacontrol.room;
 
+
+import android.os.Bundle;
+
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.jiuhua.jiuhuacontrol.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoomActivity2 extends AppCompatActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class RoomHostFragment extends Fragment {
 
     private ViewPager viewPager;
     private PagerAdapter pagerAdapter;
     private List<Fragment> fragmentList;
 
+    public RoomHostFragment() {
+        // Required empty public constructor
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_room2);
-        //TODO 接收Intent的参数
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_room_host, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         fragmentList = new ArrayList<Fragment>();
         fragmentList.add(new HistoryFragment());
         fragmentList.add(new RoomFragment());
         fragmentList.add(new PeroidFragment());
 
-        viewPager = findViewById(R.id.viewpager);
-        pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+        viewPager = view.findViewById(R.id.viewpager);
+        pagerAdapter = new ScreenSlidePagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(1);   //当前的页面是1号界面（0是开始），将来添加要调整fragmentList里面的页面顺序，
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -56,11 +71,6 @@ public class RoomActivity2 extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onBackPressed() { //如果不想直接退出activity，这里需要override。
-        super.onBackPressed();
-    }
-
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
 
         public ScreenSlidePagerAdapter(FragmentManager supportFragmentManager) {
@@ -71,7 +81,7 @@ public class RoomActivity2 extends AppCompatActivity {
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            return fragmentList.get(position);  //??没有具体使用估计有问题，
+            return fragmentList.get(position);
         }
 
         @Override
@@ -80,11 +90,5 @@ public class RoomActivity2 extends AppCompatActivity {
         }
     }
 
-    public static void jumpToRoomActivity(Context context) {
-        Intent intent = new Intent(context, RoomActivity2.class);
-        //intent.putExtra("RoomID",roomid);
-        //TODO 许多参数
-        context.startActivity(intent);
-    }
 
 }

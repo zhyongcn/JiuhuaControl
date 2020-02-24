@@ -11,12 +11,12 @@ import com.jiuhua.jiuhuacontrol.database.RoomNameDB;
 
 import java.util.List;
 
-public class RoomsRepository {
+public class MyRepository {
 
     LiveData<List<RoomNameDB>> allRoomNameLive;
     private RoomDao roomDao;
 
-    public RoomsRepository(Context context) {
+    public MyRepository(Context context) {
         MyRoomsDatabase myRoomsDatabase = MyRoomsDatabase.getDatabase(context.getApplicationContext());
         roomDao = myRoomsDatabase.getRoomDao();
         allRoomNameLive = roomDao.loadAllRoomName();

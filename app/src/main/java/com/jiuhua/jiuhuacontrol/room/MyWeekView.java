@@ -31,7 +31,7 @@ public class MyWeekView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         float square = (screenWidth - 60) / 8;  //每个小方格的宽度
-        canvas.drawText("本周运行设置",screenWidth/2, square/3+25, textPaint);
+        canvas.drawText("一周运行设置",screenWidth/2, square/3+25, textPaint);
         canvas.drawText("一", 100+square, square,textPaint1);
         canvas.drawText("二", 100+square*2, square,textPaint1);
         canvas.drawText("三", 100+square*3, square,textPaint1);

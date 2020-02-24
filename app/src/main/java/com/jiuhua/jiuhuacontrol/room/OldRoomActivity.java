@@ -22,7 +22,7 @@ import com.jiuhua.mqttsample.MyServiceConnection;
 
 import static java.lang.String.valueOf;
 
-public class RoomActivity extends AppCompatActivity implements IGetMessageCallBack,
+public class OldRoomActivity extends AppCompatActivity implements IGetMessageCallBack,
         View.OnClickListener, NumberPicker.OnValueChangeListener{
     private MyServiceConnection serviceConnection;//连接实例
     private MQTTService mqttService;//服务实例
@@ -48,21 +48,10 @@ public class RoomActivity extends AppCompatActivity implements IGetMessageCallBa
         SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_room);
         myView = findViewById(R.id.myview);
-        tvTemperature = findViewById(R.id.currentTemperature);
-        tvHumidity = findViewById(R.id.currentHumidity);
-        btManualOn = findViewById(R.id.manual_on);
-        btManualOff = findViewById(R.id.manual_off);
-        btAutomation = findViewById(R.id.automation);
-        btFeast = findViewById(R.id.feast);
-        tvModuleState = findViewById(R.id.modulestate);
-        tvFloorState = findViewById(R.id.floorstate);
-        TextView tvRoomName = findViewById(R.id.roomname);
         Intent intent = getIntent();
         String roomName = intent.getStringExtra("roomname");//Mainactivity传过来的点击的哪一个按钮（房间）
         roomID = intent.getStringExtra("roomid");//传一个标识
-        tvRoomName.setText(roomName);
         peroid_S = sharedPreferences.getString("RoomDB"+roomID+"peroid_S", "");//利用标识，获取存储的周期数据
 
         context = this;
@@ -74,7 +63,7 @@ public class RoomActivity extends AppCompatActivity implements IGetMessageCallBa
         btFeast.setOnClickListener(this);
         //MQTT服务，显示实时的温度和湿度
         serviceConnection = new MyServiceConnection();//新建连接服务的实例
-        serviceConnection.setIGetMessageCallBack(RoomActivity.this);//把本活动传入
+        serviceConnection.setIGetMessageCallBack(OldRoomActivity.this);//把本活动传入
         Intent intentServer = new Intent(this, MQTTService.class);//传递信息
         bindService(intentServer, serviceConnection, Context.BIND_AUTO_CREATE);//绑定服务
 

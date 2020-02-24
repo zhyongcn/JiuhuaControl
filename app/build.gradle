@@ -40,6 +40,8 @@ dependencies {
     // Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
 
-    implementation 'androidx.cardview:cardview:1.0.0'     //使用View Model 必须添加，可以半自动添加
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.navigation:navigation-fragment:2.2.1'
+    implementation 'androidx.navigation:navigation-ui:2.2.1'//使用View Model 必须添加，可以半自动添加
 
 }

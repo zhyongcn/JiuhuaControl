@@ -6,22 +6,22 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jiuhua.jiuhuacontrol.database.RoomNameDB;
-import com.jiuhua.jiuhuacontrol.room.RoomActivity2;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class HomepageAdapter extends RecyclerView.Adapter <HomepageAdapter.MyViewHolder> {
+public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyViewHolder> {
 
     private List<RoomNameDB> allroomsName = new ArrayList<>();
-    private RoomViewModel roomViewModel;
+    private MyViewModel myViewModel;
 
-    public HomepageAdapter(RoomViewModel roomViewModel) {
-        this.roomViewModel = roomViewModel;
+    public HomepageAdapter(MyViewModel myViewModel) {
+        this.myViewModel = myViewModel;
     }
 
     public void setAllroomsName(List<RoomNameDB> allroomsName) {
@@ -38,8 +38,7 @@ public class HomepageAdapter extends RecyclerView.Adapter <HomepageAdapter.MyVie
             @Override
             public void onClick(View v) {
                 int k = holder.getAdapterPosition();   //获取具体哪个条目了
-                //
-                RoomActivity2.jumpToRoomActivity(holder.itemView.getContext());
+                Navigation.findNavController(v).navigate(R.id.action_homeHostFragment_to_roomHostFragment);
             }
         });
         return holder;
@@ -51,14 +50,6 @@ public class HomepageAdapter extends RecyclerView.Adapter <HomepageAdapter.MyVie
         RoomNameDB roomNameDB = allroomsName.get(position);
         holder.textViewRoomName.setText(roomNameDB.getRoomName());
         //如果是耗时很少的操作可以在这里出现，或者item的内部有很多部件需要绑定，也在这里。
-//        holder.itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //invoking RoomActivity
-//                //Intent intent = new Intent();
-//
-//            }
-//        });
     }
 
     @Override

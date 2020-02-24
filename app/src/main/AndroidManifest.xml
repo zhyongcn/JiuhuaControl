@@ -10,9 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".room.RoomActivity2"></activity>
         <activity
-            android:name=".MainActivity1"
+            android:name=".Main2Activity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".MainActivity"
             android:label="周先生雅居">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,13 +23,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".RepairActivity" />
-        <activity android:name=".UserinfoActivity" />
-        <activity android:name=".DocumentsAndRepairActivity" />
-        <activity android:name=".timerSettingActivity" />
-        <activity android:name=".OutdoorActivity" />
-        <activity android:name=".room.RoomActivity" />
     </application>
 
 </manifest>
