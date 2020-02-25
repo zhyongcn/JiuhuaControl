@@ -18,32 +18,37 @@
     <fragment
         android:id="@+id/roomHostFragment"
         android:name="com.jiuhua.jiuhuacontrol.room.RoomHostFragment"
-        android:label="fragment_room_host"
+        android:label="房间信息"
         tools:layout="@layout/fragment_room_host" />
     <fragment
         android:id="@+id/nav_userinfo"
         android:name="com.jiuhua.jiuhuacontrol.ui.userinfo.UserInfoFragment"
-        android:label="fragment_userinfo"
+        android:label="用户信息"
         tools:layout="@layout/fragment_userinfo" />
     <fragment
         android:id="@+id/nav_equipmentManual"
         android:name="com.jiuhua.jiuhuacontrol.ui.equipmentManual.EquipmentManualFragment"
-        android:label="fragment_equipmentmanual"
+        android:label="设备手册"
         tools:layout="@layout/fragment_equipmentmanual" />
     <fragment
         android:id="@+id/nav_service"
         android:name="com.jiuhua.jiuhuacontrol.ui.service.ServiceFragment"
-        android:label="fragment_service"
+        android:label="服务商"
+        tools:layout="@layout/fragment_service" />
+    <fragment
+        android:id="@+id/nav_partsstore"
+        android:name="com.jiuhua.jiuhuacontrol.ui.partsstore.PartsStoreFragment"
+        android:label="配件商城"
         tools:layout="@layout/fragment_service" />
     <fragment
         android:id="@+id/nav_share"
         android:name="com.jiuhua.jiuhuacontrol.ui.share.ShareFragment"
-        android:label="fragment_share"
+        android:label="分享"
         tools:layout="@layout/fragment_share" />
     <fragment
         android:id="@+id/nav_send"
         android:name="com.jiuhua.jiuhuacontrol.ui.send.SendFragment"
-        android:label="fragment_send"
+        android:label="邮件"
         tools:layout="@layout/fragment_send" />
 
 </navigation>

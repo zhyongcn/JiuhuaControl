@@ -20,6 +20,10 @@
             android:id="@+id/nav_service"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/menu_service" />
+        <item
+            android:id="@+id/nav_partsstore"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="配件商城" />
     </group>
 
     <item android:title="@string/communicate">
