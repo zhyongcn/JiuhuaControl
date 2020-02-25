@@ -1,4 +1,4 @@
-package com.jiuhua.jiuhuacontrol;
+package com.jiuhua.jiuhuacontrol.ui.home;
 
 public class RoomLittleMessage {
     private String roomName;

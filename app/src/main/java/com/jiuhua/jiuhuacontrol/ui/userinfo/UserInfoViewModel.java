@@ -1,14 +1,14 @@
-package com.jiuhua.jiuhuacontrol.ui.gallery;
+package com.jiuhua.jiuhuacontrol.ui.userinfo;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class GalleryViewModel extends ViewModel {
+public class UserInfoViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public GalleryViewModel() {
+    public UserInfoViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is gallery fragment");
     }

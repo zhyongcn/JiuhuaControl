@@ -1,4 +1,4 @@
-package com.jiuhua.jiuhuacontrol.ui.tools;
+package com.jiuhua.jiuhuacontrol.ui.userinfo;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.jiuhua.jiuhuacontrol.R;
 
-public class ToolsFragment extends Fragment {
+public class UserInfoFragment extends Fragment {
 
-    private ToolsViewModel toolsViewModel;
+    private UserInfoViewModel userInfoViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        toolsViewModel =
-                ViewModelProviders.of(this).get(ToolsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_tools, container, false);
-        final TextView textView = root.findViewById(R.id.text_tools);
-        toolsViewModel.getText().observe(this, new Observer<String>() {
+        userInfoViewModel =
+                ViewModelProviders.of(this).get(UserInfoViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_userinfo, container, false);
+        final TextView textView = root.findViewById(R.id.text_gallery);
+        userInfoViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

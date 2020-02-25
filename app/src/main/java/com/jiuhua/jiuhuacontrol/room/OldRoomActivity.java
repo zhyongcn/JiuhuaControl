@@ -96,7 +96,7 @@ public class OldRoomActivity extends AppCompatActivity implements IGetMessageCal
     public void onClick(View v) {
 
         switch (v.getId()) {
-            case R.id.manual_off:
+            case 1:
                 MQTTService.publish("86518/JYCFGC/6-2-3401/RoomDB"+roomID,
                         "RoomDB"+roomID+"turn-offfloor", 1, true);
                 btManualOff.setBackgroundColor(Color.parseColor("#00FF00"));//设置手动停止按钮背景为绿色
@@ -104,7 +104,7 @@ public class OldRoomActivity extends AppCompatActivity implements IGetMessageCal
                 btAutomation.setBackgroundColor(Color.argb(20,0,0,0));//设置自动按钮的背景为灰色
                 btFeast.setBackgroundColor(Color.argb(20,0,0,0));//设置宴会按钮的背景为灰色
                 break;
-            case R.id.manual_on:
+            case 2:
                 //TODO  用数字选择器实现温度选择
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setPositiveButton("设置", new DialogInterface.OnClickListener(){
@@ -138,7 +138,7 @@ public class OldRoomActivity extends AppCompatActivity implements IGetMessageCal
                 btAutomation.setBackgroundColor(Color.argb(20,0,0,0));//设置自动按钮的背景为灰色
                 btFeast.setBackgroundColor(Color.argb(20,0,0,0));//设置宴会按钮的背景为灰色
                 break;
-            case R.id.automation:
+            case 3:
                 MQTTService.publish("86518/JYCFGC/6-2-3401/RoomDB"+roomID,
                         "RoomDB"+roomID+"automationfloor", 1, true);
                 btManualOff.setBackgroundColor(Color.argb(20,0,0,0));//设置手动停止按钮背景为绿色
@@ -146,7 +146,7 @@ public class OldRoomActivity extends AppCompatActivity implements IGetMessageCal
                 btAutomation.setBackgroundColor(Color.parseColor("#00FF00"));//设置自动按钮的背景为灰色
                 btFeast.setBackgroundColor(Color.argb(20,0,0,0));//设置宴会按钮的背景为灰色
                 break;
-            case R.id.feast:
+            case 4:
                 MQTTService.publish("86518/JYCFGC/6-2-3401/RoomDB"+roomID,
                         "RoomDB"+roomID+"feast", 1, true);
                 btManualOff.setBackgroundColor(Color.argb(20,0,0,0));//设置手动停止按钮背景为绿色

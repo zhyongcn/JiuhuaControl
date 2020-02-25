@@ -1,4 +1,4 @@
-package com.jiuhua.jiuhuacontrol;
+package com.jiuhua.jiuhuacontrol.ui.home;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.jiuhua.jiuhuacontrol.R;
 import com.jiuhua.jiuhuacontrol.database.RoomNameDB;
 
 import java.util.ArrayList;
@@ -18,10 +19,10 @@ import java.util.List;
 public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyViewHolder> {
 
     private List<RoomNameDB> allroomsName = new ArrayList<>();
-    private MyViewModel myViewModel;
+    private HomeViewModel homeViewModel;
 
-    public HomepageAdapter(MyViewModel myViewModel) {
-        this.myViewModel = myViewModel;
+    public HomepageAdapter(HomeViewModel homeViewModel) {
+        this.homeViewModel = homeViewModel;
     }
 
     public void setAllroomsName(List<RoomNameDB> allroomsName) {
@@ -38,7 +39,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyView
             @Override
             public void onClick(View v) {
                 int k = holder.getAdapterPosition();   //获取具体哪个条目了
-                Navigation.findNavController(v).navigate(R.id.action_homeHostFragment_to_roomHostFragment);
+                Navigation.findNavController(v).navigate(R.id.action_nav_home_to_roomHostFragment);
             }
         });
         return holder;

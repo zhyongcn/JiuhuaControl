@@ -30,11 +30,12 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
-    <string name="menu_tools">Tools</string>
-    <string name="menu_share">Share</string>
-    <string name="menu_send">Send</string>
+    <string name="menu_home">运行情况</string>
+    <string name="menu_userinfo">用户信息</string>
+    <string name="menu_equipment">设备手册</string>
+    <string name="menu_service">服务商</string>
+    <string name="communicate">Communicate</string>
+    <string name="menu_share">分享</string>
+    <string name="menu_send">发送邮件</string>
 
 </resources>

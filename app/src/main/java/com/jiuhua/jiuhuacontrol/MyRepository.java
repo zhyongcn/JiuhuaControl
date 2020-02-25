@@ -22,15 +22,15 @@ public class MyRepository {
         allRoomNameLive = roomDao.loadAllRoomName();
     }
 
-    LiveData<List<RoomNameDB>> getAllRoomsNameLive() {return allRoomNameLive;}
+    public LiveData<List<RoomNameDB>> getAllRoomsNameLive() {return allRoomNameLive;}
 
     //TODO 实现 Dao 的所有方法
     //插入房间名字
-    void insertRoomName(RoomNameDB... roomNameDBS) {
+    public void insertRoomName(RoomNameDB... roomNameDBS) {
         new InsertRoomNameAsyncTask(roomDao).execute(roomNameDBS);
     }
     //删除所有房间名字
-    void deleteAllRoomsName(){
+    public void deleteAllRoomsName(){
         new DeleteAllRoomsNameAsyncTask(roomDao).execute();
     }
 

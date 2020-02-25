@@ -1,4 +1,4 @@
-package com.jiuhua.jiuhuacontrol.ui.slideshow;
+package com.jiuhua.jiuhuacontrol.ui.service;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.jiuhua.jiuhuacontrol.R;
 
-public class SlideshowFragment extends Fragment {
+public class ServiceFragment extends Fragment {
 
-    private SlideshowViewModel slideshowViewModel;
+    private ServiceViewModel serviceViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        slideshowViewModel =
-                ViewModelProviders.of(this).get(SlideshowViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_slideshow, container, false);
-        final TextView textView = root.findViewById(R.id.text_slideshow);
-        slideshowViewModel.getText().observe(this, new Observer<String>() {
+        serviceViewModel =
+                ViewModelProviders.of(this).get(ServiceViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_service, container, false);
+        final TextView textView = root.findViewById(R.id.text_tools);
+        serviceViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
