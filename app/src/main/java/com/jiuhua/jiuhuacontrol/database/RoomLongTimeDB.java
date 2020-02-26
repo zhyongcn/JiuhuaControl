@@ -22,7 +22,7 @@ public class RoomLongTimeDB {
     @ColumnInfo(name = "room_name_id")
     private int RoomNameId;
     @ColumnInfo(name = "current_temperature")
-    private int currentTemperature;    //一小时的温度平均值
+    private int currentTemperature;    //一小时的温度平均值  //TODO 温度和湿度如何校准，也需要校准的设置界面。
     @ColumnInfo(name = "setting_temperature")
     private int settingTemperature;    //设置温度值
     @ColumnInfo(name = "current_humidity")
@@ -30,11 +30,11 @@ public class RoomLongTimeDB {
     @ColumnInfo(name = "setting_humidity")
     private int settingHumidity;
     @ColumnInfo(name = "air_volume")
-    private int airVolume;   //风量，立方米 (国标风机参数表，实际需要校准[安装后风速*截面积] )
+    private int airVolume;   //风量，立方米 (国标风机参数表，实际需要校准[安装后风速*截面积],//TODO 在界面上要有校准的设置页面 )
     @ColumnInfo(name = "floor_minute")
     private int floorMinute;   //地暖运行时间  0--60分钟
     @ColumnInfo(name = "coil_valve_minute")
-    private boolean coilValveMinute;  //两通阀打开时间  0--60分钟
+    private int coilValveMinute;  //两通阀打开时间  0--60分钟
 
     public long getId() {
         return id;
@@ -108,20 +108,21 @@ public class RoomLongTimeDB {
         this.floorMinute = floorMinute;
     }
 
-    public boolean isCoilValveMinute() {
+    public int getCoilValveMinute() {
         return coilValveMinute;
     }
 
-    public void setCoilValveMinute(boolean coilValveMinute) {
+    public void setCoilValveMinute(int coilValveMinute) {
         this.coilValveMinute = coilValveMinute;
     }
+
 
     public RoomLongTimeDB() {
     }
 
     public RoomLongTimeDB(long timeStamp, int roomNameId, int currentTemperature, int settingTemperature,
                           int currentHumidity, int settingHumidity, int airVolume, int floorMinute,
-                          boolean coilValveMinute) {
+                          int coilValveMinute) {
 
         this.timeStamp = timeStamp;
         RoomNameId = roomNameId;
