@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,8 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.jiuhua.jiuhuacontrol.HomeViewModel;
 import com.jiuhua.jiuhuacontrol.R;
-import com.jiuhua.jiuhuacontrol.database.RoomNameDB;
+import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
 
 import java.util.List;
 
@@ -48,17 +49,17 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.recyclerView);
 
-        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         homepageAdapter = new HomepageAdapter(homeViewModel);
 
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         recyclerView.setAdapter(homepageAdapter);
 
-        homeViewModel.getAllRoomsName().observe(getViewLifecycleOwner(), new Observer<List<RoomNameDB>>() {
+        homeViewModel.getAllRoomsName().observe(getViewLifecycleOwner(), new Observer<List<BasicInfoDB>>() {
             @Override
-            public void onChanged(List<RoomNameDB> roomNameDBS) {
+            public void onChanged(List<BasicInfoDB> basicInfoDBS) {
 //                int temp = homepageAdapter.getItemCount();
-                homepageAdapter.setAllroomsName(roomNameDBS);   //设置数据
+                homepageAdapter.setAllroomsName(basicInfoDBS);   //设置数据
                 homepageAdapter.notifyDataSetChanged();     //去刷新视图
             }
         });
@@ -71,9 +72,9 @@ public class HomeFragment extends Fragment {
         buttonInHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                homeViewModel.insertRoomName(new RoomNameDB("主卧室"));
-                homeViewModel.insertRoomName(new RoomNameDB("客厅"));
-                homeViewModel.insertRoomName(new RoomNameDB("儿童房"));
+                homeViewModel.insertRoomName(new BasicInfoDB("主卧室"));
+                homeViewModel.insertRoomName(new BasicInfoDB("客厅"));
+                homeViewModel.insertRoomName(new BasicInfoDB("儿童房"));
             }
         });
         buttonOutHome.setOnClickListener(new View.OnClickListener() {

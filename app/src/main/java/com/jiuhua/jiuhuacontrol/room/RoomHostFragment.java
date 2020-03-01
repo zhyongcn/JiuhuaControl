@@ -50,7 +50,7 @@ public class RoomHostFragment extends Fragment {
         fragmentList.add(new PeroidFragment());
 
         viewPager = view.findViewById(R.id.viewpager);
-        pagerAdapter = new ScreenSlidePagerAdapter(getChildFragmentManager());
+        pagerAdapter = new RoomPagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(1);   //当前的页面是1号界面（0是开始），将来添加要调整fragmentList里面的页面顺序，
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -71,11 +71,10 @@ public class RoomHostFragment extends Fragment {
         });
     }
 
-    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+    private class RoomPagerAdapter extends FragmentStatePagerAdapter {
 
-        public ScreenSlidePagerAdapter(FragmentManager supportFragmentManager) {
+        public RoomPagerAdapter(FragmentManager supportFragmentManager) {
             super(supportFragmentManager);
-
         }
 
         @NonNull

@@ -1,6 +1,6 @@
 package com.jiuhua.jiuhuacontrol.database;
 
-/*这张表把enginerDB表的数据一小时一次加平均，*/
+/*这张表把engineDB表的数据一小时一次加平均，*/
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -13,12 +13,12 @@ public class EngineLongTimeDB {
     private long id;
     @ColumnInfo(name = " timestamp")
     private long timeStamp;   //直接使用UNIX时间
-    @ColumnInfo(name = "enginer_minute")
-    private int enginerMinute;  //主机运行时间 0--60分钟
+    @ColumnInfo(name = "engine_minute")
+    private int engineMinute;  //主机运行时间 0--60分钟
 
-    public EngineLongTimeDB(long timeStamp, int enginerMinute) {
+    public EngineLongTimeDB(long timeStamp, int engineMinute) {
         this.timeStamp = timeStamp;
-        this.enginerMinute = enginerMinute;
+        this.engineMinute = engineMinute;
     }
 
     public long getId() {
@@ -37,12 +37,12 @@ public class EngineLongTimeDB {
         this.timeStamp = timeStamp;
     }
 
-    public int getEnginerMinute() {
-        return enginerMinute;
+    public int getEngineMinute() {
+        return engineMinute;
     }
 
-    public void setEnginerMinute(int enginerMinute) {
-        this.enginerMinute = enginerMinute;
+    public void setEngineMinute(int engineMinute) {
+        this.engineMinute = engineMinute;
     }
 
 }

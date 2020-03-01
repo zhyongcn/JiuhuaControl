@@ -9,8 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.jiuhua.jiuhuacontrol.HomeViewModel;
 import com.jiuhua.jiuhuacontrol.R;
-import com.jiuhua.jiuhuacontrol.database.RoomNameDB;
+import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +19,14 @@ import java.util.List;
 
 public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyViewHolder> {
 
-    private List<RoomNameDB> allroomsName = new ArrayList<>();
+    private List<BasicInfoDB> allroomsName = new ArrayList<>();
     private HomeViewModel homeViewModel;
 
     public HomepageAdapter(HomeViewModel homeViewModel) {
         this.homeViewModel = homeViewModel;
     }
 
-    public void setAllroomsName(List<RoomNameDB> allroomsName) {
+    public void setAllroomsName(List<BasicInfoDB> allroomsName) {
         this.allroomsName = allroomsName;
     }
 
@@ -48,8 +49,8 @@ public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         //具体视图元素赋值。
-        RoomNameDB roomNameDB = allroomsName.get(position);
-        holder.textViewRoomName.setText(roomNameDB.getRoomName());
+        BasicInfoDB basicInfoDB = allroomsName.get(position);
+        holder.textViewRoomName.setText(basicInfoDB.getRoomName());
         //如果是耗时很少的操作可以在这里出现，或者item的内部有很多部件需要绑定，也在这里。
     }
 

@@ -7,18 +7,18 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class EnginerDB {
+public class EngineDB {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
     @ColumnInfo(name = " timestamp")
     private long timeStamp;   //直接使用UNIX时间
     @ColumnInfo
-    private boolean enginerRuning;
+    private boolean isengineRuning;
 
-    public EnginerDB(long timeStamp, boolean enginerRuning) {
+    public EngineDB(long timeStamp, boolean isengineRuning) {
         this.timeStamp = timeStamp;
-        this.enginerRuning = enginerRuning;
+        this.isengineRuning = isengineRuning;
     }
 
     public long getId() {
@@ -37,12 +37,12 @@ public class EnginerDB {
         this.timeStamp = timeStamp;
     }
 
-    public boolean isEnginerRuning() {
-        return enginerRuning;
+    public boolean isIsengineRuning() {
+        return isengineRuning;
     }
 
-    public void setEnginerRuning(boolean enginerRuning) {
-        this.enginerRuning = enginerRuning;
+    public void setIsengineRuning(boolean isengineRuning) {
+        this.isengineRuning = isengineRuning;
     }
 
 }

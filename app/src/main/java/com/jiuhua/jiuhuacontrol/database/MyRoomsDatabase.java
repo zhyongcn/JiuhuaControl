@@ -5,7 +5,7 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {RoomDB.class, RoomNameDB.class, RoomLongTimeDB.class, EnginerDB.class,
+@Database(entities = {RoomDB.class, BasicInfoDB.class, RoomLongTimeDB.class, EngineDB.class,
         EngineLongTimeDB.class}, version = 1, exportSchema = false)
 public abstract class MyRoomsDatabase extends RoomDatabase {
     private static MyRoomsDatabase INSTANCE;
