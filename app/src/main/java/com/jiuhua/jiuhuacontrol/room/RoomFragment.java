@@ -40,21 +40,23 @@ public class RoomFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        TextView textViewCoilValve = view.findViewById(R.id.textViewCoilValve);
-        TextView textViewFloorValve = view.findViewById(R.id.textViewFloorValve);
-        TextView textViewRoomName = view.findViewById(R.id.textViewRoomName);
-        SeekBar temperatureSeekBar = view.findViewById(R.id.temperatureSeekBar);
-        SeekBar humiditySeekBar = view.findViewById(R.id.humiditySeekBar);
-        Button buttonFloor = view.findViewById(R.id.buttonfloor);
-        Button buttonHumidity = view.findViewById(R.id.buttonhumidity);
-        RadioGroup radioGroup = view.findViewById(R.id.fanspeed);
-        RadioButton radioButtonLowFan = view.findViewById(R.id.radioButtonlowfan);
-        RadioButton radioButtonMiddleFan = view.findViewById(R.id.radioButtonmiddlefan);
-        RadioButton radioButtonHighFan = view.findViewById(R.id.radioButtonhighfan);
-        RadioButton radioButtonAutoFan = view.findViewById(R.id.radioButtonautofan);
-        Button buttonStop = view.findViewById(R.id.buttonStop);
-        Button buttonManual = view.findViewById(R.id.buttonManual);
-        Button buttonAuto = view.findViewById(R.id.buttonAuto);
+
+        //放在view model中去绑定
+//        TextView textViewCoilValve = view.findViewById(R.id.textViewCoilValve);
+//        TextView textViewFloorValve = view.findViewById(R.id.textViewFloorValve);
+//        TextView textViewRoomName = view.findViewById(R.id.textViewRoomName);
+//        SeekBar temperatureSeekBar = view.findViewById(R.id.temperatureSeekBar);
+//        SeekBar humiditySeekBar = view.findViewById(R.id.humiditySeekBar);
+//        Button buttonFloor = view.findViewById(R.id.buttonfloor);
+//        Button buttonHumidity = view.findViewById(R.id.buttonhumidity);
+//        RadioGroup radioGroup = view.findViewById(R.id.fanspeed);
+//        RadioButton radioButtonLowFan = view.findViewById(R.id.radioButtonlowfan);
+//        RadioButton radioButtonMiddleFan = view.findViewById(R.id.radioButtonmiddlefan);
+//        RadioButton radioButtonHighFan = view.findViewById(R.id.radioButtonhighfan);
+//        RadioButton radioButtonAutoFan = view.findViewById(R.id.radioButtonautofan);
+//        Button buttonStop = view.findViewById(R.id.buttonStop);
+//        Button buttonManual = view.findViewById(R.id.buttonManual);
+//        Button buttonAuto = view.findViewById(R.id.buttonAuto);
 
     }
 }

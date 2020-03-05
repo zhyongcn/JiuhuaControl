@@ -1,10 +1,11 @@
-package com.jiuhua.jiuhuacontrol;
+package com.jiuhua.jiuhuacontrol.ui.home;
 
 import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.jiuhua.jiuhuacontrol.MyRepository;
 import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
 
 import java.util.List;

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="data"
-            type="com.jiuhua.jiuhuacontrol.HomeViewModel" />
+            type="com.jiuhua.jiuhuacontrol.ui.home.HomeViewModel" />
     </data>
 
     <FrameLayout
