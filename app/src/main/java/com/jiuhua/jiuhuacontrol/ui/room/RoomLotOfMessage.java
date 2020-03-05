@@ -1,4 +1,4 @@
-package com.jiuhua.jiuhuacontrol.room;
+package com.jiuhua.jiuhuacontrol.ui.room;
 
 public class RoomLotOfMessage {
 

@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/roomHostFragment"
-        android:name="com.jiuhua.jiuhuacontrol.room.RoomHostFragment"
+        android:name="com.jiuhua.jiuhuacontrol.ui.room.RoomHostFragment"
         android:label="房间信息"
         tools:layout="@layout/fragment_room_host" />
     <fragment
