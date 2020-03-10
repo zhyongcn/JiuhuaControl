@@ -1,6 +1,6 @@
 package com.jiuhua.jiuhuacontrol.ui.home;
 
-public class RoomLittleMessage {
+public class LittleMessageOfRoom {
     private String roomName;
     private int RoomId;
     private String currentTemperation;

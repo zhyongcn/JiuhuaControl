@@ -1,6 +1,6 @@
 package com.jiuhua.jiuhuacontrol.ui.room;
 
-public class RoomLotOfMessage {
+public class LotMessageOfRoom {
 
         private String roomName;
         private String currentTemperature;
@@ -10,6 +10,9 @@ public class RoomLotOfMessage {
         private String fanStatus;
         private String floorValveOpen;
         private String coilValveOpen;
+
+    public LotMessageOfRoom() {
+    }
 
     public String getRoomName() {
         return roomName;

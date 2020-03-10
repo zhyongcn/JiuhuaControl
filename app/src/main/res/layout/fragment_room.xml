@@ -6,7 +6,7 @@
     <data>
         <variable
             name="data"
-            type="com.jiuhua.jiuhuacontrol.ui.home.HomeViewModel" />
+            type="com.jiuhua.jiuhuacontrol.ui.room.RoomViewModel" />
     </data>
 
     <FrameLayout
@@ -92,18 +92,8 @@
                 app:layout_constraintEnd_toStartOf="@+id/guideline8"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/guideline9"
-                app:layout_constraintTop_toTopOf="@+id/guideline7" />
-
-            <TextView
-                android:id="@+id/textViewFloorValve"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="地暖状态"
-                app:layout_constraintBottom_toTopOf="@+id/guideline7"
-                app:layout_constraintEnd_toStartOf="@+id/guideline10"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="@+id/guideline8"
-                app:layout_constraintTop_toTopOf="@+id/guideline7" />
+                app:layout_constraintTop_toTopOf="@+id/guideline7"
+                tools:text="两通阀状态" />
 
             <TextView
                 android:id="@+id/textViewRoomName"
@@ -114,7 +104,20 @@
                 app:layout_constraintBottom_toTopOf="@+id/guideline7"
                 app:layout_constraintEnd_toStartOf="@+id/guideline10"
                 app:layout_constraintStart_toStartOf="@+id/guideline9"
-                app:layout_constraintTop_toTopOf="@+id/guideline7" />
+                app:layout_constraintTop_toTopOf="@+id/guideline7"
+                tools:text="房间名称" />
+
+            <TextView
+                android:id="@+id/textViewFloorValve"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="地暖状态"
+                app:layout_constraintBottom_toTopOf="@+id/guideline7"
+                app:layout_constraintEnd_toStartOf="@+id/guideline10"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/guideline8"
+                app:layout_constraintTop_toTopOf="@+id/guideline7"
+                tools:text="地暖状态" />
 
             <ImageView
                 android:id="@+id/imageView2"
@@ -133,6 +136,7 @@
                 android:layout_height="wrap_content"
                 android:max="35"
                 android:min="12"
+                android:progress="@{data.settingTemperature}"
                 app:layout_constraintBottom_toTopOf="@+id/guideline11"
                 app:layout_constraintEnd_toStartOf="@+id/guideline10"
                 app:layout_constraintStart_toStartOf="@+id/guideline9"
@@ -154,6 +158,7 @@
                 android:layout_height="wrap_content"
                 android:max="90"
                 android:min="20"
+                android:progress="@{data.settingHumidity}"
                 app:layout_constraintBottom_toTopOf="@+id/guideline12"
                 app:layout_constraintEnd_toStartOf="@+id/guideline10"
                 app:layout_constraintStart_toEndOf="@+id/imageView3"
