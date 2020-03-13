@@ -15,9 +15,12 @@ import java.util.List;
 
 public class IndoorViewModel extends AndroidViewModel {
 
-//    enum Fanspeed {STOP, LOW, MEDIUM, HIGH, AUTO }
+    enum FanSpeed {STOP, LOW, MEDIUM, HIGH, AUTO}
+
+    enum RoomState {STOP, MANUAL, AUTO}
 
     MyRepository myRepository;
+
     IndoorDB currentIndoorInfo;
 
     //变量及其getter & setter 方法
@@ -26,9 +29,10 @@ public class IndoorViewModel extends AndroidViewModel {
     private MutableLiveData<Integer> settingTemperature = new MutableLiveData<>();
     private MutableLiveData<Integer> currentHumidity = new MutableLiveData<>();
     private MutableLiveData<Integer> settingHumidity = new MutableLiveData<>();
-    private MutableLiveData<String> fanStatus = new MutableLiveData<>();
+    private MutableLiveData<FanSpeed> fanStatus = new MutableLiveData<>();
     private MutableLiveData<String> floorValveOpen = new MutableLiveData<>();
     private MutableLiveData<String> coilValveOpen = new MutableLiveData<>();
+    private MutableLiveData<RoomState> roomState = new MutableLiveData<>();
 
     public MutableLiveData<String> getRoomName() {
         return roomName;
@@ -41,8 +45,8 @@ public class IndoorViewModel extends AndroidViewModel {
     /*这个方法是一个临时验证方法*/
     public void setName() {
 //        roomName.postValue("canting");//也可以运行，主要用于worker线程中
-        roomName.setValue("canting");
-        coilValveOpen.setValue("kkkk");
+        roomName.setValue("餐厅");
+        coilValveOpen.setValue("开开开");
     }
 
     public MutableLiveData<Integer> getCurrentTemperature() {
@@ -77,12 +81,12 @@ public class IndoorViewModel extends AndroidViewModel {
         this.settingHumidity.setValue(i);
     }
 
-    public MutableLiveData<String> getFanStatus() {
+    public MutableLiveData<FanSpeed> getFanStatus() {
         return this.fanStatus;
     }
 
-    public void setFanStatus(String s) {
-        this.fanStatus.setValue(s);
+    public void setFanStatus(FanSpeed fanspeed) {
+        this.fanStatus.setValue(fanspeed);
     }
 
     public MutableLiveData<String> getFloorValveOpen() {
@@ -101,6 +105,47 @@ public class IndoorViewModel extends AndroidViewModel {
         this.coilValveOpen.setValue(s);
     }
 
+    public MutableLiveData<RoomState> getRoomState() {
+        return roomState;
+    }
+
+    public void setRoomState(RoomState roomState) {
+        this.roomState.setValue(roomState);
+    }
+
+    //下面三个方法用来设定房间的状态
+    public void setRoomStateStop() {
+        this.roomState.setValue(RoomState.STOP);
+    }
+
+    public void setRoomStateManual() {
+        this.roomState.setValue(RoomState.MANUAL);
+    }
+
+    public void setRoomStateAuto() {
+        this.roomState.setValue(RoomState.AUTO);
+    }
+
+    //下面三个方法用来设定风机状态
+    public void setFanStatusStop() {
+        this.fanStatus.setValue(FanSpeed.STOP);
+    }
+
+    public void setFanStatusLow() {
+        this.fanStatus.setValue(FanSpeed.LOW);
+    }
+
+    public void setFanStatusMedium() {
+        this.fanStatus.setValue(FanSpeed.MEDIUM);
+    }
+
+    public void setFanStatusHigh() {
+        this.fanStatus.setValue(FanSpeed.HIGH);
+    }
+
+    public void setFanStatusAuto() {
+        this.fanStatus.setValue(FanSpeed.AUTO);
+    }
 
     //构造方法
     public IndoorViewModel(@NonNull Application application) {

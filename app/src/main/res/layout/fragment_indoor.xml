@@ -119,16 +119,18 @@
                 app:layout_constraintTop_toTopOf="@+id/guideline7"
                 tools:text="地暖状态" />
 
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="196dp"
-                android:layout_height="204dp"
-                android:layout_marginTop="56dp"
-                android:src="@android:drawable/ic_lock_lock"
+            <TextView
+                android:id="@+id/temptextview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{data.settingTemperature.toString()}"
+                android:textSize="36sp"
+                app:layout_constraintBottom_toTopOf="@+id/guideline11"
                 app:layout_constraintEnd_toStartOf="@+id/guideline10"
-                app:layout_constraintHorizontal_bias="0.495"
+                app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toStartOf="@+id/guideline9"
-                app:layout_constraintTop_toTopOf="@+id/guideline7" />
+                app:layout_constraintTop_toTopOf="@+id/guideline7"
+                tools:text="临时显示" />
 
             <SeekBar
                 android:id="@+id/temperatureSeekBar"
@@ -190,7 +192,6 @@
                 android:id="@+id/fanspeed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checkedButton="@id/radioButtonautofan"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toTopOf="@+id/guideline14"
                 app:layout_constraintEnd_toEndOf="@+id/guideline10"
@@ -201,25 +202,29 @@
                     android:id="@+id/radioButtonlowfan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="低速风" />
+                    android:text="低速风"
+                    android:onClick="@{()->data.setFanStatusLow()}"/>
 
                 <RadioButton
                     android:id="@+id/radioButtonmiddlefan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="中速风" />
+                    android:text="中速风"
+                    android:onClick="@{()->data.setFanStatusMedium()}"/>
 
                 <RadioButton
                     android:id="@+id/radioButtonhighfan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="高速风" />
+                    android:text="高速风"
+                    android:onClick="@{()->data.setFanStatusHigh()}"/>
 
                 <RadioButton
                     android:id="@+id/radioButtonautofan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="自动风" />
+                    android:text="自动风"
+                    android:onClick="@{()->data.setFanStatusAuto()}"/>
             </RadioGroup>
 
             <Button
@@ -227,6 +232,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="停止"
+                android:onClick="@{() -> data.setRoomStateStop()}"
                 app:layout_constraintBottom_toTopOf="@+id/guideline15"
                 app:layout_constraintEnd_toStartOf="@+id/buttonManual"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -238,6 +244,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="手动"
+                android:onClick="@{()-> data.setRoomStateManual()}"
                 app:layout_constraintEnd_toStartOf="@+id/buttonAuto"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/buttonStop"
@@ -249,6 +256,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="52dp"
                 android:text="周期自动"
+                android:onClick="@{()-> data.setRoomStateAuto()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/buttonManual"
