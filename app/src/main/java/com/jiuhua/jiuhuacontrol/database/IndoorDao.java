@@ -8,16 +8,16 @@ import androidx.room.Query;
 import java.util.List;
 
 @Dao
-public interface RoomDao {
+public interface IndoorDao {
 
     @Insert
-    void insertRoomDB(RoomDB... roomDBS);
+    void insertRoomDB(IndoorDB... indoorDBS);
 
     @Insert
     void insertRoomNameDB(BasicInfoDB... basicInfoDBS);
 
     @Insert
-    void insertRoomLongTimeDB(RoomLongTimeDB...roomLongTimeDBS);
+    void insertRoomLongTimeDB(IndoorLongTimeDB... indoorLongTimeDBS);
 
     @Query("DELETE FROM BasicInfoDB")
     void deleteAllRoomsName();
@@ -26,8 +26,8 @@ public interface RoomDao {
     public LiveData<List<BasicInfoDB>> loadAllRoomName();
 
     //提取最大id的条目
-    @Query("SELECT *  FROM RoomDB ")
-    RoomDB getCurrentRoomMessage();
+    @Query("SELECT *  FROM IndoorDB ")
+    IndoorDB getCurrentRoomMessage();
 
     //TODO 提取一周数据
 

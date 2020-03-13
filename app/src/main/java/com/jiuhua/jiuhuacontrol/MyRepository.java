@@ -7,8 +7,8 @@ import android.os.AsyncTask;
 import androidx.lifecycle.LiveData;
 
 import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
-import com.jiuhua.jiuhuacontrol.database.MyRoomsDatabase;
-import com.jiuhua.jiuhuacontrol.database.RoomDao;
+import com.jiuhua.jiuhuacontrol.database.IndoorDao;
+import com.jiuhua.jiuhuacontrol.database.MyIndoorsDatabase;
 import com.jiuhua.mqttsample.IGetMessageCallBack;
 import com.jiuhua.mqttsample.MQTTService;
 import com.jiuhua.mqttsample.MyServiceConnection;
@@ -18,16 +18,16 @@ import java.util.List;
 public class MyRepository implements IGetMessageCallBack {
 
     LiveData<List<BasicInfoDB>> allRoomNameLive;
-    private RoomDao roomDao;
+    private IndoorDao indoorDao;
 
     //MQTT需要的参数
     private MyServiceConnection serviceConnection;//连接实例
     private MQTTService mqttService;//服务实例
 
     public MyRepository(Context context) {
-        MyRoomsDatabase myRoomsDatabase = MyRoomsDatabase.getDatabase(context.getApplicationContext());
-        roomDao = myRoomsDatabase.getRoomDao();
-        allRoomNameLive = roomDao.loadAllRoomName();
+        MyIndoorsDatabase myIndoorsDatabase = MyIndoorsDatabase.getDatabase(context.getApplicationContext());
+        indoorDao = myIndoorsDatabase.getRoomDao();
+        allRoomNameLive = indoorDao.loadAllRoomName();
 
         serviceConnection = new MyServiceConnection();//新建连接服务的实例
         serviceConnection.setIGetMessageCallBack(MyRepository.this);//把本活动传入
@@ -41,11 +41,11 @@ public class MyRepository implements IGetMessageCallBack {
     //TODO 实现 Dao 的所有方法
     //插入房间名字
     public void insertRoomName(BasicInfoDB... basicInfoDBS) {
-        new InsertRoomNameAsyncTask(roomDao).execute(basicInfoDBS);
+        new InsertRoomNameAsyncTask(indoorDao).execute(basicInfoDBS);
     }
     //删除所有房间名字
     public void deleteAllRoomsName(){
-        new DeleteAllRoomsNameAsyncTask(roomDao).execute();
+        new DeleteAllRoomsNameAsyncTask(indoorDao).execute();
     }
 
     @Override
@@ -82,23 +82,23 @@ public class MyRepository implements IGetMessageCallBack {
 
     //TODO 内部类，辅助线程上执行 Dao 的方法    还有一种线程池的方法（Google文档上的）
     static class InsertRoomNameAsyncTask extends AsyncTask<BasicInfoDB, Void, Void> {
-        private RoomDao roomDao;   //独立的线程需要独立的 Dao
+        private IndoorDao indoorDao;   //独立的线程需要独立的 Dao
 
-        InsertRoomNameAsyncTask(RoomDao roomDao) {this.roomDao = roomDao; }
+        InsertRoomNameAsyncTask(IndoorDao indoorDao) {this.indoorDao = indoorDao; }
 
         @Override
         protected Void doInBackground(BasicInfoDB... basicInfoDBS) {
-            roomDao.insertRoomNameDB(basicInfoDBS);
+            indoorDao.insertRoomNameDB(basicInfoDBS);
             return null;
         }
     }
     static class DeleteAllRoomsNameAsyncTask extends AsyncTask<Void, Void, Void> {
-        private RoomDao roomDao;
-        DeleteAllRoomsNameAsyncTask(RoomDao roomDao) {this.roomDao = roomDao;}
+        private IndoorDao indoorDao;
+        DeleteAllRoomsNameAsyncTask(IndoorDao indoorDao) {this.indoorDao = indoorDao;}
 
         @Override
         protected Void doInBackground(Void... voids) {
-            roomDao.deleteAllRoomsName();
+            indoorDao.deleteAllRoomsName();
             return null;
         }
     }

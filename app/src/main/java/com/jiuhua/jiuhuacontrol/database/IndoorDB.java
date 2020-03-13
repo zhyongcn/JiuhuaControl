@@ -4,12 +4,13 @@ package com.jiuhua.jiuhuacontrol.database;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(foreignKeys = @ForeignKey(entity = RoomDB.class, parentColumns = "id",childColumns = "room_name_id"),
+@Entity(foreignKeys = @ForeignKey(entity = IndoorDB.class, parentColumns = "id",childColumns = "room_name_id"),
 indices = {@Index(value = {"room_name_id"} ) } )
-public class RoomDB {
+public class IndoorDB {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
@@ -32,9 +33,14 @@ public class RoomDB {
     @ColumnInfo(name = "coil_valve")
     private boolean coilValveOpen;
 
-    public RoomDB(long timeStamp, int roomNameId, int currentTemperature, int settingTemperature,
-                  int currentHumidity, int settingHumidity, int fanStatus, boolean floorValveOpen,
-                  boolean coilValveOpen) {
+    public IndoorDB() {
+        //empty public constructor for IndoorViewModel
+    }
+
+    @Ignore
+    public IndoorDB(long timeStamp, int roomNameId, int currentTemperature, int settingTemperature,
+                    int currentHumidity, int settingHumidity, int fanStatus, boolean floorValveOpen,
+                    boolean coilValveOpen) {
         this.timeStamp = timeStamp;
         this.roomNameId = roomNameId;
         this.currentTemperature = currentTemperature;

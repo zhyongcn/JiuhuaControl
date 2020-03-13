@@ -1,4 +1,4 @@
-package com.jiuhua.jiuhuacontrol.ui.room;
+package com.jiuhua.jiuhuacontrol.ui.indoor;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -52,7 +52,7 @@ public class OldRoomActivity extends AppCompatActivity implements IGetMessageCal
         Intent intent = getIntent();
         String roomName = intent.getStringExtra("roomname");//Mainactivity传过来的点击的哪一个按钮（房间）
         roomID = intent.getStringExtra("roomid");//传一个标识
-        peroid_S = sharedPreferences.getString("RoomDB"+roomID+"peroid_S", "");//利用标识，获取存储的周期数据
+        peroid_S = sharedPreferences.getString("IndoorDB"+roomID+"peroid_S", "");//利用标识，获取存储的周期数据
 
         context = this;
         myView.getdata(peroid_S);//把获取的周期数据传给myview
@@ -67,7 +67,7 @@ public class OldRoomActivity extends AppCompatActivity implements IGetMessageCal
         Intent intentServer = new Intent(this, MQTTService.class);//传递信息
         bindService(intentServer, serviceConnection, Context.BIND_AUTO_CREATE);//绑定服务
 
-        MQTTService.publish("86518/JYCFGC/6-2-3401Room"+roomID,"RoomDB"+roomID+"feedback", 1, true);
+        MQTTService.publish("86518/JYCFGC/6-2-3401Room"+roomID,"IndoorDB"+roomID+"feedback", 1, true);
     }
 
     @Override
@@ -97,8 +97,8 @@ public class OldRoomActivity extends AppCompatActivity implements IGetMessageCal
 
         switch (v.getId()) {
             case 1:
-                MQTTService.publish("86518/JYCFGC/6-2-3401/RoomDB"+roomID,
-                        "RoomDB"+roomID+"turn-offfloor", 1, true);
+                MQTTService.publish("86518/JYCFGC/6-2-3401/IndoorDB"+roomID,
+                        "IndoorDB"+roomID+"turn-offfloor", 1, true);
                 btManualOff.setBackgroundColor(Color.parseColor("#00FF00"));//设置手动停止按钮背景为绿色
                 btManualOn.setBackgroundColor(Color.argb(20,0,0,0));//设置手动的按钮背景为灰色
                 btAutomation.setBackgroundColor(Color.argb(20,0,0,0));//设置自动按钮的背景为灰色
@@ -110,8 +110,8 @@ public class OldRoomActivity extends AppCompatActivity implements IGetMessageCal
                 builder.setPositiveButton("设置", new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        MQTTService.publish("86518/JYCFGC/6-2-3401/RoomDB"+roomID,
-                                valueOf(settingTemperature)+"RoomDB"+roomID+"set_temp", 1, true);
+                        MQTTService.publish("86518/JYCFGC/6-2-3401/IndoorDB"+roomID,
+                                valueOf(settingTemperature)+"IndoorDB"+roomID+"set_temp", 1, true);
                     }
                 });
                 builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -132,23 +132,23 @@ public class OldRoomActivity extends AppCompatActivity implements IGetMessageCal
                 dialog.setView(dialogView);
                 dialog.show();
                 //先开阀，再考虑温度，是不是应该开。
-                MQTTService.publish("86518/JYCFGC/6-2-3401/RoomDB"+roomID,"RoomDB"+roomID+"manual-onfloor", 1, true);
+                MQTTService.publish("86518/JYCFGC/6-2-3401/IndoorDB"+roomID,"IndoorDB"+roomID+"manual-onfloor", 1, true);
                 btManualOff.setBackgroundColor(Color.argb(20,0,0,0));//设置手动停止按钮背景为绿色
                 btManualOn.setBackgroundColor(Color.parseColor("#00FF00"));//设置手动的按钮背景为灰色
                 btAutomation.setBackgroundColor(Color.argb(20,0,0,0));//设置自动按钮的背景为灰色
                 btFeast.setBackgroundColor(Color.argb(20,0,0,0));//设置宴会按钮的背景为灰色
                 break;
             case 3:
-                MQTTService.publish("86518/JYCFGC/6-2-3401/RoomDB"+roomID,
-                        "RoomDB"+roomID+"automationfloor", 1, true);
+                MQTTService.publish("86518/JYCFGC/6-2-3401/IndoorDB"+roomID,
+                        "IndoorDB"+roomID+"automationfloor", 1, true);
                 btManualOff.setBackgroundColor(Color.argb(20,0,0,0));//设置手动停止按钮背景为绿色
                 btManualOn.setBackgroundColor(Color.argb(20,0,0,0));//设置手动的按钮背景为灰色
                 btAutomation.setBackgroundColor(Color.parseColor("#00FF00"));//设置自动按钮的背景为灰色
                 btFeast.setBackgroundColor(Color.argb(20,0,0,0));//设置宴会按钮的背景为灰色
                 break;
             case 4:
-                MQTTService.publish("86518/JYCFGC/6-2-3401/RoomDB"+roomID,
-                        "RoomDB"+roomID+"feast", 1, true);
+                MQTTService.publish("86518/JYCFGC/6-2-3401/IndoorDB"+roomID,
+                        "IndoorDB"+roomID+"feast", 1, true);
                 btManualOff.setBackgroundColor(Color.argb(20,0,0,0));//设置手动停止按钮背景为绿色
                 btManualOn.setBackgroundColor(Color.argb(20,0,0,0));//设置手动的按钮背景为灰色
                 btAutomation.setBackgroundColor(Color.argb(20,0,0,0));//设置自动按钮的背景为灰色

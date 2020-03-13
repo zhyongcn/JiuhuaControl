@@ -1,4 +1,4 @@
-package com.jiuhua.jiuhuacontrol.ui.room;
+package com.jiuhua.jiuhuacontrol.ui.indoor;
 
 import android.content.Context;
 import android.graphics.Canvas;

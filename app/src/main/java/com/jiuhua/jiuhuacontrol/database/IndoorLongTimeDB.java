@@ -11,9 +11,9 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(foreignKeys = @ForeignKey(entity = RoomDB.class, parentColumns = "id",childColumns = "room_name_id"),
+@Entity(foreignKeys = @ForeignKey(entity = IndoorDB.class, parentColumns = "id",childColumns = "room_name_id"),
  indices = { @Index(value = {"room_name_id"})})
-public class RoomLongTimeDB {
+public class IndoorLongTimeDB {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
@@ -117,12 +117,12 @@ public class RoomLongTimeDB {
     }
 
 
-    public RoomLongTimeDB() {
+    public IndoorLongTimeDB() {
     }
 
-    public RoomLongTimeDB(long timeStamp, int roomNameId, int currentTemperature, int settingTemperature,
-                          int currentHumidity, int settingHumidity, int airVolume, int floorMinute,
-                          int coilValveMinute) {
+    public IndoorLongTimeDB(long timeStamp, int roomNameId, int currentTemperature, int settingTemperature,
+                            int currentHumidity, int settingHumidity, int airVolume, int floorMinute,
+                            int coilValveMinute) {
 
         this.timeStamp = timeStamp;
         RoomNameId = roomNameId;

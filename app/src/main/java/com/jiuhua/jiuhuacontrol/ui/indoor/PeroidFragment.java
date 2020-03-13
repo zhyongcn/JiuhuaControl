@@ -1,4 +1,4 @@
-package com.jiuhua.jiuhuacontrol.ui.room;
+package com.jiuhua.jiuhuacontrol.ui.indoor;
 
 
 import android.os.Bundle;
@@ -12,13 +12,13 @@ import android.view.ViewGroup;
 import com.jiuhua.jiuhuacontrol.R;
 
 /**
- * 昨天的温湿度显示（24小时的）
+ * 一周运行时间段的显示和设置
  * A simple {@link Fragment} subclass.
  */
-public class HistoryFragment extends Fragment {
+public class PeroidFragment extends Fragment {
 
 
-    public HistoryFragment() {
+    public PeroidFragment() {
         // Required empty public constructor
     }
 
@@ -27,7 +27,7 @@ public class HistoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_history, container, false);
+        return inflater.inflate(R.layout.fragment_peroid, container, false);
     }
 
 }

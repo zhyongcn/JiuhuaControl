@@ -72,7 +72,9 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 homeViewModel.insertRoomName(new BasicInfoDB("主卧室"));
+                homeViewModel.insertRoomName(new BasicInfoDB("次卧室"));
                 homeViewModel.insertRoomName(new BasicInfoDB("客厅"));
+                homeViewModel.insertRoomName(new BasicInfoDB("餐厅"));
                 homeViewModel.insertRoomName(new BasicInfoDB("儿童房"));
             }
         });
@@ -80,6 +82,12 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 homeViewModel.deleteAllRoomsName();
+            }
+        });
+        buttonECO.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //pass
             }
         });
     }

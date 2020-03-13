@@ -1,11 +1,24 @@
+//import android.content.Context;
+//import android.content.Intent;
+//import android.content.SharedPreferences;
+//import android.os.Bundle;
+//import android.view.Menu;
+//import android.view.MenuItem;
+//import android.view.View;
+//import android.widget.Button;
+//import android.widget.Toast;
+//
+//import androidx.appcompat.app.AppCompatActivity;
+//
 //import com.espressif.iot.esptouch.demo_activity.EsptouchDemoActivity;
-//import com.jiuhua.jiuhuacontrol.room.OldRoomActivity;
+//import com.jiuhua.jiuhuacontrol.R;
+//import com.jiuhua.jiuhuacontrol.ui.indoor.OldRoomActivity;
 //import com.jiuhua.mqttsample.IGetMessageCallBack;
 //import com.jiuhua.mqttsample.MQTTService;
 //import com.jiuhua.mqttsample.MyServiceConnection;
 //
 //public class OldMainActivity extends AppCompatActivity implements IGetMessageCallBack {
-
+//
 //    //MQTT需要的参数
 //    private MyServiceConnection serviceConnection;//连接实例
 //    private MQTTService mqttService;//服务实例
@@ -16,13 +29,14 @@
 //        //从存储器中读取数据：各个房间的名字
 //        //这个放在开始的部分，利用线程，不耽误其他线程
 //        SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
-//        room1name = sharedPreferences.getString("room1name", "");
+//        String room1name = sharedPreferences.getString("room1name", "");
 //
 //        super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_main);
 //
 //
 //        //如果房间名称是空的，让这个按钮不可见
+//        Button buttonA;
 //        if (room1name.equals("")) buttonA.setVisibility(View.INVISIBLE);
 //
 //        //点击各个房间的按钮，跳转到各个房间的详情
@@ -35,6 +49,7 @@
 //                startActivity(intent);
 //            }
 //        });
+//        Button buttonB;
 //        buttonB.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -130,7 +145,7 @@
 //    protected void onResume() {
 //        super.onResume();
 //
-//        MQTTService.publish("86518/JYCFGC/6-2-3401/RoomDB", "feedback", 1, true);
+//        MQTTService.publish("86518/JYCFGC/6-2-3401/IndoorDB", "feedback", 1, true);
 //        MQTTService.publish("86518/JYCFGC/6-2-3401/Room2", "feedback", 1, true);
 //    }
 //

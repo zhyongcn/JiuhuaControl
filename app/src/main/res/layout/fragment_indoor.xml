@@ -6,13 +6,13 @@
     <data>
         <variable
             name="data"
-            type="com.jiuhua.jiuhuacontrol.ui.room.RoomViewModel" />
+            type="com.jiuhua.jiuhuacontrol.ui.indoor.IndoorViewModel" />
     </data>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.room.RoomFragment">
+        tools:context=".ui.indoor.IndoorFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -87,7 +87,7 @@
                 android:id="@+id/textViewCoilValve"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="两通阀状态"
+                android:text="@{data.coilValveOpen}"
                 app:layout_constraintBottom_toTopOf="@+id/guideline7"
                 app:layout_constraintEnd_toStartOf="@+id/guideline8"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -99,7 +99,7 @@
                 android:id="@+id/textViewRoomName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="房间名称"
+                android:text="@{data.roomName}"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toTopOf="@+id/guideline7"
                 app:layout_constraintEnd_toStartOf="@+id/guideline10"
@@ -111,7 +111,7 @@
                 android:id="@+id/textViewFloorValve"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="地暖状态"
+                android:text="@{data.floorValveOpen}"
                 app:layout_constraintBottom_toTopOf="@+id/guideline7"
                 app:layout_constraintEnd_toStartOf="@+id/guideline10"
                 app:layout_constraintHorizontal_bias="1.0"
@@ -168,7 +168,9 @@
                 android:id="@+id/buttonfloor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:shadowColor="#FFFFFF"
                 android:text="地暖开关"
+                android:onClick="@{()->data.setName()}"
                 app:layout_constraintBottom_toTopOf="@+id/guideline13"
                 app:layout_constraintEnd_toStartOf="@+id/guideline8"
                 app:layout_constraintStart_toStartOf="@+id/guideline9"
