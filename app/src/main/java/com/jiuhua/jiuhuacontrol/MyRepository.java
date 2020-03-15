@@ -3,17 +3,22 @@ package com.jiuhua.jiuhuacontrol;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
 import com.jiuhua.jiuhuacontrol.database.IndoorDao;
 import com.jiuhua.jiuhuacontrol.database.MyIndoorsDatabase;
+import com.jiuhua.jiuhuacontrol.ui.indoor.IndoorViewModel;
 import com.jiuhua.mqttsample.IGetMessageCallBack;
 import com.jiuhua.mqttsample.MQTTService;
 import com.jiuhua.mqttsample.MyServiceConnection;
 
 import java.util.List;
+
+import static com.jiuhua.mqttsample.MQTTService.TAG;
 
 public class MyRepository implements IGetMessageCallBack {
 
@@ -31,28 +36,37 @@ public class MyRepository implements IGetMessageCallBack {
 
         serviceConnection = new MyServiceConnection();//新建连接服务的实例
         serviceConnection.setIGetMessageCallBack(MyRepository.this);//把本活动传入
-        Intent intent = new Intent(context, getClass());
+        Intent intent = new Intent(context, MQTTService.class);
         context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
-        context.startService(intent);
     }
 
-    public LiveData<List<BasicInfoDB>> getAllRoomsNameLive() {return allRoomNameLive;}
+    public LiveData<List<BasicInfoDB>> getAllRoomsNameLive() {
+        return allRoomNameLive;
+    }
 
     //TODO 实现 Dao 的所有方法
     //插入房间名字
     public void insertRoomName(BasicInfoDB... basicInfoDBS) {
         new InsertRoomNameAsyncTask(indoorDao).execute(basicInfoDBS);
     }
+
     //删除所有房间名字
-    public void deleteAllRoomsName(){
+    public void deleteAllRoomsName() {
         new DeleteAllRoomsNameAsyncTask(indoorDao).execute();
     }
 
     @Override
     public void setMessage(String message) {
-        //use the mqtt data here.
+        //use mqtt message here.
         //依据message字符串最后一位决定房间号，倒数第二位决定温湿度C为温度，H为湿度。
-//        if (message.contains("C1")) room1temperature = message.replace("C1", "C");
+        //if (message.contains("C2")) room1temperature = message.replace("C2", "C");//这几个房间有信号
+        //if (message.contains("C3")) room1temperature = message.replace("C3", "C");
+        //if (message.contains("C5")) room1temperature = message.replace("C5", "C");
+        if (message.contains("C2")) {
+            IndoorViewModel.currentTemperature.setValue(message.replace("C2", "C"));
+        }
+
+
 //        if (message.contains("RH1")) room1humidity = message.replace("RH1", "RH");
 //        if (message.contains("C2")) room2temperature = message.replace("C2", "C");
 
@@ -80,11 +94,13 @@ public class MyRepository implements IGetMessageCallBack {
 
     }
 
-    //TODO 内部类，辅助线程上执行 Dao 的方法    还有一种线程池的方法（Google文档上的）
+    //内部类，辅助线程上执行 Dao 的方法。    还有一种线程池的方法（Google文档上的）
     static class InsertRoomNameAsyncTask extends AsyncTask<BasicInfoDB, Void, Void> {
         private IndoorDao indoorDao;   //独立的线程需要独立的 Dao
 
-        InsertRoomNameAsyncTask(IndoorDao indoorDao) {this.indoorDao = indoorDao; }
+        InsertRoomNameAsyncTask(IndoorDao indoorDao) {
+            this.indoorDao = indoorDao;
+        }
 
         @Override
         protected Void doInBackground(BasicInfoDB... basicInfoDBS) {
@@ -92,9 +108,13 @@ public class MyRepository implements IGetMessageCallBack {
             return null;
         }
     }
+
     static class DeleteAllRoomsNameAsyncTask extends AsyncTask<Void, Void, Void> {
         private IndoorDao indoorDao;
-        DeleteAllRoomsNameAsyncTask(IndoorDao indoorDao) {this.indoorDao = indoorDao;}
+
+        DeleteAllRoomsNameAsyncTask(IndoorDao indoorDao) {
+            this.indoorDao = indoorDao;
+        }
 
         @Override
         protected Void doInBackground(Void... voids) {

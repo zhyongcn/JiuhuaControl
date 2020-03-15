@@ -25,7 +25,7 @@
 //
 //    @Override
 //    protected void onCreate(final Bundle savedInstanceState) {
-//        //TODO 要通过全局对象来传递数据，getApplication()
+//        //要通过全局对象来传递数据，getApplication()，---不需要了，通过数据库来存储
 //        //从存储器中读取数据：各个房间的名字
 //        //这个放在开始的部分，利用线程，不耽误其他线程
 //        SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);

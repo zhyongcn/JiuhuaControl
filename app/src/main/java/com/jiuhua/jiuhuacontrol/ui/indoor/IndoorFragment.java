@@ -40,7 +40,7 @@ public class IndoorFragment extends Fragment {
 //        binding = FragmentRoomBinding.inflate(LayoutInflater.from(getContext()), null, false); //从绑定类吹气
 //        binding = FragmentRoomBinding.inflate(inflater, container, false);
 //        binding = FragmentRoomBinding.inflate(inflater);
-//        binding = DataBindingUtil.setContentView(getActivity(), R.layout.fragment_indoor);//这句不行
+//        //**这句不行**  binding = DataBindingUtil.setContentView(getActivity(), R.layout.fragment_indoor);
         //上面三句也是可以的
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_indoor, container, false);
 
@@ -141,8 +141,8 @@ public class IndoorFragment extends Fragment {
 
         //临时验证方法
         indoorViewModel.setRoomName("客厅");
-        indoorViewModel.setSettingTemperature(24);
-        indoorViewModel.setSettingHumidity(40);
+        indoorViewModel.setSettingTemperature(22);
+        indoorViewModel.setSettingHumidity(50);
         indoorViewModel.setCoilValveOpen("两通阀开");
         indoorViewModel.setFloorValveOpen("地暖开");
     }

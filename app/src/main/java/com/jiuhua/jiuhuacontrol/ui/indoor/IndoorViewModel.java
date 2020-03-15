@@ -25,7 +25,7 @@ public class IndoorViewModel extends AndroidViewModel {
 
     //变量及其getter & setter 方法
     private MutableLiveData<String> roomName = new MutableLiveData<>();
-    private MutableLiveData<Integer> currentTemperature = new MutableLiveData<>();
+    public static final MutableLiveData<String> currentTemperature = new MutableLiveData<>();
     private MutableLiveData<Integer> settingTemperature = new MutableLiveData<>();
     private MutableLiveData<Integer> currentHumidity = new MutableLiveData<>();
     private MutableLiveData<Integer> settingHumidity = new MutableLiveData<>();
@@ -42,26 +42,19 @@ public class IndoorViewModel extends AndroidViewModel {
         this.roomName.setValue(s);
     }
 
-    /*这个方法是一个临时验证方法*/
-    public void setName() {
-//        roomName.postValue("canting");//也可以运行，主要用于worker线程中
-        roomName.setValue("餐厅");
-        coilValveOpen.setValue("开开开");
-    }
-
-    public MutableLiveData<Integer> getCurrentTemperature() {
+    public MutableLiveData<String> getCurrentTemperature() {
         return this.currentTemperature;
     }
 
-    public void setCurrentTemperature(int i) {
-        this.currentTemperature.setValue(i);
+    public void setCurrentTemperature(Integer i) {
+        this.currentTemperature.setValue(String.valueOf(i));
     }
 
     public MutableLiveData<Integer> getSettingTemperature() {
         return this.settingTemperature;
     }
 
-    public void setSettingTemperature(int i) {
+    public void setSettingTemperature(Integer i) {
         this.settingTemperature.setValue(i);
     }
 
@@ -69,7 +62,7 @@ public class IndoorViewModel extends AndroidViewModel {
         return this.currentHumidity;
     }
 
-    public void setCurrentHumidity(int i) {
+    public void setCurrentHumidity(Integer i) {
         currentHumidity.setValue(i);
     }
 
@@ -77,7 +70,7 @@ public class IndoorViewModel extends AndroidViewModel {
         return this.settingHumidity;
     }
 
-    public void setSettingHumidity(int i) {
+    public void setSettingHumidity(Integer i) {
         this.settingHumidity.setValue(i);
     }
 
@@ -126,7 +119,7 @@ public class IndoorViewModel extends AndroidViewModel {
         this.roomState.setValue(RoomState.AUTO);
     }
 
-    //下面三个方法用来设定风机状态
+    //下面五个方法用来设定风机状态
     public void setFanStatusStop() {
         this.fanStatus.setValue(FanSpeed.STOP);
     }
@@ -150,10 +143,9 @@ public class IndoorViewModel extends AndroidViewModel {
     //构造方法
     public IndoorViewModel(@NonNull Application application) {
         super(application);
-        myRepository = new MyRepository(application);
-        currentIndoorInfo = new IndoorDB();
+        this.myRepository = new MyRepository(application);
+        this.currentIndoorInfo = new IndoorDB();
     }
-
 
     //TODO　包装 Repository 里面的 Dao 方法
     public void insertRoomName(BasicInfoDB... basicInfoDBS) {
