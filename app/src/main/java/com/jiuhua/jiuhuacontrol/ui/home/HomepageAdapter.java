@@ -33,7 +33,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyView
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View itemView = layoutInflater.inflate(R.layout.cell_layout, parent, false);
+        View itemView = layoutInflater.inflate(R.layout.home_cell_layout, parent, false);
         final MyViewHolder holder = new MyViewHolder(itemView);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

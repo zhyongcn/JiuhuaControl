@@ -1,7 +1,8 @@
-package com.jiuhua.jiuhuacontrol.ui.home;
+package com.jiuhua.jiuhuacontrol.ui.userinfo;
 
 import android.app.Application;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
@@ -10,15 +11,16 @@ import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
 
 import java.util.List;
 
-public class HomeViewModel extends AndroidViewModel {
+public class UserInfoViewModel extends AndroidViewModel {
 
     MyRepository myRepository;
 
-    public HomeViewModel(Application application) {
+    //the data on page
+
+    public UserInfoViewModel(@NonNull Application application) {
         super(application);
         myRepository = new MyRepository(application);
     }
-
 
     //TODO　包装 Repository 里面的 Dao 方法
     public void insertRoomName(BasicInfoDB... basicInfoDBS) {
@@ -31,6 +33,4 @@ public class HomeViewModel extends AndroidViewModel {
     public LiveData<List<BasicInfoDB>> getAllRoomsName(){
         return myRepository.getAllRoomsNameLive();
     }
-
-
 }

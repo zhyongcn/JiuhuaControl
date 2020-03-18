@@ -71,11 +71,17 @@ public class HomeFragment extends Fragment {
         buttonInHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                homeViewModel.insertRoomName(new BasicInfoDB("主卧室"));
-                homeViewModel.insertRoomName(new BasicInfoDB("次卧室"));
+                //temporary test code
+                homeViewModel.insertRoomName(new BasicInfoDB("次卧室", "扬子风盘", "FP-51", true, true,
+                        true, null, null, false));
+                homeViewModel.insertRoomName(new BasicInfoDB("zhuwoshi", "约克", "FP-68", false, true,
+                        true, null, null, false));
+                homeViewModel.insertRoomName(new BasicInfoDB("canting", "麦克维尔", "FP-120", true, false,
+                        true, null, null, false));
                 homeViewModel.insertRoomName(new BasicInfoDB("客厅"));
                 homeViewModel.insertRoomName(new BasicInfoDB("餐厅"));
                 homeViewModel.insertRoomName(new BasicInfoDB("儿童房"));
+
             }
         });
         buttonOutHome.setOnClickListener(new View.OnClickListener() {

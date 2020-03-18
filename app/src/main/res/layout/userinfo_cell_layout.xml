@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="8dp"
+    android:background="#00351D1D"
+    android:backgroundTint="#00322424"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#33FFEB3B"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/user_roomname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="房间名称"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/room_fancoil_grade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="风机盘管品牌"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/room_fancoil_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="风机盘管规格型号"
+            android:inputType="textPersonName" />
+
+        <CheckBox
+            android:id="@+id/room_coilvalve_checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="风机有两通阀" />
+
+        <CheckBox
+            android:id="@+id/room_floor_checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="有地暖吗" />
+
+        <CheckBox
+            android:id="@+id/room_autofloor_checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="地暖有电控阀" />
+
+        <EditText
+            android:id="@+id/room_radiator_grade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="暖气片品牌"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/room_radiator_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="暖气片规格型号"
+            android:inputType="textPersonName" />
+
+        <CheckBox
+            android:id="@+id/room_radiatorvalve_auto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="暖气片有电控阀" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

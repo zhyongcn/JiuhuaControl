@@ -1,37 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/text_gallery2"
+    <data>
+
+        <variable
+            name="data"
+            type="com.jiuhua.jiuhuacontrol.ui.userinfo.UserInfoViewModel" />
+
+    </data>
+
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="用户信息，房间信息，设备信息"
-        android:textAlignment="center"
-        android:textSize="20sp"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.145" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/text_gallery"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="设备信息：壁挂炉，暖气片，地暖（手动/自动），两联供，风机，地暖自动分水器吗"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_gallery2"
-        app:layout_constraintVertical_bias="0.261" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/basicinfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="用户基本信息"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="姓名"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/userphone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="手机号码"
+                android:inputType="phone" />
+
+            <EditText
+                android:id="@+id/useraddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="安装地址"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/useremail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="15"
+                android:hint="电子邮件"
+                android:inputType="textEmailAddress" />
+
+            <EditText
+                android:id="@+id/userwechat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="微信号"
+                android:inputType="textPersonName" />
+
+            <TextView
+                android:id="@+id/equipment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="主设备信息"
+                android:textSize="18sp" />
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/userinfo_boiler"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="燃气壁挂炉" />
+
+                <RadioButton
+                    android:id="@+id/userinfo_heatpump"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="空气源热泵" />
+            </RadioGroup>
+
+            <EditText
+                android:id="@+id/equipmetgrade"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="主机品牌"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/equipmenttype"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="主机规格型号"
+                android:inputType="textPersonName" />
+
+            <TextView
+                android:id="@+id/user_roomequipment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="房间设备信息"
+                android:textSize="18sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/userinfo_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <Button
+                android:id="@+id/userinfo_confirm_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="确定提交" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</layout>

@@ -8,6 +8,8 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import com.jiuhua.jiuhuacontrol.ui.indoor.IndoorViewModel;
+
 @Entity(foreignKeys = @ForeignKey(entity = IndoorDB.class, parentColumns = "id",childColumns = "room_name_id"),
 indices = {@Index(value = {"room_name_id"} ) } )
 public class IndoorDB {
@@ -27,11 +29,13 @@ public class IndoorDB {
     @ColumnInfo(name = "setting_humidity")
     private int settingHumidity;
     @ColumnInfo(name = "fan_status")
-    private int fanStatus;
+    private int fanStatus;//stop 0, low 1, middium 2, high 3, auto 4.
     @ColumnInfo(name = "floor_valve")
     private boolean floorValveOpen;
     @ColumnInfo(name = "coil_valve")
     private boolean coilValveOpen;
+    @ColumnInfo(name = "room_status")
+    private int roomStatus;//stop 0, manual 1, auto 2.
 
     public IndoorDB() {
         //empty public constructor for IndoorViewModel
@@ -40,7 +44,7 @@ public class IndoorDB {
     @Ignore
     public IndoorDB(long timeStamp, int roomNameId, int currentTemperature, int settingTemperature,
                     int currentHumidity, int settingHumidity, int fanStatus, boolean floorValveOpen,
-                    boolean coilValveOpen) {
+                    boolean coilValveOpen, int roomStatus) {
         this.timeStamp = timeStamp;
         this.roomNameId = roomNameId;
         this.currentTemperature = currentTemperature;
@@ -50,6 +54,7 @@ public class IndoorDB {
         this.fanStatus = fanStatus;
         this.floorValveOpen = floorValveOpen;
         this.coilValveOpen = coilValveOpen;
+        this.roomStatus = roomStatus;
     }
 
     public long getId() {
@@ -132,5 +137,11 @@ public class IndoorDB {
         this.coilValveOpen = coilValveOpen;
     }
 
+    public int getRoomStatus() {
+        return roomStatus;
+    }
 
+    public void setRoomStatus(int roomStatus) {
+        this.roomStatus = roomStatus;
+    }
 }

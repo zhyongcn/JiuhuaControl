@@ -3,10 +3,8 @@ package com.jiuhua.jiuhuacontrol;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
 import com.jiuhua.jiuhuacontrol.database.IndoorDao;
@@ -17,8 +15,6 @@ import com.jiuhua.mqttsample.MQTTService;
 import com.jiuhua.mqttsample.MyServiceConnection;
 
 import java.util.List;
-
-import static com.jiuhua.mqttsample.MQTTService.TAG;
 
 public class MyRepository implements IGetMessageCallBack {
 
@@ -44,6 +40,14 @@ public class MyRepository implements IGetMessageCallBack {
         return allRoomNameLive;
     }
 
+    //TODO 实现发送功能
+    public void stopRoomEquipment(String roomID){
+//        mqttService = serviceConnection.getMqttService();
+        MQTTService.publish("86518/JYCFGC/6-2-3401/Room"+roomID,"Room"+roomID+"turn-offFP", 1, true);
+        MQTTService.publish("86518/JYCFGC/6-2-3401/Room"+roomID,"Room"+roomID+"turn-offfloor", 1, true);
+    }
+
+
     //TODO 实现 Dao 的所有方法
     //插入房间名字
     public void insertRoomName(BasicInfoDB... basicInfoDBS) {
@@ -59,13 +63,10 @@ public class MyRepository implements IGetMessageCallBack {
     public void setMessage(String message) {
         //use mqtt message here.
         //依据message字符串最后一位决定房间号，倒数第二位决定温湿度C为温度，H为湿度。
-        //if (message.contains("C2")) room1temperature = message.replace("C2", "C");//这几个房间有信号
-        //if (message.contains("C3")) room1temperature = message.replace("C3", "C");
-        //if (message.contains("C5")) room1temperature = message.replace("C5", "C");
+        //目前只有 C2  C3 C5 三个房间有信号
         if (message.contains("C2")) {
             IndoorViewModel.currentTemperature.setValue(message.replace("C2", "C"));
         }
-
 
 //        if (message.contains("RH1")) room1humidity = message.replace("RH1", "RH");
 //        if (message.contains("C2")) room2temperature = message.replace("C2", "C");

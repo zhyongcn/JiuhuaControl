@@ -24,6 +24,7 @@ public class IndoorViewModel extends AndroidViewModel {
     IndoorDB currentIndoorInfo;
 
     //变量及其getter & setter 方法
+    private int roomId;
     private MutableLiveData<String> roomName = new MutableLiveData<>();
     public static final MutableLiveData<String> currentTemperature = new MutableLiveData<>();
     private MutableLiveData<Integer> settingTemperature = new MutableLiveData<>();
@@ -109,6 +110,7 @@ public class IndoorViewModel extends AndroidViewModel {
     //下面三个方法用来设定房间的状态
     public void setRoomStateStop() {
         this.roomState.setValue(RoomState.STOP);
+        myRepository.stopRoomEquipment(String.valueOf(roomId));
     }
 
     public void setRoomStateManual() {
@@ -148,6 +150,10 @@ public class IndoorViewModel extends AndroidViewModel {
     }
 
     //TODO　包装 Repository 里面的 Dao 方法
+    public void stopRoomEquipment(String roomid){
+        myRepository.stopRoomEquipment(roomid);
+    }
+
     public void insertRoomName(BasicInfoDB... basicInfoDBS) {
         myRepository.insertRoomName(basicInfoDBS);
     }
