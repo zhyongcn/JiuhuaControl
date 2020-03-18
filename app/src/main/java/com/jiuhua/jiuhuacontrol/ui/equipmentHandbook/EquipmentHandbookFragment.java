@@ -1,4 +1,4 @@
-package com.jiuhua.jiuhuacontrol.ui.equipmentManual;
+package com.jiuhua.jiuhuacontrol.ui.equipmentHandbook;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.jiuhua.jiuhuacontrol.R;
 
-public class EquipmentManualFragment extends Fragment {
+public class EquipmentHandbookFragment extends Fragment {
 
-    private EquipmentManualViewModel equipmentManualViewModel;
+    private EquipmentHandbookViewModel equipmentHandbookViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        equipmentManualViewModel =
-                ViewModelProviders.of(this).get(EquipmentManualViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_equipmentmanual, container, false);
-        final TextView textView = root.findViewById(R.id.equipmentManual);
-        equipmentManualViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        equipmentHandbookViewModel =
+                ViewModelProviders.of(this).get(EquipmentHandbookViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_equipment_handbook, container, false);
+        final TextView textView = root.findViewById(R.id.equipmentHandbook);
+        equipmentHandbookViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

@@ -1,14 +1,14 @@
-package com.jiuhua.jiuhuacontrol.ui.equipmentManual;
+package com.jiuhua.jiuhuacontrol.ui.equipmentHandbook;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class EquipmentManualViewModel extends ViewModel {
+public class EquipmentHandbookViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public EquipmentManualViewModel() {
+    public EquipmentHandbookViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is equipmentmaunal fragment");
     }

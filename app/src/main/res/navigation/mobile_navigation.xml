@@ -27,9 +27,9 @@
         tools:layout="@layout/fragment_userinfo" />
     <fragment
         android:id="@+id/nav_equipmentManual"
-        android:name="com.jiuhua.jiuhuacontrol.ui.equipmentManual.EquipmentManualFragment"
+        android:name="com.jiuhua.jiuhuacontrol.ui.equipmentHandbook.EquipmentHandbookFragment"
         android:label="设备手册"
-        tools:layout="@layout/fragment_equipmentmanual" />
+        tools:layout="@layout/fragment_equipment_handbook" />
     <fragment
         android:id="@+id/nav_service"
         android:name="com.jiuhua.jiuhuacontrol.ui.service.ServiceFragment"
