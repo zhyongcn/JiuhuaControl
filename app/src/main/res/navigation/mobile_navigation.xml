@@ -24,7 +24,11 @@
         android:id="@+id/nav_userinfo"
         android:name="com.jiuhua.jiuhuacontrol.ui.userinfo.UserInfoFragment"
         android:label="用户信息"
-        tools:layout="@layout/fragment_userinfo" />
+        tools:layout="@layout/fragment_userinfo" >
+        <action
+            android:id="@+id/action_nav_userinfo_to_peroidFragment"
+            app:destination="@id/peroidFragment" />
+    </fragment>
     <fragment
         android:id="@+id/nav_equipmentManual"
         android:name="com.jiuhua.jiuhuacontrol.ui.equipmentHandbook.EquipmentHandbookFragment"
@@ -50,5 +54,24 @@
         android:name="com.jiuhua.jiuhuacontrol.ui.send.SendFragment"
         android:label="邮件"
         tools:layout="@layout/fragment_send" />
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.jiuhua.jiuhuacontrol.ui.indoor.HistoryFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" />
+    <fragment
+        android:id="@+id/peroidFragment"
+        android:name="com.jiuhua.jiuhuacontrol.ui.indoor.PeroidFragment"
+        android:label="fragment_peroid"
+        tools:layout="@layout/fragment_peroid" />
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.jiuhua.jiuhuacontrol.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" />
+    <fragment
+        android:id="@+id/indoorFragment"
+        android:name="com.jiuhua.jiuhuacontrol.ui.indoor.IndoorFragment"
+        android:label="IndoorFragment" />
 
 </navigation>

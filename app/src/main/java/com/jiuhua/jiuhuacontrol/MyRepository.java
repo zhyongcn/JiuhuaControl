@@ -18,7 +18,8 @@ import java.util.List;
 
 public class MyRepository implements IGetMessageCallBack {
 
-    LiveData<List<BasicInfoDB>> allRoomNameLive;
+    List<BasicInfoDB> allBasicInfo;
+    LiveData<List<BasicInfoDB>> allBasicInfoLive;
     private IndoorDao indoorDao;
 
     //MQTT需要的参数
@@ -28,16 +29,13 @@ public class MyRepository implements IGetMessageCallBack {
     public MyRepository(Context context) {
         MyIndoorsDatabase myIndoorsDatabase = MyIndoorsDatabase.getDatabase(context.getApplicationContext());
         indoorDao = myIndoorsDatabase.getRoomDao();
-        allRoomNameLive = indoorDao.loadAllRoomName();
+//        allBasicInfo = indoorDao.loadAllBasicInfo();
+        allBasicInfoLive = indoorDao.loadAllBasicInfoLive();
 
         serviceConnection = new MyServiceConnection();//新建连接服务的实例
         serviceConnection.setIGetMessageCallBack(MyRepository.this);//把本活动传入
         Intent intent = new Intent(context, MQTTService.class);
         context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
-    }
-
-    public LiveData<List<BasicInfoDB>> getAllRoomsNameLive() {
-        return allRoomNameLive;
     }
 
     //TODO 实现发送功能
@@ -49,14 +47,29 @@ public class MyRepository implements IGetMessageCallBack {
 
 
     //TODO 实现 Dao 的所有方法
-    //插入房间名字
-    public void insertRoomName(BasicInfoDB... basicInfoDBS) {
-        new InsertRoomNameAsyncTask(indoorDao).execute(basicInfoDBS);
+    //插入房间信息
+    public void insertBasicInfo(BasicInfoDB... basicInfoDBS) {
+        new InsertBasicInfoAsyncTask(indoorDao).execute(basicInfoDBS);
     }
-
+    //修改房间信息
+    public void updateBasicInfo(BasicInfoDB... basicInfoDBS) {
+        new UpdateBasicInfoAsyncTask(indoorDao).execute(basicInfoDBS);
+    }
+    //删除房间信息，依靠主键就可以
+    public void deleteBasicInfo(BasicInfoDB... basicInfoDBS) {
+        new DeleteBasicInfoAsyncTask(indoorDao).execute(basicInfoDBS);
+    }
     //删除所有房间名字
-    public void deleteAllRoomsName() {
-        new DeleteAllRoomsNameAsyncTask(indoorDao).execute();
+    public void deleteAllBasicInfo() {
+        new DeleteAllBasicInfoAsyncTask(indoorDao).execute();
+    }
+    //这个好像有问题，不能与下面的方法同时存在（早Dao里面）需要删除
+    public List<BasicInfoDB> getAllBasicInfo() {
+        return allBasicInfo;
+    }
+    //获取所有房间的信息，livedata形式。
+    public LiveData<List<BasicInfoDB>> getAllBasicInfoLive() {
+        return allBasicInfoLive;
     }
 
     @Override
@@ -96,30 +109,56 @@ public class MyRepository implements IGetMessageCallBack {
     }
 
     //内部类，辅助线程上执行 Dao 的方法。    还有一种线程池的方法（Google文档上的）
-    static class InsertRoomNameAsyncTask extends AsyncTask<BasicInfoDB, Void, Void> {
+    static class InsertBasicInfoAsyncTask extends AsyncTask<BasicInfoDB, Void, Void> {
         private IndoorDao indoorDao;   //独立的线程需要独立的 Dao
 
-        InsertRoomNameAsyncTask(IndoorDao indoorDao) {
+        InsertBasicInfoAsyncTask(IndoorDao indoorDao) {
             this.indoorDao = indoorDao;
         }
 
         @Override
         protected Void doInBackground(BasicInfoDB... basicInfoDBS) {
-            indoorDao.insertRoomNameDB(basicInfoDBS);
+            indoorDao.insertBasicInfoDB(basicInfoDBS);
             return null;
         }
     }
 
-    static class DeleteAllRoomsNameAsyncTask extends AsyncTask<Void, Void, Void> {
+    static class UpdateBasicInfoAsyncTask extends AsyncTask<BasicInfoDB, Void, Void> {
+        private IndoorDao indoorDao;
+        UpdateBasicInfoAsyncTask(IndoorDao indoorDao) {
+            this.indoorDao = indoorDao;
+        }
+
+        @Override
+        protected Void doInBackground(BasicInfoDB... basicInfoDBS) {
+            indoorDao.updateBasicInfoDB(basicInfoDBS);
+            return null;
+        }
+    }
+
+    static class DeleteBasicInfoAsyncTask extends AsyncTask<BasicInfoDB, Void, Void> {
+        private IndoorDao indoorDao;
+        DeleteBasicInfoAsyncTask(IndoorDao indoorDao) {
+            this.indoorDao = indoorDao;
+        }
+
+        @Override
+        protected Void doInBackground(BasicInfoDB... basicInfoDBS) {
+            indoorDao.deleteBasicInfoDB(basicInfoDBS);
+            return null;
+        }
+    }
+
+    static class DeleteAllBasicInfoAsyncTask extends AsyncTask<Void, Void, Void> {
         private IndoorDao indoorDao;
 
-        DeleteAllRoomsNameAsyncTask(IndoorDao indoorDao) {
+        DeleteAllBasicInfoAsyncTask(IndoorDao indoorDao) {
             this.indoorDao = indoorDao;
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            indoorDao.deleteAllRoomsName();
+            indoorDao.deleteAllBasicInfo();
             return null;
         }
     }

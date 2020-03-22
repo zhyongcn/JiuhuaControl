@@ -155,15 +155,15 @@ public class IndoorViewModel extends AndroidViewModel {
     }
 
     public void insertRoomName(BasicInfoDB... basicInfoDBS) {
-        myRepository.insertRoomName(basicInfoDBS);
+        myRepository.insertBasicInfo(basicInfoDBS);
     }
 
     public void deleteAllRoomsName() {
-        myRepository.deleteAllRoomsName();
+        myRepository.deleteAllBasicInfo();
     }
 
     public LiveData<List<BasicInfoDB>> getAllRoomsName() {
-        return myRepository.getAllRoomsNameLive();
+        return myRepository.getAllBasicInfoLive();
     }
 
 }

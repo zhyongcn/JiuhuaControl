@@ -131,10 +131,11 @@
             </androidx.recyclerview.widget.RecyclerView>
 
             <Button
-                android:id="@+id/userinfo_confirm_button"
+                android:id="@+id/button_add_userinfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="确定提交" />
+                android:text="新增房间"
+                android:textSize="14sp" />
 
         </LinearLayout>
     </ScrollView>

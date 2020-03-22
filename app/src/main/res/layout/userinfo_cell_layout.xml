@@ -25,7 +25,7 @@
             android:inputType="textPersonName" />
 
         <EditText
-            android:id="@+id/room_fancoil_grade"
+            android:id="@+id/room_fancoil_brand"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -59,7 +59,7 @@
             android:text="地暖有电控阀" />
 
         <EditText
-            android:id="@+id/room_radiator_grade"
+            android:id="@+id/room_radiator_brand"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -79,6 +79,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="暖气片有电控阀" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="修改" />
+
+            <Button
+                android:id="@+id/button_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="删除" />
+        </LinearLayout>
 
     </LinearLayout>
 

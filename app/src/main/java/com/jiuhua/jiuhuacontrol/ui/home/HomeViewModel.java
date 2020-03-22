@@ -22,14 +22,14 @@ public class HomeViewModel extends AndroidViewModel {
 
     //TODO　包装 Repository 里面的 Dao 方法
     public void insertRoomName(BasicInfoDB... basicInfoDBS) {
-        myRepository.insertRoomName(basicInfoDBS);
+        myRepository.insertBasicInfo(basicInfoDBS);
     }
     public void deleteAllRoomsName(){
-        myRepository.deleteAllRoomsName();
+        myRepository.deleteAllBasicInfo();
     }
 
     public LiveData<List<BasicInfoDB>> getAllRoomsName(){
-        return myRepository.getAllRoomsNameLive();
+        return myRepository.getAllBasicInfoLive();
     }
 
 

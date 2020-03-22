@@ -13,11 +13,6 @@ public class BasicInfoDB {
     private int Id;
     @ColumnInfo(name = "roomname")
     private String roomName;
-//    //主机情况
-//    @ColumnInfo(name = "enginetrademark")
-//    private String engineTrademark;
-//    @ColumnInfo(name = "enginetype")
-//    private String engineType;
     //风机盘管的情况
     @ColumnInfo(name = "fancoiltrademark")
     private String fancoilTrademark;
@@ -44,17 +39,17 @@ public class BasicInfoDB {
     @Ignore
     public BasicInfoDB(String roomName) {this.roomName = roomName; }
 
+    @Ignore
     public BasicInfoDB(int id, String roomName) {
         this.Id = id;
         this.roomName = roomName;
     }
 
+    @Ignore
     public BasicInfoDB(String roomName, String fancoilTrademark, String fanCoilType,
                        boolean hasCoilValve, boolean isFloorHeat, boolean isFloorAuto,
                        String radiatorTrademark, String radiatorType, boolean isRadiatorAuto) {
         this.roomName = roomName;
-//        this.engineTrademark = engineTrademark;
-//        this.engineType = engineType;
         this.fancoilTrademark = fancoilTrademark;
         this.fanCoilType = fanCoilType;
         this.hasCoilValve = hasCoilValve;
@@ -80,23 +75,6 @@ public class BasicInfoDB {
     public void setRoomName(String roomName) {
         this.roomName = roomName;
     }
-
-//    //主机参数相关
-//    public String getEngineTrademark() {
-//        return engineTrademark;
-//    }
-//
-//    public void setEngineTrademark(String engineTrademark) {
-//        this.engineTrademark = engineTrademark;
-//    }
-//
-//    public String getEngineType() {
-//        return engineType;
-//    }
-//
-//    public void setEngineType(String engineType) {
-//        this.engineType = engineType;
-//    }
 
     //风机盘管参数相关
     public String getFancoilTrademark() {

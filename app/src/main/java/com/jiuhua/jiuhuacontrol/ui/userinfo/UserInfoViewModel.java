@@ -23,14 +23,27 @@ public class UserInfoViewModel extends AndroidViewModel {
     }
 
     //TODO　包装 Repository 里面的 Dao 方法
-    public void insertRoomName(BasicInfoDB... basicInfoDBS) {
-        myRepository.insertRoomName(basicInfoDBS);
-    }
-    public void deleteAllRoomsName(){
-        myRepository.deleteAllRoomsName();
+    public void insertBasicInfo(BasicInfoDB... basicInfoDBS) {
+        myRepository.insertBasicInfo(basicInfoDBS);
     }
 
-    public LiveData<List<BasicInfoDB>> getAllRoomsName(){
-        return myRepository.getAllRoomsNameLive();
+    public void updateBasicInfo(BasicInfoDB... basicInfoDBS) {
+        myRepository.updateBasicInfo(basicInfoDBS);
+    }
+
+    public void deleteBasicInfo(BasicInfoDB... basicInfoDBS) {
+        myRepository.deleteBasicInfo(basicInfoDBS);
+    }
+
+    public void deleteAllBasicInfo(){
+        myRepository.deleteAllBasicInfo();
+    }
+
+//    public List<BasicInfoDB> getAllBasicInfo(){
+//        return myRepository.getAllBasicInfo();
+//    }
+
+    public LiveData<List<BasicInfoDB>> getAllBasicInfoLive(){
+        return myRepository.getAllBasicInfoLive();
     }
 }
