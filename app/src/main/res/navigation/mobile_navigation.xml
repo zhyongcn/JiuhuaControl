@@ -12,23 +12,14 @@
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_nav_home_to_roomHostFragment"
-            app:destination="@id/roomHostFragment" />
+            android:id="@+id/action_nav_home_to_indoorHostFragment"
+            app:destination="@id/indoorHostFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/roomHostFragment"
-        android:name="com.jiuhua.jiuhuacontrol.ui.indoor.IndoorHostFragment"
-        android:label="房间信息"
-        tools:layout="@layout/fragment_indoor_host" />
     <fragment
         android:id="@+id/nav_userinfo"
         android:name="com.jiuhua.jiuhuacontrol.ui.userinfo.UserInfoFragment"
         android:label="用户信息"
-        tools:layout="@layout/fragment_userinfo" >
-        <action
-            android:id="@+id/action_nav_userinfo_to_peroidFragment"
-            app:destination="@id/peroidFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_userinfo" />
     <fragment
         android:id="@+id/nav_equipmentManual"
         android:name="com.jiuhua.jiuhuacontrol.ui.equipmentHandbook.EquipmentHandbookFragment"
@@ -73,5 +64,17 @@
         android:id="@+id/indoorFragment"
         android:name="com.jiuhua.jiuhuacontrol.ui.indoor.IndoorFragment"
         android:label="IndoorFragment" />
+    <fragment
+        android:id="@+id/indoorHostFragment"
+        android:name="com.jiuhua.jiuhuacontrol.ui.indoor.IndoorHostFragment"
+        android:label="fragment_indoor_host"
+        tools:layout="@layout/fragment_indoor_host" >
+        <argument
+            android:name="roomId"
+            app:argType="integer" />
+        <argument
+            android:name="roomName"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

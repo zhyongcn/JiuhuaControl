@@ -1,17 +1,14 @@
 package com.jiuhua.jiuhuacontrol.database;
 
 /*这张表的数据一分钟一次，存储上限为三个月*/
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.Ignore;
-import androidx.room.Index;
 import androidx.room.PrimaryKey;
+//不要自以为牛逼，添加关联外键，失败了吧！（是不是在线程的问题上，不能在主线程UI线程）
 
-import com.jiuhua.jiuhuacontrol.ui.indoor.IndoorViewModel;
-
-@Entity(foreignKeys = @ForeignKey(entity = IndoorDB.class, parentColumns = "id",childColumns = "room_name_id"),
-indices = {@Index(value = {"room_name_id"} ) } )
+@Entity
 public class IndoorDB {
 
     @PrimaryKey(autoGenerate = true)
@@ -34,6 +31,8 @@ public class IndoorDB {
     private boolean floorValveOpen;
     @ColumnInfo(name = "coil_valve")
     private boolean coilValveOpen;
+    @ColumnInfo(name = "dehumidity_status")
+    private boolean dehumidityStatus;
     @ColumnInfo(name = "room_status")
     private int roomStatus;//stop 0, manual 1, auto 2.
 
@@ -44,7 +43,7 @@ public class IndoorDB {
     @Ignore
     public IndoorDB(long timeStamp, int roomNameId, int currentTemperature, int settingTemperature,
                     int currentHumidity, int settingHumidity, int fanStatus, boolean floorValveOpen,
-                    boolean coilValveOpen, int roomStatus) {
+                    boolean coilValveOpen, boolean dehumidityStatus, int roomStatus) {
         this.timeStamp = timeStamp;
         this.roomNameId = roomNameId;
         this.currentTemperature = currentTemperature;
@@ -54,6 +53,7 @@ public class IndoorDB {
         this.fanStatus = fanStatus;
         this.floorValveOpen = floorValveOpen;
         this.coilValveOpen = coilValveOpen;
+        this.dehumidityStatus = dehumidityStatus;
         this.roomStatus = roomStatus;
     }
 
@@ -135,6 +135,14 @@ public class IndoorDB {
 
     public void setCoilValveOpen(boolean coilValveOpen) {
         this.coilValveOpen = coilValveOpen;
+    }
+
+    public boolean isDehumidityStatus() {
+        return dehumidityStatus;
+    }
+
+    public void setDehumidityStatus(boolean dehumidityStatus) {
+        this.dehumidityStatus = dehumidityStatus;
     }
 
     public int getRoomStatus() {

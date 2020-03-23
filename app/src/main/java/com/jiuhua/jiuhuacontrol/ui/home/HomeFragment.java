@@ -2,23 +2,22 @@ package com.jiuhua.jiuhuacontrol.ui.home;
 
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-
 import com.jiuhua.jiuhuacontrol.R;
 import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
+import com.jiuhua.jiuhuacontrol.database.IndoorDB;
 
 import java.util.List;
 
@@ -55,12 +54,20 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         recyclerView.setAdapter(homepageAdapter);
 
-        homeViewModel.getAllRoomsName().observe(getViewLifecycleOwner(), new Observer<List<BasicInfoDB>>() {
+        homeViewModel.getAllBasicInfoLive().observe(getViewLifecycleOwner(), new Observer<List<BasicInfoDB>>() {
             @Override
             public void onChanged(List<BasicInfoDB> basicInfoDBS) {
 //                int temp = homepageAdapter.getItemCount();
-                homepageAdapter.setAllroomsName(basicInfoDBS);   //设置数据
+                homepageAdapter.setAllBasicInfo(basicInfoDBS);   //设置数据
                 homepageAdapter.notifyDataSetChanged();     //去刷新视图
+            }
+        });
+
+        homeViewModel.getAllIndoorDBLive().observe(getViewLifecycleOwner(), new Observer<List<IndoorDB>>() {
+            @Override
+            public void onChanged(List<IndoorDB> indoorDBS) {
+                homepageAdapter.setAllIndoorDB(indoorDBS);
+                homepageAdapter.notifyDataSetChanged();
             }
         });
 
@@ -73,18 +80,15 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //temporary test code
-                homeViewModel.insertRoomName(new BasicInfoDB("次卧室", "扬子风盘", "FP-51", true, true,
+                homeViewModel.insertRoomName(new BasicInfoDB("客厅", "扬子风盘", "FP-51", true, true,
                         true, null, null, false));
-                homeViewModel.insertRoomName(new BasicInfoDB("zhuwoshi", "约克", "FP-68", false, true,
+                homeViewModel.insertRoomName(new BasicInfoDB("餐厅", "约克", "FP-68", false, true,
                         true, null, null, false));
-                homeViewModel.insertRoomName(new BasicInfoDB("canting", "麦克维尔", "FP-120", true, false,
+                homeViewModel.insertRoomName(new BasicInfoDB("主卧室", "麦克维尔", "FP-120", true, false,
                         true, null, null, false));
-                homeViewModel.insertRoomName(new BasicInfoDB("客厅"));
-                homeViewModel.insertRoomName(new BasicInfoDB("餐厅"));
-                homeViewModel.insertRoomName(new BasicInfoDB("儿童房"));
-
             }
         });
+
         buttonOutHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,6 +96,12 @@ public class HomeFragment extends Fragment {
             }
         });
         buttonECO.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //pass
+            }
+        });
+        buttonSleep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //pass

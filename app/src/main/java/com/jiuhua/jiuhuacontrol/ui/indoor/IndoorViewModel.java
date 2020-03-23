@@ -16,16 +16,22 @@ import java.util.List;
 public class IndoorViewModel extends AndroidViewModel {
 
     enum FanSpeed {STOP, LOW, MEDIUM, HIGH, AUTO}
-
     enum RoomState {STOP, MANUAL, AUTO}
 
     MyRepository myRepository;
-
     IndoorDB currentIndoorInfo;
+
+    public IndoorDB getCurrentIndoorInfo() {
+        return currentIndoorInfo;
+    }
+
+    public void setCurrentIndoorInfo(IndoorDB currentIndoorInfo) {
+        this.currentIndoorInfo = currentIndoorInfo;
+    }
 
     //变量及其getter & setter 方法
     private int roomId;
-    private MutableLiveData<String> roomName = new MutableLiveData<>();
+    private String roomName;
     public static final MutableLiveData<String> currentTemperature = new MutableLiveData<>();
     private MutableLiveData<Integer> settingTemperature = new MutableLiveData<>();
     private MutableLiveData<Integer> currentHumidity = new MutableLiveData<>();
@@ -35,12 +41,25 @@ public class IndoorViewModel extends AndroidViewModel {
     private MutableLiveData<String> coilValveOpen = new MutableLiveData<>();
     private MutableLiveData<RoomState> roomState = new MutableLiveData<>();
 
-    public MutableLiveData<String> getRoomName() {
+    public int getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
+    }
+
+    public String getRoomName() {
         return roomName;
     }
 
-    public void setRoomName(String s) {
-        this.roomName.setValue(s);
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
+
+    public void loadRoomName(int id) {
+        this.roomName = myRepository.loadRoomName(id);
     }
 
     public MutableLiveData<String> getCurrentTemperature() {
@@ -154,15 +173,11 @@ public class IndoorViewModel extends AndroidViewModel {
         myRepository.stopRoomEquipment(roomid);
     }
 
-    public void insertRoomName(BasicInfoDB... basicInfoDBS) {
+    public void insertBasicInfo(BasicInfoDB... basicInfoDBS) {
         myRepository.insertBasicInfo(basicInfoDBS);
     }
 
-    public void deleteAllRoomsName() {
-        myRepository.deleteAllBasicInfo();
-    }
-
-    public LiveData<List<BasicInfoDB>> getAllRoomsName() {
+    public LiveData<List<BasicInfoDB>> getAllBasicInfoLive() {
         return myRepository.getAllBasicInfoLive();
     }
 

@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -28,6 +29,7 @@ public class IndoorHostFragment extends Fragment {
     private ViewPager viewPager;
     private PagerAdapter pagerAdapter;
     private List<Fragment> fragmentList;
+    private IndoorViewModel indoorViewModel;
 
     public IndoorHostFragment() {
         // Required empty public constructor
@@ -43,6 +45,11 @@ public class IndoorHostFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        indoorViewModel = new ViewModelProvider(this).get(IndoorViewModel.class);
+        int roomId = getArguments().getInt("roomId");
+        String currentRoomName = getArguments().getString("roomName");
+        indoorViewModel.setRoomId(roomId);
+        indoorViewModel.setRoomName(currentRoomName);
 
         fragmentList = new ArrayList<Fragment>();
         fragmentList.add(new HistoryFragment());

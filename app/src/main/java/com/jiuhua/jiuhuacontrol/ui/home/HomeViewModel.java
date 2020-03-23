@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 
 import com.jiuhua.jiuhuacontrol.MyRepository;
 import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
+import com.jiuhua.jiuhuacontrol.database.IndoorDB;
 
 import java.util.List;
 
@@ -28,8 +29,12 @@ public class HomeViewModel extends AndroidViewModel {
         myRepository.deleteAllBasicInfo();
     }
 
-    public LiveData<List<BasicInfoDB>> getAllRoomsName(){
+    public LiveData<List<BasicInfoDB>> getAllBasicInfoLive(){
         return myRepository.getAllBasicInfoLive();
+    }
+
+    public LiveData<List<IndoorDB>> getAllIndoorDBLive() {
+        return myRepository.getAllIndoorDBLive();
     }
 
 

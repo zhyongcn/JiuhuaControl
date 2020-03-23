@@ -139,11 +139,11 @@ public class IndoorFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //临时验证方法
-        indoorViewModel.setRoomName("客厅");
-        indoorViewModel.setSettingTemperature(22);
-        indoorViewModel.setSettingHumidity(50);
-        indoorViewModel.setCoilValveOpen("两通阀开");
-        indoorViewModel.setFloorValveOpen("地暖开");
+//        //临时验证方法
+//        indoorViewModel.setRoomName("客厅");
+//        indoorViewModel.setSettingTemperature(22);
+//        indoorViewModel.setSettingHumidity(50);
+//        indoorViewModel.setCoilValveOpen("两通阀开");
+//        indoorViewModel.setFloorValveOpen("地暖开");
     }
 }

@@ -11,10 +11,7 @@ import java.util.List;
 
 @Dao
 public interface IndoorDao {
-
-    @Insert
-    void insertRoomDB(IndoorDB... indoorDBS);
-
+    //BasicInfo的相关方法
     @Insert
     void insertBasicInfoDB(BasicInfoDB... basicInfoDBS);
 
@@ -23,9 +20,6 @@ public interface IndoorDao {
 
     @Delete
     void deleteBasicInfoDB(BasicInfoDB... basicInfoDBS);
-
-    @Insert
-    void insertRoomLongTimeDB(IndoorLongTimeDB... indoorLongTimeDBS);
 
     @Query("DELETE FROM BasicInfoDB")
     void deleteAllBasicInfo();
@@ -37,9 +31,26 @@ public interface IndoorDao {
     @Query("SELECT * FROM BasicInfoDB")
     LiveData<List<BasicInfoDB>> loadAllBasicInfoLive();
 
-    //提取最大id的条目
-    @Query("SELECT *  FROM IndoorDB ")
-    IndoorDB getCurrentRoomMessage();
+    @Query("SELECT roomname FROM BasicInfoDB WHERE id = :ID")
+    String loadRoomName(int ID);
+
+//IndoorDB的相关方法
+
+    @Insert
+    void insertIndoorDB(IndoorDB... indoorDBS);
+
+    @Query("DELETE FROM IndoorDB")
+    void deleteAllIndoorDB();
+
+//    //提取最大id的条目
+//    @Query("SELECT * , MAX(id)  FROM IndoorDB WHERE room_name_id = :roomId")
+//    LiveData<IndoorDB> getCurrentIndoorDB(int roomId);
+     //提取最大id的条目
+     @Query("SELECT * , MAX(id)  FROM IndoorDB GROUP BY room_name_id")
+     LiveData<List<IndoorDB>> loadCurrentIndoorDBsLive();
+
+    @Insert
+    void insertRoomLongTimeDB(IndoorLongTimeDB... indoorLongTimeDBS);
 
     //TODO 提取一周数据
 
@@ -48,7 +59,6 @@ public interface IndoorDao {
     //TODO　提取两年数据
 
     //TODO  提取三年数据
-
 
 
 }

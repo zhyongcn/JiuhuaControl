@@ -20,7 +20,7 @@
             android:id="@+id/roomName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="客厅"
+            android:gravity="center"
             android:textColor="#000000"
             android:textStyle="bold"
             tools:text="客厅" />
@@ -29,7 +29,7 @@
             android:id="@+id/roomStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="未运行"
+            android:text="无设备"
             android:textColor="#000000"
             android:textStyle="bold"
             tools:text="未运行" />
@@ -38,7 +38,6 @@
             android:id="@+id/roomTemp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="当前温度 18  C"
             android:textColor="#000000"
             android:textStyle="bold"
             tools:text="当前温度 18  C" />
