@@ -69,12 +69,9 @@
         android:name="com.jiuhua.jiuhuacontrol.ui.indoor.IndoorHostFragment"
         android:label="fragment_indoor_host"
         tools:layout="@layout/fragment_indoor_host" >
-        <argument
-            android:name="roomId"
-            app:argType="integer" />
-        <argument
-            android:name="roomName"
-            app:argType="string" />
+        <action
+            android:id="@+id/action_indoorHostFragment_to_indoorFragment"
+            app:destination="@id/indoorFragment" />
     </fragment>
 
 </navigation>

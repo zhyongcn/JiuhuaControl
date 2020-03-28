@@ -33,8 +33,8 @@ public class HomeViewModel extends AndroidViewModel {
         return myRepository.getAllBasicInfoLive();
     }
 
-    public LiveData<List<IndoorDB>> getAllIndoorDBLive() {
-        return myRepository.getAllIndoorDBLive();
+    public LiveData<List<IndoorDB>> getAllLatestIndoorDBsLive() {
+        return myRepository.getAllLatestIndoorDBsLive();
     }
 
 

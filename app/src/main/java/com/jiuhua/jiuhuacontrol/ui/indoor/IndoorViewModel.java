@@ -1,11 +1,11 @@
 package com.jiuhua.jiuhuacontrol.ui.indoor;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.jiuhua.jiuhuacontrol.MyRepository;
 import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
@@ -15,38 +15,23 @@ import java.util.List;
 
 public class IndoorViewModel extends AndroidViewModel {
 
-    enum FanSpeed {STOP, LOW, MEDIUM, HIGH, AUTO}
-    enum RoomState {STOP, MANUAL, AUTO}
+//    enum FanSpeed {STOP, LOW, MEDIUM, HIGH, AUTO}
+//    enum RoomState {STOP, MANUAL, AUTO}
 
     MyRepository myRepository;
-    IndoorDB currentIndoorInfo;
-
-    public IndoorDB getCurrentIndoorInfo() {
-        return currentIndoorInfo;
-    }
-
-    public void setCurrentIndoorInfo(IndoorDB currentIndoorInfo) {
-        this.currentIndoorInfo = currentIndoorInfo;
-    }
+    List<IndoorDB> allLatestIndoorDBs;
+    IndoorDB latestIndoorDB;
 
     //变量及其getter & setter 方法
-    private int roomId;
+    private int roomNameId = 1;
     private String roomName;
-    public static final MutableLiveData<String> currentTemperature = new MutableLiveData<>();
-    private MutableLiveData<Integer> settingTemperature = new MutableLiveData<>();
-    private MutableLiveData<Integer> currentHumidity = new MutableLiveData<>();
-    private MutableLiveData<Integer> settingHumidity = new MutableLiveData<>();
-    private MutableLiveData<FanSpeed> fanStatus = new MutableLiveData<>();
-    private MutableLiveData<String> floorValveOpen = new MutableLiveData<>();
-    private MutableLiveData<String> coilValveOpen = new MutableLiveData<>();
-    private MutableLiveData<RoomState> roomState = new MutableLiveData<>();
 
-    public int getRoomId() {
-        return roomId;
+    public int getRoomNameId() {
+        return roomNameId;
     }
 
-    public void setRoomId(int roomId) {
-        this.roomId = roomId;
+    public void setRoomNameId(int roomNameId) {
+        this.roomNameId = roomNameId;
     }
 
     public String getRoomName() {
@@ -57,128 +42,43 @@ public class IndoorViewModel extends AndroidViewModel {
         this.roomName = roomName;
     }
 
-
-    public void loadRoomName(int id) {
-        this.roomName = myRepository.loadRoomName(id);
+    public IndoorDB getLatestIndoorDB() {
+        return latestIndoorDB;
     }
 
-    public MutableLiveData<String> getCurrentTemperature() {
-        return this.currentTemperature;
+    public void setLatestIndoorDB(IndoorDB latestIndoorDB) {
+        this.latestIndoorDB = latestIndoorDB;
     }
 
-    public void setCurrentTemperature(Integer i) {
-        this.currentTemperature.setValue(String.valueOf(i));
+    public void setAllLatestIndoorDBs(List<IndoorDB> allLatestIndoorDBsLive) {
+        this.allLatestIndoorDBs = allLatestIndoorDBsLive;
+        if (roomNameId < allLatestIndoorDBsLive.size()) {  //TODO 临时的需要解决超出队列边界的问题
+            this.latestIndoorDB = allLatestIndoorDBsLive.get(roomNameId);
+        }else {//TODO 单纯非空还是不解决问题
+            this.latestIndoorDB = new IndoorDB();
+        }
     }
 
-    public MutableLiveData<Integer> getSettingTemperature() {
-        return this.settingTemperature;
-    }
-
-    public void setSettingTemperature(Integer i) {
-        this.settingTemperature.setValue(i);
-    }
-
-    public MutableLiveData<Integer> getCurrentHumidity() {
-        return this.currentHumidity;
-    }
-
-    public void setCurrentHumidity(Integer i) {
-        currentHumidity.setValue(i);
-    }
-
-    public MutableLiveData<Integer> getSettingHumidity() {
-        return this.settingHumidity;
-    }
-
-    public void setSettingHumidity(Integer i) {
-        this.settingHumidity.setValue(i);
-    }
-
-    public MutableLiveData<FanSpeed> getFanStatus() {
-        return this.fanStatus;
-    }
-
-    public void setFanStatus(FanSpeed fanspeed) {
-        this.fanStatus.setValue(fanspeed);
-    }
-
-    public MutableLiveData<String> getFloorValveOpen() {
-        return this.floorValveOpen;
-    }
-
-    public void setFloorValveOpen(String s) {
-        this.floorValveOpen.setValue(s);
-    }
-
-    public MutableLiveData<String> getCoilValveOpen() {
-        return this.coilValveOpen;
-    }
-
-    public void setCoilValveOpen(String s) {
-        this.coilValveOpen.setValue(s);
-    }
-
-    public MutableLiveData<RoomState> getRoomState() {
-        return roomState;
-    }
-
-    public void setRoomState(RoomState roomState) {
-        this.roomState.setValue(roomState);
-    }
-
-    //下面三个方法用来设定房间的状态
-    public void setRoomStateStop() {
-        this.roomState.setValue(RoomState.STOP);
-        myRepository.stopRoomEquipment(String.valueOf(roomId));
-    }
-
-    public void setRoomStateManual() {
-        this.roomState.setValue(RoomState.MANUAL);
-    }
-
-    public void setRoomStateAuto() {
-        this.roomState.setValue(RoomState.AUTO);
-    }
-
-    //下面五个方法用来设定风机状态
-    public void setFanStatusStop() {
-        this.fanStatus.setValue(FanSpeed.STOP);
-    }
-
-    public void setFanStatusLow() {
-        this.fanStatus.setValue(FanSpeed.LOW);
-    }
-
-    public void setFanStatusMedium() {
-        this.fanStatus.setValue(FanSpeed.MEDIUM);
-    }
-
-    public void setFanStatusHigh() {
-        this.fanStatus.setValue(FanSpeed.HIGH);
-    }
-
-    public void setFanStatusAuto() {
-        this.fanStatus.setValue(FanSpeed.AUTO);
-    }
+    //下面三个switch用来设定房间的状态
+    //下面五个switch用来设定风机状态
 
     //构造方法
     public IndoorViewModel(@NonNull Application application) {
         super(application);
         this.myRepository = new MyRepository(application);
-        this.currentIndoorInfo = new IndoorDB();
     }
 
     //TODO　包装 Repository 里面的 Dao 方法
+    //停止按钮要实现方法，停止房间所有设备
     public void stopRoomEquipment(String roomid){
         myRepository.stopRoomEquipment(roomid);
     }
+    //TODO 手动方法 自动方法
+    //TODO 地暖开关方法  除湿开关方法
+    //TODO 设置温度方法  设置湿度方法
 
-    public void insertBasicInfo(BasicInfoDB... basicInfoDBS) {
-        myRepository.insertBasicInfo(basicInfoDBS);
+
+    public LiveData<List<IndoorDB>> getAllLatestIndoorDBsLive() {
+        return myRepository.getAllLatestIndoorDBsLive();
     }
-
-    public LiveData<List<BasicInfoDB>> getAllBasicInfoLive() {
-        return myRepository.getAllBasicInfoLive();
-    }
-
 }

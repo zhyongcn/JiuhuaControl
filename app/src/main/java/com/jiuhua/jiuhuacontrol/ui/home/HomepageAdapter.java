@@ -21,7 +21,7 @@ import java.util.List;
 public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyViewHolder> {
 
     private List<BasicInfoDB> allBasicInfo = new ArrayList<>();
-    private List<IndoorDB> allIndoorDB = new ArrayList<>();
+    private List<IndoorDB> allLatestIndoorDBs = new ArrayList<>();
     private HomeViewModel homeViewModel;
 
     public HomepageAdapter(HomeViewModel homeViewModel) {
@@ -32,8 +32,8 @@ public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyView
         this.allBasicInfo = allBasicInfo;
     }
 
-    public void setAllIndoorDB(List<IndoorDB> allIndoorDB) {
-        this.allIndoorDB = allIndoorDB;
+    public void setAllLatestIndoorDBs(List<IndoorDB> allLatestIndoorDBs) {
+        this.allLatestIndoorDBs = allLatestIndoorDBs;
     }
 
     @NonNull
@@ -46,10 +46,10 @@ public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyView
             @Override
             public void onClick(View v) {
                 int k = holder.getAdapterPosition();   //获取具体哪个条目了
-                int roomId = allBasicInfo.get(k).getId();
+                int roomNameId = allBasicInfo.get(k).getId();
                 String currentRoomName = allBasicInfo.get(k).getRoomName();
                 Bundle bundle = new Bundle();
-                bundle.putInt("roomId", roomId);
+                bundle.putInt("roomNameId", k);
                 bundle.putString("roomName", currentRoomName);
                 Navigation.findNavController(v).navigate(R.id.action_nav_home_to_indoorHostFragment, bundle);
             }
@@ -62,8 +62,8 @@ public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyView
         //具体视图元素赋值。
         BasicInfoDB basicInfoDB = allBasicInfo.get(position);
         holder.textViewRoomName.setText(basicInfoDB.getRoomName());
-        if (position < allIndoorDB.size()) {
-            IndoorDB indoorDB = allIndoorDB.get(position);
+        if (position < allLatestIndoorDBs.size()) {
+            IndoorDB indoorDB = allLatestIndoorDBs.get(position);
             holder.textViewRoomTemperature.setText("当前温度：  " + indoorDB.getCurrentTemperature() + " C");
             holder.textViewRoomHumidity.setText("当前湿度：  " + indoorDB.getCurrentHumidity() + "%RH");
             switch (indoorDB.getRoomStatus()) {

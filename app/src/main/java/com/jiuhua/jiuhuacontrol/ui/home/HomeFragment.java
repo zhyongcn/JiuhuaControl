@@ -59,15 +59,15 @@ public class HomeFragment extends Fragment {
             public void onChanged(List<BasicInfoDB> basicInfoDBS) {
 //                int temp = homepageAdapter.getItemCount();
                 homepageAdapter.setAllBasicInfo(basicInfoDBS);   //设置数据
-                homepageAdapter.notifyDataSetChanged();     //去刷新视图
+//                homepageAdapter.notifyDataSetChanged();     //没有必要两次去刷新视图
             }
         });
 
-        homeViewModel.getAllIndoorDBLive().observe(getViewLifecycleOwner(), new Observer<List<IndoorDB>>() {
+        homeViewModel.getAllLatestIndoorDBsLive().observe(getViewLifecycleOwner(), new Observer<List<IndoorDB>>() {
             @Override
             public void onChanged(List<IndoorDB> indoorDBS) {
-                homepageAdapter.setAllIndoorDB(indoorDBS);
-                homepageAdapter.notifyDataSetChanged();
+                homepageAdapter.setAllLatestIndoorDBs(indoorDBS);//设置数据
+                homepageAdapter.notifyDataSetChanged();  //去刷新视图
             }
         });
 

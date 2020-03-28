@@ -37,5 +37,9 @@
     <string name="communicate">Communicate</string>
     <string name="menu_share">分享</string>
     <string name="menu_send">发送邮件</string>
+    <string name="coilvalveopen">两通阀开</string>
+    <string name="coilvalveshut">两通阀关</string>
+    <string name="floorvalveopen">地暖运行</string>
+    <string name="floorvalveshut">地暖关闭</string>
 
 </resources>

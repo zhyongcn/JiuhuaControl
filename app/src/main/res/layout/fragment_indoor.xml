@@ -87,7 +87,6 @@
                 android:id="@+id/textViewCoilValve"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{data.coilValveOpen}"
                 app:layout_constraintBottom_toTopOf="@+id/guideline7"
                 app:layout_constraintEnd_toStartOf="@+id/guideline8"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -111,7 +110,6 @@
                 android:id="@+id/textViewFloorValve"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{data.floorValveOpen}"
                 app:layout_constraintBottom_toTopOf="@+id/guideline7"
                 app:layout_constraintEnd_toStartOf="@+id/guideline10"
                 app:layout_constraintHorizontal_bias="1.0"
@@ -123,7 +121,6 @@
                 android:id="@+id/temp_temperaturextview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{data.currentTemperature}"
                 android:textSize="72sp"
                 app:layout_constraintBottom_toTopOf="@+id/guideline11"
                 app:layout_constraintEnd_toStartOf="@+id/guideline10"
@@ -138,7 +135,6 @@
                 android:layout_height="wrap_content"
                 android:max="35"
                 android:min="12"
-                android:progress="@{data.settingTemperature}"
                 app:layout_constraintBottom_toTopOf="@+id/guideline11"
                 app:layout_constraintEnd_toStartOf="@+id/guideline10"
                 app:layout_constraintStart_toStartOf="@+id/guideline9"
@@ -149,7 +145,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
-                android:text="@{data.settingHumidity.toString()}"
                 app:layout_constraintBottom_toTopOf="@+id/guideline12"
                 app:layout_constraintStart_toStartOf="@+id/guideline9"
                 app:layout_constraintTop_toTopOf="@+id/guideline12"
@@ -162,7 +157,6 @@
                 android:layout_height="wrap_content"
                 android:max="90"
                 android:min="20"
-                android:progress="@{data.settingHumidity}"
                 app:layout_constraintBottom_toTopOf="@+id/guideline12"
                 app:layout_constraintEnd_toStartOf="@+id/guideline10"
                 app:layout_constraintStart_toEndOf="@+id/temp_humidityTextView"
@@ -203,29 +197,25 @@
                     android:id="@+id/radioButtonlowfan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="低速风"
-                    android:onClick="@{()->data.setFanStatusLow()}"/>
+                    android:text="低速风"/>
 
                 <RadioButton
                     android:id="@+id/radioButtonmiddlefan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="中速风"
-                    android:onClick="@{()->data.setFanStatusMedium()}"/>
+                    android:text="中速风"/>
 
                 <RadioButton
                     android:id="@+id/radioButtonhighfan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="高速风"
-                    android:onClick="@{()->data.setFanStatusHigh()}"/>
+                    android:text="高速风"/>
 
                 <RadioButton
                     android:id="@+id/radioButtonautofan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="自动风"
-                    android:onClick="@{()->data.setFanStatusAuto()}"/>
+                    android:text="自动风"/>
             </RadioGroup>
 
             <Button
@@ -233,7 +223,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="停止"
-                android:onClick="@{() -> data.setRoomStateStop()}"
                 app:layout_constraintBottom_toTopOf="@+id/guideline15"
                 app:layout_constraintEnd_toStartOf="@+id/buttonManual"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -245,7 +234,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="手动"
-                android:onClick="@{()-> data.setRoomStateManual()}"
                 app:layout_constraintEnd_toStartOf="@+id/buttonAuto"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/buttonStop"
@@ -257,7 +245,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="52dp"
                 android:text="周期自动"
-                android:onClick="@{()-> data.setRoomStateAuto()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/buttonManual"
