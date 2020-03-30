@@ -13,16 +13,16 @@ public class IndoorDB {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
-    @ColumnInfo(name = " timestamp")
+    @ColumnInfo(name = "timestamp")
     private long timeStamp;   //直接使用UNIX时间
     @ColumnInfo(name = "room_name_id")
     private int roomNameId;
     @ColumnInfo(name = "current_temperature")
-    private int currentTemperature;
+    private float currentTemperature;
     @ColumnInfo(name = "setting_temperature")
     private int settingTemperature;
     @ColumnInfo(name = "current_humidity")
-    private int currentHumidity;
+    private float currentHumidity;
     @ColumnInfo(name = "setting_humidity")
     private int settingHumidity;
     @ColumnInfo(name = "fan_status")
@@ -41,8 +41,8 @@ public class IndoorDB {
     }
 
     @Ignore
-    public IndoorDB(long timeStamp, int roomNameId, int currentTemperature, int settingTemperature,
-                    int currentHumidity, int settingHumidity, int fanStatus, boolean floorValveOpen,
+    public IndoorDB(long timeStamp, int roomNameId, float currentTemperature, int settingTemperature,
+                    float currentHumidity, int settingHumidity, int fanStatus, boolean floorValveOpen,
                     boolean coilValveOpen, boolean dehumidityStatus, int roomStatus) {
         this.timeStamp = timeStamp;
         this.roomNameId = roomNameId;
@@ -81,11 +81,11 @@ public class IndoorDB {
         this.roomNameId = roomNameId;
     }
 
-    public int getCurrentTemperature() {
+    public float getCurrentTemperature() {
         return currentTemperature;
     }
 
-    public void setCurrentTemperature(int currentTemperature) {
+    public void setCurrentTemperature(float currentTemperature) {
         this.currentTemperature = currentTemperature;
     }
 
@@ -97,11 +97,11 @@ public class IndoorDB {
         this.settingTemperature = settingTemperature;
     }
 
-    public int getCurrentHumidity() {
+    public float getCurrentHumidity() {
         return currentHumidity;
     }
 
-    public void setCurrentHumidity(int currentHumidity) {
+    public void setCurrentHumidity(float currentHumidity) {
         this.currentHumidity = currentHumidity;
     }
 

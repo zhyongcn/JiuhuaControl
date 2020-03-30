@@ -67,7 +67,7 @@ public class IndoorFragment extends Fragment {
         indoorViewModel.getAllLatestIndoorDBsLive().observe(getViewLifecycleOwner(), new Observer<List<IndoorDB>>() {
             @Override
             public void onChanged(List<IndoorDB> indoorDBS) {
-//                indoorViewModel.setAllLatestIndoorDBs(indoorDBS);
+                indoorViewModel.setAllLatestIndoorDBs(indoorDBS);
                 indoorViewModel.setLatestIndoorDB(indoorDBS.get(roomNameId));
 //                IndoorDB indoorDB = indoorViewModel.latestIndoorDB;
 
@@ -232,8 +232,7 @@ public class IndoorFragment extends Fragment {
         binding.buttonStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(getView(), "停止房间所有设备的运行", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                indoorViewModel.stopRoomEquipment(roomNameId);
             }
         });
         binding.buttonManual.setOnClickListener(new View.OnClickListener() {
@@ -250,5 +249,6 @@ public class IndoorFragment extends Fragment {
                         .setAction("Action", null).show();
             }
         });
+
     }
 }

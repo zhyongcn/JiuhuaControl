@@ -70,7 +70,7 @@ public class IndoorViewModel extends AndroidViewModel {
 
     //TODO　包装 Repository 里面的 Dao 方法
     //停止按钮要实现方法，停止房间所有设备
-    public void stopRoomEquipment(String roomid){
+    public void stopRoomEquipment(int roomid){
         myRepository.stopRoomEquipment(roomid);
     }
     //TODO 手动方法 自动方法

@@ -67,6 +67,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onChanged(List<IndoorDB> indoorDBS) {
                 homepageAdapter.setAllLatestIndoorDBs(indoorDBS);//设置数据
+//                homeViewModel.myRepository.
                 homepageAdapter.notifyDataSetChanged();  //去刷新视图
             }
         });

@@ -3,6 +3,7 @@ package com.jiuhua.jiuhuacontrol;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -14,12 +15,16 @@ import com.jiuhua.mqttsample.IGetMessageCallBack;
 import com.jiuhua.mqttsample.MQTTService;
 import com.jiuhua.mqttsample.MyServiceConnection;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MyRepository implements IGetMessageCallBack {
 
     LiveData<List<BasicInfoDB>> allBasicInfoLive;
     LiveData<List<IndoorDB>> allLatestIndoorDBsLive;
+    List<IndoorDB> writeToDBIndoorDBs;
     private IndoorDao indoorDao;
 
     //MQTT需要的参数
@@ -37,13 +42,29 @@ public class MyRepository implements IGetMessageCallBack {
         serviceConnection.setIGetMessageCallBack(MyRepository.this);//把本活动传入
         Intent intent = new Intent(context, MQTTService.class);
         context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+
+//        timer.schedule(task, 6000, 6000);
     }
 
+//    public void setWriteToDBIndoorDBs(List<IndoorDB> writeToDBIndoorDBs) {
+//        this.writeToDBIndoorDBs = writeToDBIndoorDBs;
+//    }
+
+    //TODO 一分钟写入一次数据库
+    Timer timer = new Timer();
+    TimerTask task = new TimerTask() {
+        @Override
+        public void run() {
+            insertIndoorDB((IndoorDB) writeToDBIndoorDBs);
+        }
+    };
+
     //TODO 实现发送功能
-    public void stopRoomEquipment(String roomID) {
-//        mqttService = serviceConnection.getMqttService();
-        MQTTService.publish("86518/JYCFGC/6-2-3401/Room" + roomID, "Room" + roomID + "turn-offFP", 1, true);
+    public void stopRoomEquipment(int roomID) {
+        mqttService = serviceConnection.getMqttService();  //这句可有可无，有就用小写的，没有就用大写的MQTTService
+        mqttService.publish("86518/JYCFGC/6-2-3401/Room" + roomID, "Room" + roomID + "turn-offFP", 1, true);
         MQTTService.publish("86518/JYCFGC/6-2-3401/Room" + roomID, "Room" + roomID + "turn-offfloor", 1, true);
+//        Log.d("MQTTtest", "stopRoomEquipment: " + roomID);
     }
 
     //TODO 实现 Dao 的所有方法  **********************************************************
@@ -191,105 +212,85 @@ public class MyRepository implements IGetMessageCallBack {
     }
 
 
+    int count = 0;
     //TODO 接收 MQTT 数据后，依照数据实现相关方法。  *************************************************
     @Override
-    public void setMessage(String message) {
+    public void setMessage(String message) {   //TODO 活太多了，处理不了，不能有太复杂的逻辑
         //use mqtt message here.
-        //依据message字符串最后一位决定房间号，倒数第二位决定温湿度C为温度，H为湿度。
-        //临时方法，目前只有 C2  C3 C5 三个房间有信号
-        if (message.contains("C1")) {
-            IndoorDB indoorDB1 = new IndoorDB();
-            indoorDB1.setTimeStamp(System.currentTimeMillis() / 1000);
-            indoorDB1.setRoomNameId(1);//第一个房间
-            indoorDB1.setCurrentTemperature(21);
-            indoorDB1.setSettingTemperature(20);
-            indoorDB1.setCurrentHumidity(Integer.parseInt("40"));
-            indoorDB1.setSettingHumidity(50);
-            indoorDB1.setFanStatus(0);  //stop 0, low 1, middium 2, high 3, auto 4.
-            indoorDB1.setFloorValveOpen(true);
-            indoorDB1.setCoilValveOpen(true);
-            indoorDB1.setDehumidityStatus(false);
-            indoorDB1.setRoomStatus(0);  //stop 0, manual 1, auto 2.
-            insertIndoorDB(indoorDB1);
+//        if (message.contains("C1")) {
+//            IndoorDB indoorDB1 = new IndoorDB();
+//            indoorDB1.setTimeStamp(System.currentTimeMillis() / 1000);
+//            indoorDB1.setRoomNameId(1);//第一个房间
+//            indoorDB1.setCurrentTemperature(21);
+//            indoorDB1.setSettingTemperature(20);
+//            indoorDB1.setCurrentHumidity(Integer.parseInt("40"));
+//            indoorDB1.setSettingHumidity(50);
+//            indoorDB1.setFanStatus(0);  //stop 0, low 1, middium 2, high 3, auto 4.
+//            indoorDB1.setFloorValveOpen(true);
+//            indoorDB1.setCoilValveOpen(true);
+//            indoorDB1.setDehumidityStatus(false);
+//            indoorDB1.setRoomStatus(0);  //stop 0, manual 1, auto 2.
+//            insertIndoorDB(indoorDB1);
+//        }
+        if (message.contains("C"+1)) {
+            writeToDBIndoorDBs.get(0).setCurrentTemperature(
+                    Float.parseFloat(message.substring(0, message.indexOf(".") + 2)));
+//            insertIndoorDB(writeToDBIndoorDBs.get(0));
         }
-        if (message.contains("C2")) {
-            IndoorDB indoorDB1 = new IndoorDB();
-            indoorDB1.setTimeStamp(System.currentTimeMillis() / 1000);
-            indoorDB1.setRoomNameId(2);
-            indoorDB1.setCurrentTemperature(22);
-            indoorDB1.setSettingTemperature(20);
-            indoorDB1.setCurrentHumidity(Integer.parseInt("40"));
-            indoorDB1.setSettingHumidity(50);
-            indoorDB1.setFanStatus(1);  //stop 0, low 1, middium 2, high 3, auto 4.
-            indoorDB1.setFloorValveOpen(true);
-            indoorDB1.setCoilValveOpen(true);
-            indoorDB1.setDehumidityStatus(true);
-            indoorDB1.setRoomStatus(0);  //stop 0, manual 1, auto 2.
-            insertIndoorDB(indoorDB1);
-        }
-        if (message.contains("C3")) {
-            IndoorDB indoorDB = new IndoorDB();
-            indoorDB.setTimeStamp(System.currentTimeMillis() / 1000);
-            indoorDB.setRoomNameId(3);
-            indoorDB.setCurrentTemperature(23);
-            indoorDB.setSettingTemperature(33);
-            indoorDB.setCurrentHumidity(Integer.parseInt("30"));
-            indoorDB.setSettingHumidity(33);
-            indoorDB.setFanStatus(2);  //stop 0, low 1, middium 2, high 3, auto 4.
-            indoorDB.setFloorValveOpen(false);
-            indoorDB.setCoilValveOpen(false);
-            indoorDB.setDehumidityStatus(false);
-            indoorDB.setRoomStatus(1);  //stop 0, manual 1, auto 2.
-            insertIndoorDB(indoorDB);
-        }
-        if (message.contains("C4")) {
-            IndoorDB indoorDB = new IndoorDB();
-            indoorDB.setTimeStamp(System.currentTimeMillis() / 1000);
-            indoorDB.setRoomNameId(4);//第四个房间
-            indoorDB.setCurrentTemperature(24);
-            indoorDB.setSettingTemperature(24);
-            indoorDB.setCurrentHumidity(Integer.parseInt("30"));
-            indoorDB.setSettingHumidity(40);
-            indoorDB.setFanStatus(3);  //stop 0, low 1, middium 2, high 3, auto 4.
-            indoorDB.setFloorValveOpen(true);
-            indoorDB.setCoilValveOpen(false);
-            indoorDB.setDehumidityStatus(true);
-            indoorDB.setRoomStatus(2);  //stop 0, manual 1, auto 2.
-            insertIndoorDB(indoorDB);
-        }
-        if (message.contains("C5")) {
-            IndoorDB indoorDB1 = new IndoorDB();
-            indoorDB1.setTimeStamp(System.currentTimeMillis() / 1000);
-            indoorDB1.setRoomNameId(5);
-            indoorDB1.setCurrentTemperature(35);
-            indoorDB1.setSettingTemperature(25);
-            indoorDB1.setSettingHumidity(50);
-            indoorDB1.setCurrentHumidity(Integer.parseInt("40"));
-            indoorDB1.setFanStatus(4);  //stop 0, low 1, middium 2, high 3, auto 4.
-            indoorDB1.setFloorValveOpen(false);
-            indoorDB1.setCoilValveOpen(true);
-            indoorDB1.setDehumidityStatus(false);
-            indoorDB1.setRoomStatus(2);  //stop 0, manual 1, auto 2.
-            insertIndoorDB(indoorDB1);
+        if (message.contains("RH" + 1)) {
+            writeToDBIndoorDBs.get(0).setCurrentHumidity(
+                    Float.parseFloat(message.substring(0, message.indexOf(".") + 2)));
         }
 
-//        if (message.contains("RH1")) room1humidity = message.replace("RH1", "RH");
-//        if (message.contains("C2")) room2temperature = message.replace("C2", "C");
 
-        //运行状态需要反馈回来
-//        if (message.contains("valveonRoom1")) {
-//            room1states = "正在运行";
-//        }
-//        if (message.contains("valveonRoom2")) {
-//            room2states = "正在运行";
-//        }
+//        //依据message字符串最后一位决定房间号，倒数第二位决定温湿度C为温度，H为湿度。
+//            writeToDBIndoorDBs.get(0).setTimeStamp(System.currentTimeMillis() / 1000);
+//            writeToDBIndoorDBs.get(0).setRoomNameId(1);
+//            //依据message字符串最后一位决定房间号，倒数第二位决定温湿度C为温度，H为湿度。
 //
-//        if (message.contains("valveoffRoom1")) {
-//            room1states = "停止运行";
-//        }
-//        if (message.contains("valveoffRoom2")) {
-//            room2states = "停止运行";
-//        }
+//            //TODO 从模块回传设置温度和设置湿度
+//            writeToDBIndoorDBs.get(0).setSettingTemperature(20);
+//            writeToDBIndoorDBs.get(0).setSettingHumidity(30);
+//
+//            //回传的风机状态
+//            if (message.contains("lowRoom" + 1 + "FP"))
+//                writeToDBIndoorDBs.get(0).setFanStatus(1);
+//            if (message.contains("middleRoom" + 1 + "FP"))
+//                writeToDBIndoorDBs.get(0).setFanStatus(2);
+//            if (message.contains("highRoom" + 1 + "FP"))
+//                writeToDBIndoorDBs.get(0).setFanStatus(4);
+//            if (message.contains("stopRoom" + 1 + "FP"))
+//                writeToDBIndoorDBs.get(0).setFanStatus(0);
+//            //TODO add fanstatus auto
+//            //if (message.contains("stopRoom" + i + "FP")) writeToDBIndoorDBs.get(i-1).setFanStatus(0);
+//
+//            //地暖模块回传的信息
+//            if (message.contains("valveonRoom" + 1 + "floor"))
+//                writeToDBIndoorDBs.get(0).setFloorValveOpen(true);
+//            if (message.contains("valveoffRoom" + 1 + "floor"))
+//                writeToDBIndoorDBs.get(0).setFloorValveOpen(false);
+//            //两通阀回传的信息
+//            if (message.contains("valveonRoom" + 1 + "FP"))
+//                writeToDBIndoorDBs.get(0).setCoilValveOpen(true);
+//            if (message.contains("valveoffRoom" + 1 + "FP"))
+//                writeToDBIndoorDBs.get(0).setCoilValveOpen(false);
+//            //回传的除湿状态
+//            if (message.contains("dehumidityRoom" + 1 + "FP"))
+//                writeToDBIndoorDBs.get(0).setDehumidityStatus(true);
+//            //风机模块回传的房间状态信息
+//            if (message.contains("turnoffRoom" + 1 + "FP"))
+//                writeToDBIndoorDBs.get(0).setRoomStatus(0);
+//            if (message.contains("manualRoom" + 1 + "FP"))
+//                writeToDBIndoorDBs.get(0).setRoomStatus(1);
+//            if (message.contains("automationRoom" + 1 + "FP"))
+//                writeToDBIndoorDBs.get(0).setRoomStatus(2);
+            count++;
+        Log.d("count", String.valueOf(count));
+            if (count>50) {
+                count = 0;
+                insertIndoorDB(writeToDBIndoorDBs.get(0));
+            }
+
 
         //设置显示的文字
 //        buttonA.setText("\n" + room1name + "\n\n" + room1temperature + "\n\n" + room1humidity + "\n\n" + room1states + "\n");

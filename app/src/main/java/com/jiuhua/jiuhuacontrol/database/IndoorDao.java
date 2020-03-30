@@ -3,10 +3,12 @@ package com.jiuhua.jiuhuacontrol.database;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
+import androidx.room.Ignore;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Dao
@@ -38,6 +40,8 @@ public interface IndoorDao {
 
     @Insert
     void insertIndoorDB(IndoorDB... indoorDBS);
+//    @Insert
+//    void insertIndoorDBList(IndoorDB indoorDB, List<IndoorDB> indoorDBList);
 
     @Query("DELETE FROM IndoorDB")
     void deleteAllIndoorDB();
@@ -45,8 +49,9 @@ public interface IndoorDao {
 //    //提取最大id的条目
 //    @Query("SELECT * , MAX(id)  FROM IndoorDB WHERE room_name_id = :roomId")
 //    LiveData<IndoorDB> getCurrentIndoorDB(int roomId);
+
      //提取最大id的条目
-     @Query("SELECT * , MAX(id)  FROM IndoorDB GROUP BY room_name_id")
+     @Query("SELECT * , MAX(timeStamp)  FROM IndoorDB GROUP BY room_name_id")
      LiveData<List<IndoorDB>> loadLatestIndoorDBsLive();
 
      //IndoorLongtimeDB的相关方法
