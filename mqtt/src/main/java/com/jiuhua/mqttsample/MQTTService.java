@@ -160,7 +160,7 @@ public class MQTTService extends Service {
         @Override
         public void messageArrived(String topic, MqttMessage message) throws Exception {
                                    //这里的参数调用者会自动赋予
-            String str1 = new String(message.getPayload());//获取消息内容
+            String str1 = new String(message.getPayload());//获取消息内容  //TODO 是不是可以在这里转到工作线程？？
             if (IGetMessageCallBack != null){
                 IGetMessageCallBack.setMessage(str1);//IGetMessageCallBack的唯一方法
             }
