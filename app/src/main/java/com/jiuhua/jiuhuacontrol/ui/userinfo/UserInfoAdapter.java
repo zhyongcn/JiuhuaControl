@@ -34,27 +34,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.MyView
 
     public void setAllBasicInfo(List<BasicInfoDB> allBasicInfo) {
         this.allBasicInfo = allBasicInfo;
-
-//        Gson gson = new Gson();
-//        String jsonTran = gson.toJson(allBasicInfo);
-//        Log.d("json", jsonTran);
-//        allBasicInfoCopy = jsonToArrayList(jsonTran, BasicInfoDB.class);
-//        jsoncopy = gson.toJson(allBasicInfoCopy);
-//        Log.d("jsoncopy", jsoncopy);
-
     }
-
-//    //json 到 ArrayList 的方法（java深度拷贝）
-//    public static <T> ArrayList<T> jsonToArrayList(String json, Class<T> clazz) {
-//        Type type = new TypeToken<ArrayList<JsonObject>>() { }.getType();
-//        ArrayList<JsonObject> jsonObjects = new Gson().fromJson(json, type);
-//
-//        ArrayList<T> arrayList = new ArrayList<>();
-//        for (JsonObject jsonObject : jsonObjects) {
-//            arrayList.add(new Gson().fromJson(jsonObject, clazz));
-//        }
-//        return arrayList;
-//    }
 
     @NonNull
     @Override
@@ -63,8 +43,6 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.MyView
         View itemView = layoutInflater.inflate(R.layout.userinfo_cell_layout, parent, false);
 
         final MyViewHolder holder = new MyViewHolder(itemView);
-
-
 
 //        holder.editTextRoomName.addTextChangedListener(new TextWatcher() {
 //            int k = holder.getAdapterPosition();   //获取具体哪个条目了

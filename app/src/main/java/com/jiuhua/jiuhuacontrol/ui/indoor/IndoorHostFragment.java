@@ -46,12 +46,12 @@ public class IndoorHostFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        int roomNameId = getArguments().getInt("roomNameId");
+        int roomNameId = getArguments().getInt("roomNameId");//bundle的参数接收：具体哪个房间。
         String roomName = getArguments().getString("roomName");
 
         fragmentList = new ArrayList<Fragment>();
         fragmentList.add(new HistoryFragment());
-        fragmentList.add(new IndoorFragment(roomNameId, roomName));
+        fragmentList.add(new IndoorFragment(roomNameId, roomName));//参数传入：具体哪个房间，
         fragmentList.add(new PeroidFragment());
 
         viewPager = view.findViewById(R.id.viewpager);

@@ -1,13 +1,11 @@
 package com.jiuhua.jiuhuacontrol.ui.indoor;
 
-
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Toast;
@@ -23,13 +21,10 @@ import com.google.android.material.snackbar.Snackbar;
 import com.jiuhua.jiuhuacontrol.R;
 import com.jiuhua.jiuhuacontrol.database.IndoorDB;
 import com.jiuhua.jiuhuacontrol.databinding.FragmentIndoorBinding;
+import com.jiuhua.mqttsample.MQTTService;
 
 import java.util.List;
 
-/**
- * 替换以前的RoomActivity
- * A simple {@link Fragment} subclass.
- */
 public class IndoorFragment extends Fragment {
 
     private FragmentIndoorBinding binding;
@@ -39,7 +34,7 @@ public class IndoorFragment extends Fragment {
     String roomName;
 
     public IndoorFragment(int roomNameId, String roomName) {
-        this.roomNameId = roomNameId;
+        this.roomNameId = roomNameId;//这里传入的ID有问题，房间2传来的是 1。
         this.roomName = roomName;
         // Required empty public constructor 传参了
     }
@@ -68,7 +63,7 @@ public class IndoorFragment extends Fragment {
             @Override
             public void onChanged(List<IndoorDB> indoorDBS) {
                 indoorViewModel.setAllLatestIndoorDBs(indoorDBS);
-                indoorViewModel.setLatestIndoorDB(indoorDBS.get(roomNameId));
+                indoorViewModel.setLatestIndoorDB(indoorDBS.get(roomNameId-1));//传入的时候再k值上加 1 了，现在要减 1 ，否则队列越界，
 //                IndoorDB indoorDB = indoorViewModel.latestIndoorDB;
 
                 //数据驱动界面改变,所以代码要放在fragment或者Activity里面。只处理界面
@@ -148,37 +143,37 @@ public class IndoorFragment extends Fragment {
 
         //温度和湿度的设置进度条，收取数据。
         binding.temperatureSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int temp_P;
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//                indoorViewModel.setSettingTemperature(progress);
-                Toast.makeText(getContext(),"设置要求温度为"+progress+"摄氏度", Toast.LENGTH_SHORT).show();
+                temp_P = progress;//这里的数字会不停的变，所以先存储一下。
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStartTrackingTouch(SeekBar seekBar) {}
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
+            public void onStopTrackingTouch(SeekBar seekBar) {//touch结束之后再执行逻辑。
+                MQTTService.publish("86518/JYCFGC/6-2-3401/Room" + roomNameId,
+                        temp_P + "Room"+roomNameId+"set_temp", 1, true);
+                Toast.makeText(getContext(),roomName+"设置温度为"+ temp_P +"摄氏度", Toast.LENGTH_SHORT).show();
             }
         });
         binding.humiditySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int temp_P;
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//                indoorViewModel.setSettingHumidity(progress);
-                Toast.makeText(getContext(),"设置要求湿度为"+progress+"%RH", Toast.LENGTH_SHORT).show();
+                temp_P = progress;//这里的数字会不停的变，所以先存储一下。
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStartTrackingTouch(SeekBar seekBar) {}
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                MQTTService.publish("86518/JYCFGC/6-2-3401/Room" + roomNameId,
+                        temp_P + "Room"+roomNameId+"set_humidity", 1, true);
+                Toast.makeText(getContext(),roomName+"设置湿度为"+ temp_P +"%RH", Toast.LENGTH_SHORT).show();
             }
         });
         //地暖开关，除湿开关，风速选择，房间状态选择实现。
@@ -186,11 +181,15 @@ public class IndoorFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (indoorViewModel.latestIndoorDB.isFloorValveOpen()){
-                    //TODO 关地暖
-                    Toast.makeText(getContext(),"guan地暖", Toast.LENGTH_SHORT).show();
+                    //关地暖
+                    MQTTService.publish("86518/JYCFGC/6-2-3401/Room" + roomNameId,
+                             "Room" + roomNameId + "turn-offfloor", 1, true);
+                    Toast.makeText(getContext(),roomName+"关闭地暖", Toast.LENGTH_SHORT).show();
                 }else {
                     //开地暖
-                    Toast.makeText(getContext(),"开地暖", Toast.LENGTH_SHORT).show();
+                    MQTTService.publish("86518/JYCFGC/6-2-3401/Room" + roomNameId,
+                            "Room" + roomNameId + "manual-onfloor", 1, true);
+                    Toast.makeText(getContext(),roomName+"打开地暖", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -198,11 +197,18 @@ public class IndoorFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (indoorViewModel.latestIndoorDB.isDehumidityStatus()){
-                    //stop 除湿
-                    Toast.makeText(getContext(),"turn off 除湿", Toast.LENGTH_SHORT).show();
+                    //stop Dehumidify is turnoff fancoil。
+                    MQTTService.publish("86518/JYCFGC/6-2-3401/Room" + roomNameId,
+                            "Room" + roomNameId + "turn-offFP", 1, true);
+                    Toast.makeText(getContext(),roomName+"停止除湿", Toast.LENGTH_SHORT).show();
                 }else {
                     //start Dehumidity
-                    Toast.makeText(getContext(),"start 除湿", Toast.LENGTH_SHORT).show();
+                    //TODO 再传送一边设定湿度？？
+                    MQTTService.publish("86518/JYCFGC/6-2-3401/Room" + roomNameId,
+                            "Room" + roomNameId + "deHumidity", 1, true);
+                    MQTTService.publish("86518/JYCFGC/6-2-3401/Room" + roomNameId,
+                            "Room" + roomNameId + "turn-offfloor", 1, true);//除湿的时候水温很低，需要关闭地暖。
+                    Toast.makeText(getContext(),roomName+"开始除湿", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -211,19 +217,24 @@ public class IndoorFragment extends Fragment {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId){
                     case R.id.radioButtonlowfan:
-                        Toast.makeText(getContext(),"start 低风速", Toast.LENGTH_SHORT).show();
+                        //TODO 具体设置代码
+                        Toast.makeText(getContext(),roomName+"风机盘管低风速运行", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.radioButtonmiddlefan:
-                        Toast.makeText(getContext(),"start 中风速", Toast.LENGTH_SHORT).show();
+                        //TODO 具体设置代码
+                        Toast.makeText(getContext(),roomName+"风机盘管中风速运行", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.radioButtonhighfan:
-                        Toast.makeText(getContext(),"start 高风速", Toast.LENGTH_SHORT).show();
+                        //TODO 具体设置代码
+                        Toast.makeText(getContext(),roomName+"风机盘管高风速运行", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.radioButtonautofan:
-                        Toast.makeText(getContext(),"start zidong风速", Toast.LENGTH_SHORT).show();
+                        //TODO 具体设置代码
+                        Toast.makeText(getContext(),roomName+"风机盘管自动风速运行", Toast.LENGTH_SHORT).show();
                         break;
                     default:
-                        Toast.makeText(getContext(),"start 风速wu", Toast.LENGTH_SHORT).show();
+                        //TODO 具体设置代码
+                        Toast.makeText(getContext(),roomName+"风机盘管停止运行", Toast.LENGTH_SHORT).show();
                         break;
                 }
 
@@ -232,20 +243,25 @@ public class IndoorFragment extends Fragment {
         binding.buttonStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO 具体设置代码，使用Json传输的时候需要再调整！！
                 indoorViewModel.stopRoomEquipment(roomNameId);
+                Snackbar.make(getView(), roomName+"设备停止运行", Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null).show();
             }
         });
         binding.buttonManual.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(getView(), "房间设备手动运行", Snackbar.LENGTH_LONG)
+                //TODO 具体设置代码
+                Snackbar.make(getView(), roomName+"设备手动运行", Snackbar.LENGTH_SHORT)
                         .setAction("Action", null).show();
             }
         });
         binding.buttonAuto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(getView(), "自动运行房间所有设备", Snackbar.LENGTH_LONG)
+                //TODO 具体设置代码
+                Snackbar.make(getView(), roomName+"设备自动按周期运行", Snackbar.LENGTH_SHORT)
                         .setAction("Action", null).show();
             }
         });

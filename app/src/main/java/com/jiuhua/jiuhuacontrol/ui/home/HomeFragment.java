@@ -21,9 +21,6 @@ import com.jiuhua.jiuhuacontrol.database.IndoorDB;
 
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class HomeFragment extends Fragment {
 
     HomeViewModel homeViewModel;
@@ -49,11 +46,12 @@ public class HomeFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerView);
 
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-        homepageAdapter = new HomepageAdapter(homeViewModel);
+        homepageAdapter = new HomepageAdapter(homeViewModel);//这个类以及需要的参数是自己写的。
 
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        recyclerView.setAdapter(homepageAdapter);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));//RecyclerView是需要管理器的，网格管理，两行。
+        recyclerView.setAdapter(homepageAdapter);//adapter肯定是必须的！！
 
+        //
         homeViewModel.getAllBasicInfoLive().observe(getViewLifecycleOwner(), new Observer<List<BasicInfoDB>>() {
             @Override
             public void onChanged(List<BasicInfoDB> basicInfoDBS) {
@@ -83,10 +81,10 @@ public class HomeFragment extends Fragment {
                 //temporary test code
                 homeViewModel.insertRoomName(new BasicInfoDB("客厅", "扬子风盘", "FP-51", true, true,
                         true, null, null, false));
-                homeViewModel.insertRoomName(new BasicInfoDB("餐厅", "约克", "FP-68", false, true,
-                        true, null, null, false));
-                homeViewModel.insertRoomName(new BasicInfoDB("主卧室", "麦克维尔", "FP-120", true, false,
-                        true, null, null, false));
+//                homeViewModel.insertRoomName(new BasicInfoDB("餐厅", "约克", "FP-68", false, true,
+//                        true, null, null, false));
+//                homeViewModel.insertRoomName(new BasicInfoDB("主卧室", "麦克维尔", "FP-120", true, false,
+//                        true, null, null, false));
             }
         });
 

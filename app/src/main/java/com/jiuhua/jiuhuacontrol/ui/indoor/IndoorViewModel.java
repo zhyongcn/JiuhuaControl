@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.jiuhua.jiuhuacontrol.CommandESP;
 import com.jiuhua.jiuhuacontrol.MyRepository;
 import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
 import com.jiuhua.jiuhuacontrol.database.IndoorDB;
@@ -16,11 +17,12 @@ import java.util.List;
 public class IndoorViewModel extends AndroidViewModel {
 
 //    enum FanSpeed {STOP, LOW, MEDIUM, HIGH, AUTO}
-//    enum RoomState {STOP, MANUAL, AUTO}
+//    enum RoomState {off, MANUAL, AUTO, dehumidity, feast}
 
     MyRepository myRepository;
     List<IndoorDB> allLatestIndoorDBs;
     IndoorDB latestIndoorDB;
+    CommandESP commandESP;
 
     //变量及其getter & setter 方法
     private int roomNameId = 1;
@@ -66,6 +68,7 @@ public class IndoorViewModel extends AndroidViewModel {
     public IndoorViewModel(@NonNull Application application) {
         super(application);
         this.myRepository = new MyRepository(application);
+        this.commandESP = new CommandESP();
     }
 
     //TODO　包装 Repository 里面的 Dao 方法

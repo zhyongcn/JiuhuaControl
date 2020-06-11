@@ -141,7 +141,14 @@ public class MQTTService extends Service {
             try {
                 // ***订阅myTopic话题***
                 client.subscribe(myTopic,0);//订阅的主题质量要求必须传到。
-                client.subscribe("86518/DRHY/3-1-1603/Room1", 1);//可以订阅多个主题，消息混在一起，需要注意处理
+                client.subscribe("86518/JYCFGC/6-2-3401/Room1", 1);//可以订阅多个主题，消息混在一起，需要注意处理
+                client.subscribe("86518/JYCFGC/6-2-3401/Room2", 1);
+                client.subscribe("86518/JYCFGC/6-2-3401/Room3", 1);
+                client.subscribe("86518/JYCFGC/6-2-3401/Room4", 1);
+                client.subscribe("86518/JYCFGC/6-2-3401/Room5", 1);
+                client.subscribe("86518/JYCFGC/6-2-3401/Room6", 1);
+                client.subscribe("86518/JYCFGC/6-2-3401/Room7", 1);
+                client.subscribe("86518/JYCFGC/6-2-3401/Room8", 1);
             } catch (MqttException e) {
                 e.printStackTrace();
             }

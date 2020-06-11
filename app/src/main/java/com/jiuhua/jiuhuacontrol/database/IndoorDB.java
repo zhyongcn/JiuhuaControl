@@ -6,7 +6,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-//不要自以为牛逼，添加关联外键，失败了吧！（是不是在线程的问题上，不能在主线程UI线程）
+//TODO 添加关联外键，失败了吧！（是不是在线程的问题上，不能在主线程UI线程）
 
 @Entity
 public class IndoorDB {
