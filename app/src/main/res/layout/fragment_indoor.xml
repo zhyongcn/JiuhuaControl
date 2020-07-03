@@ -53,28 +53,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.52" />
+                app:layout_constraintGuide_percent="0.5" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.61" />
+                app:layout_constraintGuide_percent="0.59" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline13"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.73" />
+                app:layout_constraintGuide_percent="0.8" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.82" />
+                app:layout_constraintGuide_percent="0.69" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline15"
@@ -133,8 +133,8 @@
                 android:id="@+id/temperatureSeekBar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:max="35"
-                android:min="12"
+                android:max="350"
+                android:min="120"
                 app:layout_constraintBottom_toTopOf="@+id/guideline11"
                 app:layout_constraintEnd_toStartOf="@+id/guideline10"
                 app:layout_constraintStart_toStartOf="@+id/guideline9"
@@ -155,8 +155,8 @@
                 android:id="@+id/humiditySeekBar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:max="90"
-                android:min="20"
+                android:max="900"
+                android:min="100"
                 app:layout_constraintBottom_toTopOf="@+id/guideline12"
                 app:layout_constraintEnd_toStartOf="@+id/guideline10"
                 app:layout_constraintStart_toEndOf="@+id/temp_humidityTextView"
@@ -233,7 +233,7 @@
                 android:id="@+id/buttonManual"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="手动"
+                android:text="空调开关"
                 app:layout_constraintEnd_toStartOf="@+id/buttonAuto"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/buttonStop"

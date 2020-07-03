@@ -51,7 +51,7 @@ public interface IndoorDao {
 //    LiveData<IndoorDB> getCurrentIndoorDB(int roomId);
 
      //提取最大id的条目
-     @Query("SELECT * , MAX(timeStamp)  FROM IndoorDB GROUP BY room_name_id")
+     @Query("SELECT * , MAX(timeStamp)  FROM IndoorDB GROUP BY room_id")
      LiveData<List<IndoorDB>> loadLatestIndoorDBsLive();
 
      //IndoorLongtimeDB的相关方法

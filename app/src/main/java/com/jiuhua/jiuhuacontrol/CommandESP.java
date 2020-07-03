@@ -4,17 +4,15 @@ package com.jiuhua.jiuhuacontrol;
 * this class will be translate to json to pass order
 * 这个类将转换成json格式通过mqtt传输到模块，去操作模块*/
 public class CommandESP {
-    private int roomId;
-    private String deviceType;//使用枚举？？
-    private String roomState;
-    private String fanSpeed;
-    private String module;
-    private int set_temp;
-    private int set_humidity;
-    private int avg_temp;
-    private int avg_humidity;
-    private int[] peroid;
-    private String upgrade;
+    private int roomId;// 1, 2, 3, 4, 5, 6, 7, 8, etc
+    private int deviceType;//FANCOIL 0, FLLORHEATER 1, RADIATOR 2, BOILER 3, HEATPUMP 4, DHTSENSOR 5
+    private int roomState;//OFF 0, MANUAL 1, AUTOMATION 2, DEHUMIDITY 3, FEAST 4
+    private int settingfanSpeed;//STOP 0, LOW 1, MEDIUM 2, HIGH 3, AUTOSPEED 4
+    private String module;  //reboot, feedback, etc.
+    private int setting_temp;  //X10 假浮点 False float
+    private int setting_humidity;  //X10 假浮点 False float
+    private int[] peroid; //
+    private String upgrade;//升级模块指令集。
 
     public int getRoomId() {
         return roomId;
@@ -24,28 +22,28 @@ public class CommandESP {
         this.roomId = roomId;
     }
 
-    public String getDeviceType() {
+    public int getDeviceType() {
         return deviceType;
     }
 
-    public void setDeviceType(String deviceType) {
+    public void setDeviceType(int deviceType) {
         this.deviceType = deviceType;
     }
 
-    public String getRoomState() {
+    public int getRoomState() {
         return roomState;
     }
 
-    public void setRoomState(String roomState) {
+    public void setRoomState(int roomState) {
         this.roomState = roomState;
     }
 
-    public String getFanSpeed() {
-        return fanSpeed;
+    public int getSettingfanSpeed() {
+        return settingfanSpeed;
     }
 
-    public void setFanSpeed(String fanSpeed) {
-        this.fanSpeed = fanSpeed;
+    public void setSettingfanSpeed(int settingfanSpeed) {
+        this.settingfanSpeed = settingfanSpeed;
     }
 
     public String getModule() {
@@ -56,36 +54,20 @@ public class CommandESP {
         this.module = module;
     }
 
-    public int getSet_temp() {
-        return set_temp;
+    public int getSetting_temp() {
+        return setting_temp;
     }
 
-    public void setSet_temp(int set_temp) {
-        this.set_temp = set_temp;
+    public void setSetting_temp(int setting_temp) {
+        this.setting_temp = setting_temp;
     }
 
-    public int getSet_humidity() {
-        return set_humidity;
+    public int getSetting_humidity() {
+        return setting_humidity;
     }
 
-    public void setSet_humidity(int set_humidity) {
-        this.set_humidity = set_humidity;
-    }
-
-    public int getAvg_temp() {
-        return avg_temp;
-    }
-
-    public void setAvg_temp(int avg_temp) {
-        this.avg_temp = avg_temp;
-    }
-
-    public int getAvg_humidity() {
-        return avg_humidity;
-    }
-
-    public void setAvg_humidity(int avg_humidity) {
-        this.avg_humidity = avg_humidity;
+    public void setSetting_humidity(int setting_humidity) {
+        this.setting_humidity = setting_humidity;
     }
 
     public int[] getPeroid() {

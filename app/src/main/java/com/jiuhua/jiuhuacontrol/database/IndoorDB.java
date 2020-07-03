@@ -6,54 +6,79 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-//TODO 添加关联外键，失败了吧！（是不是在线程的问题上，不能在主线程UI线程）
+
+import com.google.gson.annotations.SerializedName;
+//fixme 添加关联外键，失败了吧！（是不是在线程的问题上，不能在主线程UI线程）
 
 @Entity
 public class IndoorDB {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
+    //
     @ColumnInfo(name = "timestamp")
+    @SerializedName("timestamp")
     private long timeStamp;   //直接使用UNIX时间
-    @ColumnInfo(name = "room_name_id")
-    private int roomNameId;
-    @ColumnInfo(name = "current_temperature")
-    private float currentTemperature;
+    //
+    @ColumnInfo(name = "room_id")
+    @SerializedName("roomId")
+    private int roomId;
+    //
+    @ColumnInfo(name = "device_type")
+    @SerializedName("deviceType")
+    private int deviceType; //FANCOIL 0, FLOORHEATER 1, RADIATOR 2, BOILER 3, HEATPUMP 4
+    //
     @ColumnInfo(name = "setting_temperature")
-    private int settingTemperature;
-    @ColumnInfo(name = "current_humidity")
-    private float currentHumidity;
+    @SerializedName("settingTemp")
+    private int settingTemperature;//10X 之后的假浮点。
+    @ColumnInfo(name = "current_temperature")
+    @SerializedName("currentTemp")
+    private int currentTemperature;//模块 10X 之后的假浮点。
+
     @ColumnInfo(name = "setting_humidity")
+    @SerializedName("settingHumidity")
     private int settingHumidity;
-    @ColumnInfo(name = "fan_status")
-    private int fanStatus;//stop 0, low 1, middium 2, high 3, auto 4.
+    @ColumnInfo(name = "current_humidity")
+    @SerializedName("currentHumidity")
+    private int currentHumidity;
+    //
+    @ColumnInfo(name = "current_fan_status")//不要使用枚举，占用太多资源，还需要转换器。
+    @SerializedName("currentFanSpeed")
+    private int currentFanStatus;  //Constants.fanSpeed_XXX
+    @ColumnInfo(name = "setting_fan_status")
+    @SerializedName("settingFanSpeed")
+    private int settingFanStatus;
+    //
     @ColumnInfo(name = "floor_valve")
+    @SerializedName("floorvalve")
     private boolean floorValveOpen;
     @ColumnInfo(name = "coil_valve")
+    @SerializedName("coilvalve")
     private boolean coilValveOpen;
-    @ColumnInfo(name = "dehumidity_status")
-    private boolean dehumidityStatus;
-    @ColumnInfo(name = "room_status")
-    private int roomStatus;//stop 0, manual 1, auto 2.
+    //
+    @ColumnInfo(name = "room_status")//不要使用枚举，占用太多资源，还需要转换器。
+    @SerializedName("roomState")
+    private int roomStatus; //Constants.roomState_XXXX
 
     public IndoorDB() {
         //empty public constructor for IndoorViewModel
     }
 
     @Ignore
-    public IndoorDB(long timeStamp, int roomNameId, float currentTemperature, int settingTemperature,
-                    float currentHumidity, int settingHumidity, int fanStatus, boolean floorValveOpen,
-                    boolean coilValveOpen, boolean dehumidityStatus, int roomStatus) {
+    public IndoorDB(long timeStamp, int roomId, int deviceType, int currentTemperature, int settingTemperature,
+                    int currentHumidity, int settingHumidity, int settingFanStatus, int currentFanStatus, boolean floorValveOpen,
+                    boolean coilValveOpen, int roomStatus) {
         this.timeStamp = timeStamp;
-        this.roomNameId = roomNameId;
+        this.roomId = roomId;
+        this.deviceType = deviceType;
         this.currentTemperature = currentTemperature;
         this.settingTemperature = settingTemperature;
         this.currentHumidity = currentHumidity;
         this.settingHumidity = settingHumidity;
-        this.fanStatus = fanStatus;
+        this.settingFanStatus = settingFanStatus;
+        this.currentFanStatus = currentFanStatus;
         this.floorValveOpen = floorValveOpen;
         this.coilValveOpen = coilValveOpen;
-        this.dehumidityStatus = dehumidityStatus;
         this.roomStatus = roomStatus;
     }
 
@@ -73,19 +98,27 @@ public class IndoorDB {
         this.timeStamp = timeStamp;
     }
 
-    public int getRoomNameId() {
-        return roomNameId;
+    public int getRoomId() {
+        return roomId;
     }
 
-    public void setRoomNameId(int roomNameId) {
-        this.roomNameId = roomNameId;
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
     }
 
-    public float getCurrentTemperature() {
+    public int getDeviceType() {
+        return deviceType;
+    }
+
+    public void setDeviceType(int deviceType) {
+        this.deviceType = deviceType;
+    }
+
+    public int getCurrentTemperature() {
         return currentTemperature;
     }
 
-    public void setCurrentTemperature(float currentTemperature) {
+    public void setCurrentTemperature(int currentTemperature) {
         this.currentTemperature = currentTemperature;
     }
 
@@ -97,11 +130,11 @@ public class IndoorDB {
         this.settingTemperature = settingTemperature;
     }
 
-    public float getCurrentHumidity() {
+    public int getCurrentHumidity() {
         return currentHumidity;
     }
 
-    public void setCurrentHumidity(float currentHumidity) {
+    public void setCurrentHumidity(int currentHumidity) {
         this.currentHumidity = currentHumidity;
     }
 
@@ -113,12 +146,20 @@ public class IndoorDB {
         this.settingHumidity = settingHumidity;
     }
 
-    public int getFanStatus() {
-        return fanStatus;
+    public int getCurrentFanStatus() {
+        return currentFanStatus;
     }
 
-    public void setFanStatus(int fanStatus) {
-        this.fanStatus = fanStatus;
+    public void setCurrentFanStatus(int currentFanStatus) {
+        this.currentFanStatus = currentFanStatus;
+    }
+
+    public int getSettingFanStatus() {
+        return settingFanStatus;
+    }
+
+    public void setSettingFanStatus(int settingFanStatus) {
+        this.settingFanStatus = settingFanStatus;
     }
 
     public boolean isFloorValveOpen() {
@@ -135,14 +176,6 @@ public class IndoorDB {
 
     public void setCoilValveOpen(boolean coilValveOpen) {
         this.coilValveOpen = coilValveOpen;
-    }
-
-    public boolean isDehumidityStatus() {
-        return dehumidityStatus;
-    }
-
-    public void setDehumidityStatus(boolean dehumidityStatus) {
-        this.dehumidityStatus = dehumidityStatus;
     }
 
     public int getRoomStatus() {

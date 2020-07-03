@@ -14,7 +14,8 @@ public abstract class MyIndoorsDatabase extends RoomDatabase {//@Database注释�
         if(INSTANCE == null) {
             //Room.databaseBuilder() 或者 Room.inMemoryDatabaseBuilder() 获取数据库的实例。
             INSTANCE = androidx.room.Room.databaseBuilder(context.getApplicationContext(),
-                    MyIndoorsDatabase.class, "rooms_database").build();
+                    MyIndoorsDatabase.class, "rooms_database")
+                    .build();
         }
         return INSTANCE;
     }

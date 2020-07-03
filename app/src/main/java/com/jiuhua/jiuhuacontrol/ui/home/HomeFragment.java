@@ -81,10 +81,14 @@ public class HomeFragment extends Fragment {
                 //temporary test code
                 homeViewModel.insertRoomName(new BasicInfoDB("客厅", "扬子风盘", "FP-51", true, true,
                         true, null, null, false));
-//                homeViewModel.insertRoomName(new BasicInfoDB("餐厅", "约克", "FP-68", false, true,
-//                        true, null, null, false));
-//                homeViewModel.insertRoomName(new BasicInfoDB("主卧室", "麦克维尔", "FP-120", true, false,
-//                        true, null, null, false));
+                homeViewModel.insertRoomName(new BasicInfoDB("餐厅", "约克", "FP-68", false, true,
+                        true, null, null, false));
+                homeViewModel.insertRoomName(new BasicInfoDB("主卧室", "麦克维尔", "FP-120", true, false,
+                        true, null, null, false));
+                homeViewModel.insertRoomName(new BasicInfoDB("次卧室", "约克", "FP-68", false, true,
+                        true, null, null, false));
+                homeViewModel.insertRoomName(new BasicInfoDB("北卧室", "麦克维尔", "FP-120", true, false,
+                        true, null, null, false));
             }
         });
 
