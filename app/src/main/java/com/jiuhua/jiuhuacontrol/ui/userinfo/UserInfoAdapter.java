@@ -36,6 +36,8 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.MyView
         this.allBasicInfo = allBasicInfo;
     }
 
+    //TODO 添加校准温湿度的逻辑。
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder (@NonNull ViewGroup parent, int viewType) {

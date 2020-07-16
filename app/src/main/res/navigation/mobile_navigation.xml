@@ -54,7 +54,11 @@
         android:id="@+id/peroidFragment"
         android:name="com.jiuhua.jiuhuacontrol.ui.indoor.PeroidFragment"
         android:label="fragment_peroid"
-        tools:layout="@layout/fragment_peroid" />
+        tools:layout="@layout/fragment_peroid" >
+        <action
+            android:id="@+id/action_peroidFragment_to_peroidSettingFragment"
+            app:destination="@id/peroidSettingFragment" />
+    </fragment>
     <activity
         android:id="@+id/mainActivity"
         android:name="com.jiuhua.jiuhuacontrol.MainActivity"
@@ -73,5 +77,10 @@
             android:id="@+id/action_indoorHostFragment_to_indoorFragment"
             app:destination="@id/indoorFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/peroidSettingFragment"
+        android:name="com.jiuhua.jiuhuacontrol.ui.indoor.PeroidSettingFragment"
+        android:label="fragment_peroid_setting"
+        tools:layout="@layout/fragment_peroid_setting" />
 
 </navigation>

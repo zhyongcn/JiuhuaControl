@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Toast;
@@ -62,37 +63,33 @@ public class IndoorFragment extends Fragment {
             public void onChanged(List<IndoorDB> indoorDBS) {
                 indoorViewModel.setAllLatestIndoorDBs(indoorDBS);
 //                indoorViewModel.setLatestIndoorDB(indoorDBS.get(roomNameId - 1));  //好像多余，viewmodel里面有赋值
-                                                                         // 传入的时候再k值上加 1 了，现在要减 1 ，否则队列越界，
+                // 传入的时候再k值上加 1 了，现在要减 1 ，否则队列越界，
 //                IndoorDB indoorDB = indoorViewModel.latestIndoorDB;
 
                 //数据驱动界面改变,所以代码要放在fragment或者Activity里面。只处理界面
+                //显示两通阀的开关
                 if (indoorViewModel.latestIndoorDB.isCoilValveOpen()) {
                     binding.textViewCoilValve.setText(R.string.coilvalveopen);
                 } else {
                     binding.textViewCoilValve.setText(R.string.coilvalveshut);
                 }
+                //显示地暖的开关
                 if (indoorViewModel.latestIndoorDB.isFloorValveOpen()) {
                     binding.textViewFloorValve.setText(R.string.floorvalveopen);
                 } else {
                     binding.textViewFloorValve.setText(R.string.floorvalveshut);
                 }
-                binding.tempTemperaturextview.setText(String.valueOf(indoorViewModel.latestIndoorDB.getCurrentTemperature() / 10));
+                //显示当前温度
+                binding.tempTemperaturextview.setText(String.valueOf(indoorViewModel.latestIndoorDB.getCurrentTemperature() / 10));//假浮点需要除以10
+                //显示设置温度
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    binding.temperatureSeekBar.setProgress(indoorViewModel.latestIndoorDB.getSettingTemperature(), true);
+                    binding.temperatureSeekBar.setProgress(indoorViewModel.latestIndoorDB.getSettingTemperature() / 10, true);//假浮点需要除以10
                 }
-                binding.tempHumidityTextView.setText(String.valueOf(indoorViewModel.latestIndoorDB.getCurrentHumidity() / 10));
+                //显示当前湿度
+                binding.tempHumidityTextView.setText(String.valueOf(indoorViewModel.latestIndoorDB.getCurrentHumidity() / 10));//假浮点需要除以10
+                //显示设置湿度
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    binding.humiditySeekBar.setProgress(indoorViewModel.latestIndoorDB.getSettingHumidity(), true);
-                }
-                if (indoorViewModel.latestIndoorDB.isFloorValveOpen()) {
-                    binding.buttonfloor.setBackgroundColor(Color.parseColor("#00FF00"));
-                } else {
-                    binding.buttonfloor.setBackgroundColor(Color.argb(20, 0, 0, 0));
-                }
-                if (indoorViewModel.latestIndoorDB.getRoomStatus() == Constants.roomState_DEHUMIDITY) {
-                    binding.buttonhumidity.setBackgroundColor(Color.parseColor("#00FF00"));
-                } else {
-                    binding.buttonhumidity.setBackgroundColor(Color.argb(20, 0, 0, 0));
+                    binding.humiditySeekBar.setProgress(indoorViewModel.latestIndoorDB.getSettingHumidity() / 10, true);//假浮点需要除以10
                 }
                 //风机状态数据驱动相关按钮颜色的变化（高中低及自动风）
                 switch (indoorViewModel.latestIndoorDB.getCurrentFanStatus()) {
@@ -115,19 +112,31 @@ public class IndoorFragment extends Fragment {
                 //依据房间的状态改变按钮的颜色(停止，手动，自动)
                 switch (indoorViewModel.latestIndoorDB.getRoomStatus()) {
                     case Constants.roomState_OFF: //stop 0, manual 1, auto 2
-                        binding.buttonStop.setBackgroundColor(Color.parseColor("#00FF00"));
-                        binding.buttonManual.setBackgroundColor(Color.argb(20, 0, 0, 0));
-                        binding.buttonAuto.setBackgroundColor(Color.argb(20, 0, 0, 0));
+                        binding.buttonStop.setBackgroundColor(Color.parseColor("#FF0000"));
+                        binding.switchManualAuto.setChecked(false);
+                        binding.buttonFeastDehumidity.setBackgroundColor(Color.argb(20, 0, 0, 0));//除湿&宴会按钮灰色
                         break;
                     case Constants.roomState_MANUAL:
                         binding.buttonStop.setBackgroundColor(Color.argb(20, 0, 0, 0));
-                        binding.buttonManual.setBackgroundColor(Color.parseColor("#00FF00"));
-                        binding.buttonAuto.setBackgroundColor(Color.argb(20, 0, 0, 0));
+                        binding.switchManualAuto.setChecked(false);
+                        binding.buttonFeastDehumidity.setBackgroundColor(Color.argb(20, 0, 0, 0));//除湿&宴会按钮灰色
                         break;
                     case Constants.roomState_AUTO:
                         binding.buttonStop.setBackgroundColor(Color.argb(20, 0, 0, 0));
-                        binding.buttonManual.setBackgroundColor(Color.argb(20, 0, 0, 0));
-                        binding.buttonAuto.setBackgroundColor(Color.parseColor("#00FF00"));
+                        binding.switchManualAuto.setChecked(true);
+                        binding.buttonFeastDehumidity.setBackgroundColor(Color.argb(20, 0, 0, 0));//除湿&宴会按钮灰色
+                        break;
+                    case Constants.roomState_DEHUMIDITY:
+                        //除湿按钮的显示
+                        binding.buttonFeastDehumidity.setBackgroundColor(Color.parseColor("#00FF00"));
+                        binding.buttonFeastDehumidity.setText("除湿");
+                        break;
+                    case Constants.roomState_FEAST:
+                        //宴会按钮的显示
+                        binding.buttonFeastDehumidity.setBackgroundColor(Color.parseColor("#00FF00"));
+                        binding.buttonFeastDehumidity.setText("宴会");
+                        break;
+                    default:
                         break;
                 }
             }
@@ -178,38 +187,6 @@ public class IndoorFragment extends Fragment {
                 Toast.makeText(getContext(), roomName + "设置湿度为" + temp_P / 10 + "%RH", Toast.LENGTH_SHORT).show();
             }
         });
-        //地暖开关
-        binding.buttonfloor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (indoorViewModel.latestIndoorDB.isFloorValveOpen()) {
-                    //关地暖
-                    indoorViewModel.floorRoomDevice(roomNameId, Constants.roomState_OFF);
-                    Toast.makeText(getContext(), roomName + "关闭地暖", Toast.LENGTH_SHORT).show();
-                } else {
-                    //开地暖
-                    indoorViewModel.floorRoomDevice(roomNameId, Constants.roomState_FEAST);
-                    Toast.makeText(getContext(), roomName + "打开地暖", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        //除湿按钮：
-        binding.buttonhumidity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (indoorViewModel.latestIndoorDB.getRoomStatus() == Constants.roomState_DEHUMIDITY) {
-                    //stop Dehumidify is turnoff fancoil。
-                    indoorViewModel.dehumidityRoomDevice(roomNameId, Constants.roomState_OFF);
-                    Toast.makeText(getContext(), roomName + "停止除湿", Toast.LENGTH_SHORT).show();
-                } else {
-                    //start Dehumidity
-                    //TODO 再传送一边设定湿度？？
-                    indoorViewModel.dehumidityRoomDevice(roomNameId, Constants.roomState_DEHUMIDITY);
-                    indoorViewModel.floorRoomDevice(roomNameId, Constants.roomState_OFF); //除湿的时候水温很低，需要关闭地暖。
-                    Toast.makeText(getContext(), roomName + "开始除湿", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
         //风速：
         binding.fanspeed.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -217,65 +194,92 @@ public class IndoorFragment extends Fragment {
                 switch (checkedId) {
                     case R.id.radioButtonlowfan:
                         indoorViewModel.fanSpeedRoomDevice(roomNameId, Constants.fanSpeed_LOW);
-                        Toast.makeText(getContext(), roomName + "风机盘管低风速运行", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getContext(), roomName + "风机盘管低风速运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                         break;
                     case R.id.radioButtonmiddlefan:
                         indoorViewModel.fanSpeedRoomDevice(roomNameId, Constants.fanSpeed_MEDIUM);
-                        Toast.makeText(getContext(), roomName + "风机盘管中风速运行", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getContext(), roomName + "风机盘管中风速运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                         break;
                     case R.id.radioButtonhighfan:
                         indoorViewModel.fanSpeedRoomDevice(roomNameId, Constants.fanSpeed_HIGH);
-                        Toast.makeText(getContext(), roomName + "风机盘管高风速运行", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getContext(), roomName + "风机盘管高风速运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                         break;
                     case R.id.radioButtonautofan:
                         indoorViewModel.fanSpeedRoomDevice(roomNameId, Constants.fanSpeed_AUTO);
-                        Toast.makeText(getContext(), roomName + "风机盘管自动风速运行", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getContext(), roomName + "风机盘管自动风速运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                         break;
-                    default:
-                        indoorViewModel.fanSpeedRoomDevice(roomNameId, Constants.fanSpeed_STOP);
-                        Toast.makeText(getContext(), roomName + "风机盘管停止运行", Toast.LENGTH_SHORT).show();
-                        break;
+//                    default:  //好像没有必要
+//                        indoorViewModel.fanSpeedRoomDevice(roomNameId, Constants.fanSpeed_STOP);
+//                        Toast.makeText(getContext(), roomName + "风机盘管停止运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
+//                        break;
                 }
 
+                //还是使用从数据库中提取的返回数据来驱动界面，不要多此一举在这里修改了。
             }
         });
-        //房间状态：停止/手动/周期自动
+
+
+        //除湿和宴会 按钮功能的实现
+        binding.buttonFeastDehumidity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (indoorViewModel.commandESP.getDeviceType() == Constants.deviceType_floorheater) {
+                    indoorViewModel.feastRoomDevice(roomNameId);
+                    binding.buttonFeastDehumidity.setBackgroundColor(Color.parseColor("#00FF00"));//先显示，模块数据回来会更改的
+                    binding.buttonStop.setBackgroundColor(Color.argb(20, 0, 0, 0));
+                } else if (indoorViewModel.commandESP.getDeviceType() == Constants.deviceType_fancoil) {
+                    indoorViewModel.dehumidityRoomDevice(roomNameId);
+                    binding.buttonFeastDehumidity.setBackgroundColor(Color.parseColor("#00FF00"));//先显示，模块数据回来会更改的
+                    binding.buttonStop.setBackgroundColor(Color.argb(20, 0, 0, 0));
+                    binding.radioButtonlowfan.setChecked(true);
+                }
+            }
+        });
+
+        //自动&手动切换按钮功能
+        binding.switchManualAuto.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    indoorViewModel.autoRoomDevice(roomNameId);
+                    binding.buttonStop.setBackgroundColor(Color.argb(20, 0, 0, 0));
+                } else {
+                    indoorViewModel.manualRoomDevice(roomNameId);
+                    binding.buttonStop.setBackgroundColor(Color.argb(20, 0, 0, 0));
+                }
+            }
+        });
+
+        //停止按钮
         binding.buttonStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 indoorViewModel.stopRoomDevice(roomNameId);
-                Toast.makeText(getContext(), roomName + "设备停止运行", Toast.LENGTH_SHORT).show();//挡住了按钮，不好看
+                binding.buttonStop.setBackgroundColor(Color.parseColor("#FF0000"));
+                binding.buttonFeastDehumidity.setBackgroundColor(Color.argb(20, 0, 0, 0));
+                binding.fanspeed.clearCheck();
+//                Toast.makeText(getContext(), roomName + "设备停止运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
             }
         });
-        binding.buttonManual.setOnClickListener(new View.OnClickListener() {
+
+        //空调&地暖切换按钮功能
+        binding.switchFancoilOrFloor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                indoorViewModel.manualRoomDevice(roomNameId);
-                Toast.makeText(getContext(), roomName + "设备手动运行", Toast.LENGTH_SHORT).show();
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    indoorViewModel.floorRoomDevice(roomNameId);
+                    binding.buttonFeastDehumidity.setText("宴会");
+                    binding.buttonStop.setBackgroundColor(Color.argb(20, 0, 0, 0));
+                } else {
+                    indoorViewModel.fancoilRoomDevice(roomNameId);
+                    binding.buttonFeastDehumidity.setText("除湿");
+                    binding.buttonStop.setBackgroundColor(Color.argb(20, 0, 0, 0));
+                }
             }
         });
-        binding.buttonAuto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                indoorViewModel.autoRoomDevice(roomNameId);
-                Toast.makeText(getContext(), roomName + "设备自动按周期运行", Toast.LENGTH_SHORT).show();
-            }
-        });
+
 
     }
-
-    //FIXME 停止使用一段时间再启动，从堆栈中，或者图标，只要不是全新的启动，不能使用MQTT发布信息。
-    //fixme 挂接电脑调试，始终有mqtt进来的信息，不存在上面一行的问题。
-    //TODO   下面的方法没有尝试，不知道效果。
-//    @Override
-//    public void setUserVisibleHint(boolean isVisibleToUser) {
-//        super.setUserVisibleHint(isVisibleToUser);
-//        if (isVisibleToUser){
-//            //可见时的代码
-//        }else {
-//            //不可见时的代码
-//        }
-//    }
 
 
 }

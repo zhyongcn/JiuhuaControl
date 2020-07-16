@@ -49,7 +49,7 @@ public class IndoorHostFragment extends Fragment {
         fragmentList = new ArrayList<Fragment>();
         fragmentList.add(new HistoryFragment());
         fragmentList.add(new IndoorFragment(roomNameId, roomName));//参数传入：具体哪个房间，
-        fragmentList.add(new PeroidFragment());
+        fragmentList.add(new PeroidFragment(roomNameId, roomName));
 
         viewPager = view.findViewById(R.id.viewpager);
         pagerAdapter = new RoomPagerAdapter(getChildFragmentManager());

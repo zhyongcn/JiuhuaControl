@@ -18,6 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="@+id/temperatureSeekBar"
+            app:layout_constraintEnd_toStartOf="@+id/guideline8"
+            app:layout_constraintStart_toStartOf="@+id/guideline8"
             app:layout_constraintTop_toBottomOf="@+id/temperatureSeekBar">
 
             <androidx.constraintlayout.widget.Guideline
@@ -25,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.50121653" />
+                app:layout_constraintGuide_percent="0.50" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline9"
@@ -163,24 +165,14 @@
                 app:layout_constraintTop_toTopOf="@+id/guideline12" />
 
             <Button
-                android:id="@+id/buttonfloor"
+                android:id="@+id/button_feast_dehumidity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:shadowColor="#FFFFFF"
-                android:text="地暖开关"
+                android:text="除湿/宴会"
                 app:layout_constraintBottom_toTopOf="@+id/guideline13"
                 app:layout_constraintEnd_toStartOf="@+id/guideline8"
                 app:layout_constraintStart_toStartOf="@+id/guideline9"
-                app:layout_constraintTop_toTopOf="@+id/guideline13" />
-
-            <Button
-                android:id="@+id/buttonhumidity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="除湿开关"
-                app:layout_constraintBottom_toTopOf="@+id/guideline13"
-                app:layout_constraintEnd_toStartOf="@+id/guideline10"
-                app:layout_constraintStart_toStartOf="@+id/guideline8"
                 app:layout_constraintTop_toTopOf="@+id/guideline13" />
 
             <RadioGroup
@@ -197,26 +189,27 @@
                     android:id="@+id/radioButtonlowfan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="低速风"/>
+                    android:text="低速风" />
 
                 <RadioButton
                     android:id="@+id/radioButtonmiddlefan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="中速风"/>
+                    android:text="中速风" />
 
                 <RadioButton
                     android:id="@+id/radioButtonhighfan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="高速风"/>
+                    android:text="高速风" />
 
                 <RadioButton
                     android:id="@+id/radioButtonautofan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="自动风"/>
+                    android:text="自动风" />
             </RadioGroup>
+
 
             <Button
                 android:id="@+id/buttonStop"
@@ -224,31 +217,53 @@
                 android:layout_height="wrap_content"
                 android:text="停止"
                 app:layout_constraintBottom_toTopOf="@+id/guideline15"
-                app:layout_constraintEnd_toStartOf="@+id/buttonManual"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/guideline15" />
+                app:layout_constraintEnd_toStartOf="@+id/guideline8"
+                app:layout_constraintHorizontal_bias="0.179"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toTopOf="@+id/guideline15"
+                app:layout_constraintVertical_bias="0.458" />
 
-            <Button
-                android:id="@+id/buttonManual"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="空调开关"
-                app:layout_constraintEnd_toStartOf="@+id/buttonAuto"
-                app:layout_constraintHorizontal_bias="0.5"
+            <Switch
+                android:id="@+id/switch_manual_auto"
+                android:layout_width="167dp"
+                android:layout_height="102dp"
+                android:checked="false"
+                android:showText="true"
+                android:splitTrack="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textOff="手动运行"
+                android:textOn="周期自动"
+                android:textSize="144sp"
+                android:thumb="@drawable/my_thumb"
+                android:thumbTintMode="multiply"
+                android:visibility="visible"
+                app:layout_constraintBottom_toTopOf="@+id/guideline13"
+                app:layout_constraintEnd_toStartOf="@+id/guideline10"
+                app:layout_constraintTop_toTopOf="@+id/guideline13"
+                tools:ignore="MissingConstraints" />
+
+            <Switch
+                android:id="@+id/switch_fancoil_or_floor"
+                android:layout_width="115dp"
+                android:layout_height="60dp"
+                android:layout_marginEnd="80dp"
+                android:checked="false"
+                android:showText="true"
+                android:splitTrack="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textOff="空调"
+                android:textOn="地暖"
+                android:textSize="144sp"
+                android:thumb="@drawable/my_thumb"
+                android:thumbTintMode="multiply"
+                android:visibility="visible"
+                app:layout_constraintBottom_toTopOf="@+id/guideline15"
+                app:layout_constraintEnd_toStartOf="@+id/guideline10"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/buttonStop"
-                app:layout_constraintTop_toTopOf="@+id/buttonStop" />
-
-            <Button
-                android:id="@+id/buttonAuto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="52dp"
-                android:text="周期自动"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/buttonManual"
-                app:layout_constraintTop_toTopOf="@+id/buttonManual" />
+                app:layout_constraintTop_toTopOf="@+id/guideline15"
+                app:layout_constraintVertical_bias="0.539"
+                tools:checked="true" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>

@@ -83,7 +83,7 @@ public class MyRepository implements IGetMessageCallBack {
         new DeleteAllBasicInfoAsyncTask(indoorDao).execute();
     }
 
-    //    //这个好像有问题，不能与下面的方法同时存在（在Dao里面）需要删除
+     //这个好像有问题，不能与下面的方法同时存在（在Dao里面）需要删除
 //    public List<BasicInfoDB> getAllBasicInfo() {
 //        return allBasicInfo;
 //    }

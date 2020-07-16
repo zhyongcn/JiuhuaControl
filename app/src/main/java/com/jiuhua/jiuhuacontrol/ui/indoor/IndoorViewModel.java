@@ -50,14 +50,14 @@ public class IndoorViewModel extends AndroidViewModel {
     public void setAllLatestIndoorDBs(List<IndoorDB> allLatestIndoorDBsLive) {
         this.allLatestIndoorDBs = allLatestIndoorDBsLive;
         if (roomNameId < allLatestIndoorDBsLive.size()) {  //TODO 临时的需要解决超出队列边界的问题
-            this.latestIndoorDB = allLatestIndoorDBsLive.get(roomNameId-1);
+            this.latestIndoorDB = allLatestIndoorDBsLive.get(roomNameId - 1);
             commandESP.setRoomId(latestIndoorDB.getRoomId());
             commandESP.setDeviceType(latestIndoorDB.getDeviceType());
             commandESP.setRoomState(latestIndoorDB.getRoomStatus());
             commandESP.setSetting_temp(latestIndoorDB.getSettingTemperature());
             commandESP.setSetting_humidity(latestIndoorDB.getSettingHumidity());
             commandESP.setSettingfanSpeed(latestIndoorDB.getSettingFanStatus());
-        }else {//fixme: 单纯非空还是不解决问题
+        } else {//fixme: 单纯非空还是不解决问题
             this.latestIndoorDB = new IndoorDB();
         }
     }
@@ -69,7 +69,7 @@ public class IndoorViewModel extends AndroidViewModel {
     }
 
     //停止按钮实现方法，停止房间所有设备
-    public void stopRoomDevice(int roomid){
+    public void stopRoomDevice(int roomid) {
         commandESP.setRoomId(roomid);
         commandESP.setDeviceType(Constants.deviceType_fancoil);
         commandESP.setRoomState(Constants.roomState_OFF);
@@ -80,61 +80,71 @@ public class IndoorViewModel extends AndroidViewModel {
         commandESP.setRoomState(Constants.roomState_OFF);
         myRepository.jsonToDevice(commandESP);
     }
+
     //手动按钮实现方法
-    public void manualRoomDevice(int roomid){
+    public void manualRoomDevice(int roomid) {
         commandESP.setRoomId(roomid);
-        commandESP.setDeviceType(Constants.deviceType_fancoil);
-        commandESP.setRoomState(Constants.roomState_MANUAL);
-        commandESP.setSettingfanSpeed(Constants.fanSpeed_MEDIUM);
-        myRepository.jsonToDevice(commandESP);
-        commandESP.setRoomId(roomid);
-        commandESP.setDeviceType(Constants.deviceType_floorheater);
         commandESP.setRoomState(Constants.roomState_MANUAL);
         myRepository.jsonToDevice(commandESP);
     }
+
     //周期自动按钮实现方法
-    public void autoRoomDevice(int roomid){
+    public void autoRoomDevice(int roomid) {
         commandESP.setRoomId(roomid);
-        commandESP.setDeviceType(Constants.deviceType_fancoil);
         commandESP.setRoomState(Constants.roomState_AUTO);
         commandESP.setSettingfanSpeed(Constants.fanSpeed_AUTO);
         myRepository.jsonToDevice(commandESP);
-        commandESP.setRoomId(roomid);
-        commandESP.setDeviceType(Constants.deviceType_floorheater);
-        commandESP.setRoomState(Constants.roomState_AUTO);
-        myRepository.jsonToDevice(commandESP);
     }
+
     //宴会按钮实现方法，这个好像没有用到。
-    public void feastRoomDevice(int roomid){
+    public void feastRoomDevice(int roomid) {
         commandESP.setRoomId(roomid);
         commandESP.setDeviceType(Constants.deviceType_floorheater);
-        commandESP.setRoomState(Constants.roomState_FEAST);
+        //判断一下是否在宴会状态
+        if (commandESP.getRoomState() == Constants.roomState_FEAST) {
+            commandESP.setRoomState(Constants.roomState_MANUAL);
+        } else {
+            commandESP.setRoomState(Constants.roomState_FEAST);
+        }
         myRepository.jsonToDevice(commandESP);
     }
+
     //除湿按钮实现方法
-    public void dehumidityRoomDevice(int roomid, int roomState){
+    public void dehumidityRoomDevice(int roomid) {
         commandESP.setRoomId(roomid);
         commandESP.setDeviceType(Constants.deviceType_fancoil);
-        commandESP.setRoomState(roomState);
-        if (roomState == Constants.roomState_OFF) commandESP.setSettingfanSpeed(Constants.fanSpeed_STOP);
-        if (roomState == Constants.roomState_DEHUMIDITY) commandESP.setSettingfanSpeed(Constants.fanSpeed_LOW);
+        if (commandESP.getRoomState() == Constants.roomState_DEHUMIDITY) {
+            commandESP.setSettingfanSpeed(Constants.roomState_MANUAL);
+        } else {
+            commandESP.setSettingfanSpeed(Constants.roomState_DEHUMIDITY);
+            commandESP.setSettingfanSpeed(Constants.fanSpeed_LOW);
+        }
         myRepository.jsonToDevice(commandESP);
     }
+
     //地暖按钮实现方法
-    public void floorRoomDevice(int roomid, int roomState){
+    public void floorRoomDevice(int roomid) {
         commandESP.setRoomId(roomid);
         commandESP.setDeviceType(Constants.deviceType_floorheater);
-        commandESP.setRoomState(roomState);
         myRepository.jsonToDevice(commandESP);
     }
-    //风速按钮实现方法
-    public void fanSpeedRoomDevice(int roomid, int fanSpeed){
+
+    //空调按钮实现方法
+    public void fancoilRoomDevice(int roomid) {
         commandESP.setRoomId(roomid);
         commandESP.setDeviceType(Constants.deviceType_fancoil);
-        commandESP.setRoomState(Constants.roomState_MANUAL);
+        myRepository.jsonToDevice(commandESP);
+    }
+
+    //风速按钮实现方法
+    public void fanSpeedRoomDevice(int roomid, int fanSpeed) {
+        commandESP.setRoomId(roomid);
+        commandESP.setDeviceType(Constants.deviceType_fancoil);
+        commandESP.setRoomState(Constants.roomState_MANUAL);//yes 改成手动运行
         commandESP.setSettingfanSpeed(fanSpeed);
         myRepository.jsonToDevice(commandESP);
     }
+
     //传送温度
     public void temperatureToRoomDevice(int roomid, int temp) {
         commandESP.setRoomId(roomid);
@@ -146,6 +156,7 @@ public class IndoorViewModel extends AndroidViewModel {
         commandESP.setSetting_temp(temp);//传输的X10 的假浮点
         myRepository.jsonToDevice(commandESP);
     }
+
     //传送湿度
     public void humidityToRoomDevice(int roomid, int temp) {
         commandESP.setRoomId(roomid);
@@ -157,7 +168,6 @@ public class IndoorViewModel extends AndroidViewModel {
         commandESP.setSetting_humidity(temp);//传输的X10 的假浮点
         myRepository.jsonToDevice(commandESP);
     }
-
 
 
     public LiveData<List<IndoorDB>> getAllLatestIndoorDBsLive() {
