@@ -2,7 +2,6 @@ package com.jiuhua.jiuhuacontrol.ui.indoor;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -10,9 +9,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
-
-import androidx.annotation.Nullable;
 
 import java.util.StringTokenizer;
 
@@ -27,9 +23,9 @@ public class MyView extends View {
     private Paint linePaint;
     private Paint linePaint1;
     private Paint textPaint;
-    private Paint textPaint1;
+    private Paint textPaintCross;//画“+”的笔 the paint to draw cross.
     private String period_S;
-    private int[][] period = new int[7][30];
+    private int[][] period = new int[7][30];//格式【星期】【（【starhour】【starminute】【endhour】【endminute】【setTemp】）*6】
     private Paint rectPaint;
 
 
@@ -67,11 +63,11 @@ public class MyView extends View {
         textPaint.setAntiAlias(true);
         textPaint.setTextSize(40);
 
-        textPaint1 = new Paint();       //写时间段文字的笔
-        textPaint1.setColor(Color.BLACK);
-        textPaint1.setTextAlign(Paint.Align.CENTER);//文字在中心
-        textPaint1.setAntiAlias(true);
-        textPaint1.setTextSize(35);
+        textPaintCross = new Paint();       //写时间段文字的笔
+        textPaintCross.setColor(Color.BLACK);
+        textPaintCross.setTextAlign(Paint.Align.CENTER);//文字在中心
+        textPaintCross.setAntiAlias(true);
+        textPaintCross.setTextSize(35);
 
         rectPaint = new Paint();  //画 时间块的矩形 的笔
         rectPaint.setColor(Color.argb(255, 0, 255, 0));
@@ -126,18 +122,18 @@ public class MyView extends View {
                         period[i][j * 5] * square + (period[i][j * 5 + 1]) * square / 60,
                         square * (i + 2) + 30,
                         period[i][j * 5 + 2] * square + period[i][j * 5 + 3] * square / 60,
-                        20,
-                        20,
+                        20,//倒角的数据 the parameter of chamfering
+                        20,//圆角的数据 the argument of chamfering
                         rectPaint);
                 //计算机的除法是取整“/”和取余数“%”，所以先乘为大数在取整60
 
                 if (!(period[i][j * 5 + 4] == 0)) {  //判断一下，去除未设置，0，的干扰
                     //写时间段的名称
                     canvas.drawText(timeFrame, square * (i + 1) + 90,
-                            period[i][j * 5] * square + period[i][j * 5 + 1] * square / 60 + 50, textPaint1);
+                            period[i][j * 5] * square + period[i][j * 5 + 1] * square / 60 + 50, textPaintCross);
                     //写 设置的温度
                     canvas.drawText(String.format("%d C", period[i][j * 5 + 4]), square * (i + 1) + 80,
-                            period[i][j * 5] * square + period[i][j * 5 + 1] * square / 60 + 90, textPaint1);
+                            period[i][j * 5] * square + period[i][j * 5 + 1] * square / 60 + 90, textPaintCross);
                 }
             }
         }
@@ -154,16 +150,20 @@ public class MyView extends View {
     }
 
     //从调用的activity获取周期数据，并存储于本类的数组
-    public void getdata(String string) {
-        this.period_S = string;
-        StringTokenizer tokenizer = new StringTokenizer(period_S, ",");
-        for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < 30; j++) {
-                if (tokenizer.hasMoreTokens()) {//这里需要判断一下，如果没有元素了，在执行就会报错了
-                    this.period[i][j] = Integer.valueOf(tokenizer.nextToken());
-                }
-            }
-        }
+//    public void getdata(String string) {
+//        this.period_S = string;
+//        StringTokenizer tokenizer = new StringTokenizer(period_S, ",");
+//        for (int i = 0; i < 7; i++) {
+//            for (int j = 0; j < 30; j++) {
+//                if (tokenizer.hasMoreTokens()) {//这里需要判断一下，如果没有元素了，在执行就会报错了
+//                    this.period[i][j] = Integer.valueOf(tokenizer.nextToken());
+//                }
+//            }
+//        }
+//        invalidate();//重绘
+//    }
+    public void getdata(int[][] period) {
+        this.period = period;
         invalidate();//重绘
     }
 

@@ -12,11 +12,11 @@ import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
 import com.jiuhua.jiuhuacontrol.database.IndoorDB;
 import com.jiuhua.jiuhuacontrol.database.IndoorDao;
 import com.jiuhua.jiuhuacontrol.database.MyIndoorsDatabase;
+import com.jiuhua.jiuhuacontrol.database.PeriodDB;
 import com.jiuhua.mqttsample.IGetMessageCallBack;
 import com.jiuhua.mqttsample.MQTTService;
 import com.jiuhua.mqttsample.MyServiceConnection;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MyRepository implements IGetMessageCallBack {
@@ -24,6 +24,7 @@ public class MyRepository implements IGetMessageCallBack {
     long TimeStamp;
     LiveData<List<BasicInfoDB>> allBasicInfoLive;
     LiveData<List<IndoorDB>> allLatestIndoorDBsLive;
+    LiveData<List<PeriodDB>> allLatestPeriodDBsLive;
     private IndoorDao indoorDao;
     Gson gson = new Gson();
 
@@ -44,6 +45,7 @@ public class MyRepository implements IGetMessageCallBack {
 //        allBasicInfo = indoorDao.loadAllBasicInfo();  //相关于Dao里面的一个有问题的方法。好像不能用。
         allBasicInfoLive = indoorDao.loadAllBasicInfoLive();
         allLatestIndoorDBsLive = indoorDao.loadLatestIndoorDBsLive();
+        allLatestPeriodDBsLive = indoorDao.loadLatestPeriodDBsLive();//需要先判空？？ 出问题的语句！！（系统先试行了插入，发现使用了主线程,this is not answer.）
 
         serviceConnection = new MyServiceConnection();//新建连接服务的实例
         serviceConnection.setIGetMessageCallBack(MyRepository.this);//把本活动传入
@@ -62,7 +64,10 @@ public class MyRepository implements IGetMessageCallBack {
         Log.d("jsonToDevice", jsonCommandESP);
     }
 
-    //TODO 实现 Dao 的所有方法  **********************************************************
+    /********实现 Dao 的所有方法*******************************************/
+    /**
+     * basic room information
+     */
     //插入基本房间信息
     public void insertBasicInfo(BasicInfoDB... basicInfoDBS) {
         new InsertBasicInfoAsyncTask(indoorDao).execute(basicInfoDBS);
@@ -83,11 +88,6 @@ public class MyRepository implements IGetMessageCallBack {
         new DeleteAllBasicInfoAsyncTask(indoorDao).execute();
     }
 
-     //这个好像有问题，不能与下面的方法同时存在（在Dao里面）需要删除
-//    public List<BasicInfoDB> getAllBasicInfo() {
-//        return allBasicInfo;
-//    }
-
     //获取所有的基本房间信息，LiveData形式。
     public LiveData<List<BasicInfoDB>> getAllBasicInfoLive() {
         return allBasicInfoLive;
@@ -98,10 +98,15 @@ public class MyRepository implements IGetMessageCallBack {
         return indoorDao.loadRoomName(id);
     }
 
+    /**
+     * room information not include period
+     */
     //插入普通房间的状态信息
     public void insertIndoorDB(IndoorDB... indoorDBS) {
         new InsertIndoorDBAsyncTask(indoorDao).execute(indoorDBS);
     }
+
+    //delete one indoorDB is not necessary
 
     //删除所有普通房间的信息
     public void deleteAllIndoorDB() {
@@ -114,15 +119,27 @@ public class MyRepository implements IGetMessageCallBack {
         return allLatestIndoorDBsLive;
     }
 
-//    获取单个房间的信息
-//    public LiveData<IndoorDB> getSingleLatestIndoorDBLive(int roomNameId) {
-//        int Id = roomNameId;
-//        lattestIndoorDB = indoorDao.loadSingleLatestIndoorDBLive(Id);
-//        return lattestIndoorDB;
-//    }
+    /**
+     * the period information of room
+     */
+    public void insertPeriodDB(PeriodDB... periodDBS) {
+        new InsertPeriodDBAsyncTask(indoorDao).execute();
+    }
+
+    public void deletePeriodDB(PeriodDB... periodDBS) {
+        new DeletePeriodDBAsyncTask(indoorDao).execute();
+    }
+
+    //获取所有房间的周期
+    public LiveData<List<PeriodDB>> getAllLatestPeriodDBsLive() {
+        return allLatestPeriodDBsLive;
+    }
 
 
-    //TODO 内部类，辅助线程上执行 Dao 的方法。    还有一种线程池的方法（Google文档上的）*****************
+    /**
+     * 内部类，辅助线程上执行 Dao 的方法。    还有一种线程池的方法（Google文档上的）
+     * 读取消耗时间少，没有专门开线程。read data from SQLite has no new thread.
+     */
     static class InsertBasicInfoAsyncTask extends AsyncTask<BasicInfoDB, Void, Void> {
         private IndoorDao indoorDao;   //独立的线程需要独立的 Dao
 
@@ -207,7 +224,38 @@ public class MyRepository implements IGetMessageCallBack {
         }
     }
 
-    //TODO 接收 MQTT 数据后，依照数据实现相关方法。（直接去显示 还是只写入数据库）************************
+    static class InsertPeriodDBAsyncTask extends AsyncTask<PeriodDB, Void, Void> {
+        private IndoorDao indoorDao;
+
+        InsertPeriodDBAsyncTask(IndoorDao indoorDao) {
+            this.indoorDao = indoorDao;
+        }
+
+        @Override
+        protected Void doInBackground(PeriodDB... periodDBS) {
+            indoorDao.insertPeroidDB(periodDBS);
+            return null;
+        }
+    }
+
+    static class DeletePeriodDBAsyncTask extends AsyncTask<PeriodDB, Void, Void> {
+        private IndoorDao indoorDao;
+
+        DeletePeriodDBAsyncTask(IndoorDao indoorDao) {
+            this.indoorDao = indoorDao;
+        }
+
+        @Override
+        protected Void doInBackground(PeriodDB... periodDBS) {
+            indoorDao.deletePeroidDB(periodDBS);
+            return null;
+        }
+    }
+
+
+    /**
+     * 接收 MQTT 数据后，依照数据实现相关方法。（直接去显示 还是只写入数据库）
+     */
     @Override
     public void setMessage(final String message) {
         //TODO 解析json和写入数据库，且不能在UI线程，是否应该开辟一个线程池来处理。
@@ -216,6 +264,7 @@ public class MyRepository implements IGetMessageCallBack {
 
         new Thread(new Runnable() {
             IndoorDB indoorDB;
+
             @Override
             public void run() {
                 //TODO 接受执行模块的json字符串 转换为indoorDB的实例，写入数据库。！！

@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.jiuhua.jiuhuacontrol.R;
@@ -41,6 +42,7 @@ public class IndoorFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         //这里不再需要原始的创建视图的方法了,这个方法也生成视图但是没有绑定数据
         //View view = inflater.inflate(R.layout.fragment_indoor, container, false);
 
@@ -51,7 +53,7 @@ public class IndoorFragment extends Fragment {
         //上面三句也是可以的
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_indoor, container, false);
 
-        indoorViewModel = ViewModelProviders.of(this).get(IndoorViewModel.class);//涉及一个单例？？
+        indoorViewModel = new ViewModelProvider(this).get(IndoorViewModel.class);  //涉及一个单例？？
         binding.setData(indoorViewModel);
         binding.setLifecycleOwner(this);
 
@@ -66,7 +68,7 @@ public class IndoorFragment extends Fragment {
                 // 传入的时候再k值上加 1 了，现在要减 1 ，否则队列越界，
 //                IndoorDB indoorDB = indoorViewModel.latestIndoorDB;
 
-                //数据驱动界面改变,所以代码要放在fragment或者Activity里面。只处理界面
+                //****数据驱动界面改变,所以代码要放在fragment或者Activity里面。只处理界面****
                 //显示两通阀的开关
                 if (indoorViewModel.latestIndoorDB.isCoilValveOpen()) {
                     binding.textViewCoilValve.setText(R.string.coilvalveopen);

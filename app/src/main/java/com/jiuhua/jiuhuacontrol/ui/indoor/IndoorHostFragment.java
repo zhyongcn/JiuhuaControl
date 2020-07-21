@@ -8,9 +8,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.Navigation;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -49,7 +46,7 @@ public class IndoorHostFragment extends Fragment {
         fragmentList = new ArrayList<Fragment>();
         fragmentList.add(new HistoryFragment());
         fragmentList.add(new IndoorFragment(roomNameId, roomName));//参数传入：具体哪个房间，
-        fragmentList.add(new PeroidFragment(roomNameId, roomName));
+        fragmentList.add(new PeriodFragment(roomNameId, roomName));
 
         viewPager = view.findViewById(R.id.viewpager);
         pagerAdapter = new RoomPagerAdapter(getChildFragmentManager());

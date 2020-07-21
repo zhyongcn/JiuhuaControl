@@ -9,13 +9,15 @@ import androidx.lifecycle.LiveData;
 import com.jiuhua.jiuhuacontrol.CommandESP;
 import com.jiuhua.jiuhuacontrol.MyRepository;
 import com.jiuhua.jiuhuacontrol.database.IndoorDB;
+import com.jiuhua.jiuhuacontrol.database.PeriodDB;
 
 import java.util.List;
 
 public class IndoorViewModel extends AndroidViewModel {
 
     MyRepository myRepository;
-    List<IndoorDB> allLatestIndoorDBs;
+    List<IndoorDB> allLatestIndoorDBs;   //room1,room2...`s settingtempreature etc.
+    List<PeriodDB> allLatestPeriodDBs;   //room1,room2...`s period.
     IndoorDB latestIndoorDB;
     CommandESP commandESP = new CommandESP();
 
@@ -62,10 +64,15 @@ public class IndoorViewModel extends AndroidViewModel {
         }
     }
 
+    public void setAllLatestPeriodDBs(List<PeriodDB> allLatestPeriodDBs) {
+        this.allLatestPeriodDBs = allLatestPeriodDBs;
+    }
+
     //构造方法
     public IndoorViewModel(@NonNull Application application) {
         super(application);
         this.myRepository = new MyRepository(application);
+        
     }
 
     //停止按钮实现方法，停止房间所有设备
@@ -172,5 +179,9 @@ public class IndoorViewModel extends AndroidViewModel {
 
     public LiveData<List<IndoorDB>> getAllLatestIndoorDBsLive() {
         return myRepository.getAllLatestIndoorDBsLive();
+    }
+
+    public LiveData<List<PeriodDB>> getAllLatestPeriodDBs() {
+        return myRepository.getAllLatestPeriodDBsLive();
     }
 }
