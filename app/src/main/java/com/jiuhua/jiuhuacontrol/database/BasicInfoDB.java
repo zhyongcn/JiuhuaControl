@@ -11,8 +11,12 @@ public class BasicInfoDB {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private int Id;
+    @ColumnInfo(name = "roomId")
+    private int roomId;
     @ColumnInfo(name = "roomname")
     private String roomName;
+    @ColumnInfo(name = "sensorCalibration")
+    private int sensorCalibration;
     //风机盘管的情况
     @ColumnInfo(name = "fancoiltrademark")
     private String fancoilTrademark;
@@ -46,10 +50,12 @@ public class BasicInfoDB {
     }
 
     @Ignore
-    public BasicInfoDB(String roomName, String fancoilTrademark, String fanCoilType,
+    public BasicInfoDB(int roomId, String roomName, int sensorCalibration, String fancoilTrademark, String fanCoilType,
                        boolean hasCoilValve, boolean isFloorHeat, boolean isFloorAuto,
                        String radiatorTrademark, String radiatorType, boolean isRadiatorAuto) {
+        this.roomId = roomId;
         this.roomName = roomName;
+        this.sensorCalibration = sensorCalibration;
         this.fancoilTrademark = fancoilTrademark;
         this.fanCoilType = fanCoilType;
         this.hasCoilValve = hasCoilValve;
@@ -68,12 +74,28 @@ public class BasicInfoDB {
         Id = id;
     }
 
+    public int getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
+    }
+
     public String getRoomName() {
         return roomName;
     }
 
     public void setRoomName(String roomName) {
         this.roomName = roomName;
+    }
+
+    public int getSensorCalibration() {
+        return sensorCalibration;
+    }
+
+    public void setSensorCalibration(int sensorCalibration) {
+        this.sensorCalibration = sensorCalibration;
     }
 
     //风机盘管参数相关

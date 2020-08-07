@@ -10,6 +10,9 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.jiuhua.jiuhuacontrol.database.DayPeriod;
+
+import java.util.List;
 import java.util.StringTokenizer;
 
 import static android.view.View.MeasureSpec.getSize;
@@ -24,8 +27,7 @@ public class MyView extends View {
     private Paint linePaint1;
     private Paint textPaint;
     private Paint textPaintCross;//画“+”的笔 the paint to draw cross.
-    private String period_S;
-    private int[][] period = new int[7][30];//格式【星期】【（【starhour】【starminute】【endhour】【endminute】【setTemp】）*6】
+    private List<DayPeriod> weeklyPeriod;
     private Paint rectPaint;
 
 
@@ -89,54 +91,31 @@ public class MyView extends View {
         for (int i = 1; i <= 8; i++) {
             canvas.drawLine(square * i + 30, 0, square * i + 30, square * 24, linePaint);
         }
-        //画时间段的块，时段名称，设置温度
-        for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < 6; j++) {
-                String timeFrame = null;//这个变量是时间端的名称
-                if (j == 0) {
-                    rectPaint.setColor(Color.LTGRAY);
-                    timeFrame = "时段一";
-                }
-                if (j == 1) {
-                    rectPaint.setColor(Color.CYAN);
-                    timeFrame = "时段二";
-                }
-                if (j == 2) {
-                    rectPaint.setColor(Color.LTGRAY);
-                    timeFrame = "时段三";
-                }
-                if (j == 3) {
-                    rectPaint.setColor(Color.GREEN);
-                    timeFrame = "时段四";
-                }
-                if (j == 4) {
-                    rectPaint.setColor(Color.YELLOW);
-                    timeFrame = "时段五";
-                }
-                if (j == 5) {
-                    rectPaint.setColor(Color.GRAY);
-                    timeFrame = "时段六";
-                }
-                //画时间段的块
-                canvas.drawRoundRect(square * (i + 1) + 30,
-                        period[i][j * 5] * square + (period[i][j * 5 + 1]) * square / 60,
-                        square * (i + 2) + 30,
-                        period[i][j * 5 + 2] * square + period[i][j * 5 + 3] * square / 60,
+        //画时间段的块，时段名称，设置温度 //TODO: for each 迭代？？
+        //画时间段的块
+        if (weeklyPeriod != null) {//读取null对象依然是问题。
+            for (DayPeriod dayPeriod : weeklyPeriod) {
+                canvas.drawRoundRect(square * (dayPeriod.getWeekday() + 1) + 30,
+                        dayPeriod.getStartMinuteStamp() * square / 60,
+                        square * (dayPeriod.getWeekday() + 2) + 30,
+                        dayPeriod.getEndMinuteStamp() * square / 60,
                         20,//倒角的数据 the parameter of chamfering
                         20,//圆角的数据 the argument of chamfering
                         rectPaint);
                 //计算机的除法是取整“/”和取余数“%”，所以先乘为大数在取整60
 
-                if (!(period[i][j * 5 + 4] == 0)) {  //判断一下，去除未设置，0，的干扰
-                    //写时间段的名称
-                    canvas.drawText(timeFrame, square * (i + 1) + 90,
-                            period[i][j * 5] * square + period[i][j * 5 + 1] * square / 60 + 50, textPaintCross);
+                if (dayPeriod.getTempreature() != 0) {  //判断一下，去除未设置，0，的干扰
+                    //写 时间段的名称
+                    canvas.drawText("时段", square * (dayPeriod.getWeekday() + 1) + 90,
+                            dayPeriod.getStartMinuteStamp() * square / 60 + 50, textPaintCross);
                     //写 设置的温度
-                    canvas.drawText(String.format("%d C", period[i][j * 5 + 4]), square * (i + 1) + 80,
-                            period[i][j * 5] * square + period[i][j * 5 + 1] * square / 60 + 90, textPaintCross);
+                    canvas.drawText(String.format("%d C", dayPeriod.getTempreature()), square * (dayPeriod.getWeekday() + 1) + 80,
+                            dayPeriod.getStartMinuteStamp() * square / 60 + 90, textPaintCross);
                 }
             }
         }
+
+
         //画“ + ” 号
         if (clickedX != 0) {
             //十字的横线
@@ -149,22 +128,12 @@ public class MyView extends View {
 
     }
 
-    //从调用的activity获取周期数据，并存储于本类的数组
-//    public void getdata(String string) {
-//        this.period_S = string;
-//        StringTokenizer tokenizer = new StringTokenizer(period_S, ",");
-//        for (int i = 0; i < 7; i++) {
-//            for (int j = 0; j < 30; j++) {
-//                if (tokenizer.hasMoreTokens()) {//这里需要判断一下，如果没有元素了，在执行就会报错了
-//                    this.period[i][j] = Integer.valueOf(tokenizer.nextToken());
-//                }
-//            }
+    //从调用的periodFragment获取周期数据，并存储于本类的数组
+    public void getWeeklyPeriod(List<DayPeriod> list) {
+//        if (list != null) {
+            this.weeklyPeriod = list;
+            invalidate();//重绘
 //        }
-//        invalidate();//重绘
-//    }
-    public void getdata(int[][] period) {
-        this.period = period;
-        invalidate();//重绘
     }
 
     //自定义view点击的通用的做法。
@@ -181,6 +150,7 @@ public class MyView extends View {
             case MotionEvent.ACTION_MOVE:
                 break;
             case MotionEvent.ACTION_UP:
+                //TODO 还有先判断在哪个时间段之内。空白的时间段再执行下面的代码。
                 if (clickedX == (int) ((x - 30) / square) && clickedX != 0 && clickedY == (int) (y / square)) {
                     //传出clickedX 1是周一，7是周日  clieckedY 0是0:00  23是23:00
                     //把信息传送到调用的fragment，由fragment去处理，解耦。这个类只管图形和传出图形相关的数据。
@@ -200,13 +170,14 @@ public class MyView extends View {
 
     //定义一个接口对象
     private ClickCrossListener clickCrossListener;
+
     //设置接口的函数（供外部程序调用），传入了接口
     public void setClickCrossListener(ClickCrossListener l) {
         this.clickCrossListener = l;
     }
+
     //创建一个接口，并写一个函数原型（此原型可以用来传参）
     public interface ClickCrossListener {
-//        public void onClick(int weekday, int hour);
         public void onClick(int weekday, int hour);
     }
 

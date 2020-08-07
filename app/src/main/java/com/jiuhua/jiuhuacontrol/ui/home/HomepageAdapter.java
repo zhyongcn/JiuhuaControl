@@ -46,10 +46,10 @@ public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyView
             @Override
             public void onClick(View v) {
                 int k = holder.getAdapterPosition();   //获取具体哪个条目了
-                int roomNameId = allBasicInfo.get(k).getId();
+                int roomId = allBasicInfo.get(k).getRoomId();
                 String currentRoomName = allBasicInfo.get(k).getRoomName();
                 Bundle bundle = new Bundle();
-                bundle.putInt("roomNameId", k+1);//因为roomid还没有确定好，所以暂时不传这个参数。
+                bundle.putInt("roomId", roomId);//因为roomid还没有确定好，所以暂时不传这个参数。
                 bundle.putString("roomName", currentRoomName);
                 Navigation.findNavController(v).navigate(R.id.action_nav_home_to_indoorHostFragment, bundle);
             }

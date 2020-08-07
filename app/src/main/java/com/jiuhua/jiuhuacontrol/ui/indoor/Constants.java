@@ -21,4 +21,12 @@ public interface Constants {
     int deviceType_heatpump = 4;
     int deviceType_DHTsensor = 5;
 
+    int Monday = 0;
+    int Tuesday = 1;
+    int Wednesday = 2;
+    int Thursday = 3;
+    int Friday = 4;
+    int Saturday = 5;
+    int Sunday = 6;
+
 }

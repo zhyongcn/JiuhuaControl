@@ -4,14 +4,18 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class PeriodDB {
 
     @PrimaryKey(autoGenerate = true)
-    private long id;
+    private int id;
     //
     @ColumnInfo(name = "timestamp")
     @SerializedName("timestamp")
@@ -27,22 +31,23 @@ public class PeriodDB {
     //存储周期数组
     @ColumnInfo(name = "period")
     @SerializedName("period")
-    private int[][] period;
+    @TypeConverters({Converters.class})
+    private List<DayPeriod> oneRoomWeeklyPeriod;
 
     public PeriodDB() {
     }
 
     @Ignore
-    public PeriodDB(int roomId, int[][] period) {
+    public PeriodDB(int roomId, List<DayPeriod> oneRoomWeeklyPeriod) {
         this.roomId = roomId;
-        this.period = period;
+        this.oneRoomWeeklyPeriod = oneRoomWeeklyPeriod;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -62,11 +67,11 @@ public class PeriodDB {
         this.roomId = roomId;
     }
 
-    public int[][] getPeriod() {
-        return period;
+    public List<DayPeriod> getOneRoomWeeklyPeriod() {
+        return oneRoomWeeklyPeriod;
     }
 
-    public void setPeriod(int[][] period) {
-        this.period = period;
+    public void setOneRoomWeeklyPeriod(List<DayPeriod> oneRoomWeeklyPeriod) {
+        this.oneRoomWeeklyPeriod = oneRoomWeeklyPeriod;
     }
 }

@@ -28,7 +28,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.MyView
     }
 
     //在数据库里面插入一个新的房间，会自动获取主键
-    public void addBasicInfo(){
+    public void addBasicInfo() {
         userInfoViewModel.insertBasicInfo(new BasicInfoDB());
     }
 
@@ -40,7 +40,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.MyView
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder (@NonNull ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View itemView = layoutInflater.inflate(R.layout.userinfo_cell_layout, parent, false);
 
@@ -64,7 +64,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.MyView
 //            }
 //        });
 
-          //这部分代码完成历史使命，帮助搞清楚原理，
+        //这部分代码完成历史使命，帮助搞清楚原理，
 //        holder.itemView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -87,6 +87,8 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.MyView
         BasicInfoDB basicInfoDB = allBasicInfo.get(position);
 
         holder.editTextRoomName.setText(basicInfoDB.getRoomName());
+        holder.editTextRoomId.setText(String.valueOf(basicInfoDB.getRoomId()));
+        holder.editTextSensorCalibration.setText(String.valueOf(basicInfoDB.getSensorCalibration()));
         holder.editTextFancoilTradeMark.setText(basicInfoDB.getFancoilTrademark());
         holder.editTextFancoilType.setText(basicInfoDB.getFanCoilType());
         holder.checkBoxCoilvalve.setChecked(basicInfoDB.isHasCoilValve());
@@ -100,31 +102,39 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.MyView
 
         holder.buttonEdit.setOnClickListener(new View.OnClickListener() {
             int k = holder.getAdapterPosition();   //获取具体哪个条目了
+
             @Override
             public void onClick(View v) {
-                BasicInfoDB basicInfoDB = new BasicInfoDB();
-                basicInfoDB.setId(allBasicInfo.get(k).getId());
-                basicInfoDB.setRoomName(holder.editTextRoomName.getText().toString());
-                basicInfoDB.setFancoilTrademark(holder.editTextFancoilTradeMark.getText().toString());
-                basicInfoDB.setFanCoilType(holder.editTextRadiatorType.getText().toString());
-                basicInfoDB.setHasCoilValve(holder.checkBoxCoilvalve.isChecked());
-                basicInfoDB.setFloorHeat(holder.checkBoxHasFloorHeating.isChecked());
-                basicInfoDB.setFloorAuto(holder.checkBoxIsFloorHeatingAuto.isChecked());
-                basicInfoDB.setRadiatorTrademark(holder.editTextRadiatorTradeMark.getText().toString());
-                basicInfoDB.setRadiatorType(holder.editTextRadiatorType.getText().toString());
-                basicInfoDB.setRadiatorAuto(holder.checkBoxIsRadiatorValveAuto.isChecked());
+                //TODO 检查一下，房间编号必填。同时不能重复。
+                if (Integer.parseInt(holder.editTextRoomId.getText().toString()) != 0) {
+                    BasicInfoDB basicInfoDB = new BasicInfoDB();
+                    basicInfoDB.setRoomName(holder.editTextRoomName.getText().toString());
+                    basicInfoDB.setRoomId(Integer.parseInt(holder.editTextRoomId.getText().toString()));
+                    basicInfoDB.setSensorCalibration(Integer.parseInt(holder.editTextSensorCalibration.getText().toString()));
+                    basicInfoDB.setFancoilTrademark(holder.editTextFancoilTradeMark.getText().toString());
+                    basicInfoDB.setFanCoilType(holder.editTextRadiatorType.getText().toString());
+                    basicInfoDB.setHasCoilValve(holder.checkBoxCoilvalve.isChecked());
+                    basicInfoDB.setFloorHeat(holder.checkBoxHasFloorHeating.isChecked());
+                    basicInfoDB.setFloorAuto(holder.checkBoxIsFloorHeatingAuto.isChecked());
+                    basicInfoDB.setRadiatorTrademark(holder.editTextRadiatorTradeMark.getText().toString());
+                    basicInfoDB.setRadiatorType(holder.editTextRadiatorType.getText().toString());
+                    basicInfoDB.setRadiatorAuto(holder.checkBoxIsRadiatorValveAuto.isChecked());
 
-                userInfoViewModel.updateBasicInfo(basicInfoDB);
-                Toast.makeText(v.getContext(), "你修改了房间信息", Toast.LENGTH_SHORT).show();
+                    userInfoViewModel.updateBasicInfo(basicInfoDB);
+                    Toast.makeText(v.getContext(), "你修改了房间信息", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(v.getContext(), "房间编号必须填写", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         holder.buttonDelete.setOnClickListener(new View.OnClickListener() {
             int k = holder.getAdapterPosition();   //获取具体哪个条目了
+
             @Override
             public void onClick(View v) {
                 BasicInfoDB basicInfoDB = new BasicInfoDB();
-                basicInfoDB.setId(allBasicInfo.get(k).getId());
+                basicInfoDB.setId(allBasicInfo.get(k).getId());//删除是通过主键 id 匹配的。
                 userInfoViewModel.deleteBasicInfo(basicInfoDB);
             }
         });
@@ -136,7 +146,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.MyView
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
-        EditText editTextRoomName, editTextFancoilTradeMark, editTextFancoilType;
+        EditText editTextRoomName, editTextRoomId, editTextSensorCalibration, editTextFancoilTradeMark, editTextFancoilType;
         CheckBox checkBoxCoilvalve, checkBoxHasFloorHeating, checkBoxIsFloorHeatingAuto;
         EditText editTextRadiatorTradeMark, editTextRadiatorType;
         CheckBox checkBoxIsRadiatorValveAuto;
@@ -145,6 +155,8 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.MyView
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             editTextRoomName = itemView.findViewById(R.id.user_roomname);
+            editTextRoomId = itemView.findViewById(R.id.user_roomId);
+            editTextSensorCalibration = itemView.findViewById(R.id.sensorcalibration);
             editTextFancoilTradeMark = itemView.findViewById(R.id.room_fancoil_brand);
             editTextFancoilType = itemView.findViewById(R.id.room_fancoil_type);
             checkBoxCoilvalve = itemView.findViewById(R.id.room_coilvalve_checkBox);

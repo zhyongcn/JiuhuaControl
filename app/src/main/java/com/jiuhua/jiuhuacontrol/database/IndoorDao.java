@@ -1,13 +1,18 @@
 package com.jiuhua.jiuhuacontrol.database;
 
+import android.icu.text.Replaceable;
+
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.RoomWarnings;
 import androidx.room.Update;
 
 import java.util.List;
+
+import static androidx.room.OnConflictStrategy.REPLACE;
 
 @Dao
 public interface IndoorDao {
@@ -41,20 +46,22 @@ public interface IndoorDao {
     @Query("DELETE FROM IndoorDB")
     void deleteAllIndoorDB();
 
+//    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)  //TODO  每次编译都出错，能正常运行，太烦了，才加上的。
     @Query("SELECT * , MAX(timeStamp)  FROM IndoorDB GROUP BY room_id")
-    LiveData<List<IndoorDB>> loadLatestIndoorDBsLive();   //only can use LiveData<> !
+    LiveData<List<IndoorDB>> loadLatestIndoorDBsLive();   //only can use LiveData<> !   这里添加了Max（timestamp）一列，但是IndoorDB里面没有。
 
     /**
      * PeroidDB的相关方法
      */
-    @Insert
-    void insertPeroidDB(PeriodDB... periodDBS);
+    @Insert(onConflict = REPLACE)
+    void insertPeriodDB(PeriodDB... periodDBS);
 
     @Delete
-    void deletePeroidDB(PeriodDB... periodDBS);
+    void deletePeriodDB(PeriodDB... periodDBS);
 
+    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)  //TODO  每次编译都出错，能正常运行，太烦了，才加上的。
     @Query("SELECT * , MAX(timestamp) FROM PeriodDB GROUP BY room_id")
-    LiveData<List<PeriodDB>> loadLatestPeriodDBsLive();  //only can use LiveData<> ! 加了转换器居然编译通过了。
+    LiveData<List<PeriodDB>> loadLatestPeriodDBsLive();  //only can use LiveData<> ! 加了转换器居然编译通过了。//FIXME ??其实多出来一项，entity里面没有的。
 
     /**
      * IndoorLongtimeDB的相关方法

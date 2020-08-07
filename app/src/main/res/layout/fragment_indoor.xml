@@ -16,11 +16,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="@+id/temperatureSeekBar"
-            app:layout_constraintEnd_toStartOf="@+id/guideline8"
-            app:layout_constraintStart_toStartOf="@+id/guideline8"
-            app:layout_constraintTop_toBottomOf="@+id/temperatureSeekBar">
+            android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline8"
@@ -100,7 +96,7 @@
                 android:id="@+id/textViewRoomName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{data.roomName}"
+                android:text="@{data.getCurrentlyRoomName}"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toTopOf="@+id/guideline7"
                 app:layout_constraintEnd_toStartOf="@+id/guideline10"

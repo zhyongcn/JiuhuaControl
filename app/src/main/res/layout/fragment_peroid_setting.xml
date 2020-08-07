@@ -45,14 +45,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="301dp" />
+            app:layout_constraintGuide_begin="317dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="373dp" />
+            app:layout_constraintGuide_begin="384dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline20"
@@ -76,7 +76,7 @@
             app:layout_constraintGuide_begin="68dp" />
 
         <TextView
-            android:id="@+id/run_time"
+            android:id="@+id/run_time_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="客厅运行时段设置"
@@ -89,7 +89,7 @@
 
         <TextView
             android:id="@+id/starttime"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:text="开始时间"
@@ -101,7 +101,7 @@
 
         <TextView
             android:id="@+id/endtime"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:text="结束时间"
@@ -112,8 +112,8 @@
             app:layout_constraintVertical_bias="0.541" />
 
         <TextView
-            android:id="@+id/setTemp_peroid"
-            android:layout_width="wrap_content"
+            android:id="@+id/setPeroidTemperature"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:text="设定温度"
@@ -121,17 +121,6 @@
             app:layout_constraintBottom_toTopOf="@+id/guideline20"
             app:layout_constraintStart_toStartOf="@+id/guideline22"
             app:layout_constraintTop_toTopOf="@+id/guideline20" />
-
-        <CheckBox
-            android:id="@+id/checkBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:text="是否重复"
-            app:layout_constraintEnd_toStartOf="@+id/guideline17"
-            app:layout_constraintHorizontal_bias="0.412"
-            app:layout_constraintStart_toStartOf="@+id/guideline22"
-            app:layout_constraintTop_toBottomOf="@+id/setTemp_peroid" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -142,54 +131,68 @@
             app:layout_constraintStart_toStartOf="@+id/guideline22"
             app:layout_constraintTop_toTopOf="@+id/guideline21">
 
-            <RadioButton
-                android:id="@+id/radioButton7"
+            <CheckBox
+                android:id="@+id/checkBox1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="日"
-                android:textSize="14sp" />
+                android:button="@null"
+                android:drawableBottom="?android:attr/listChoiceIndicatorMultiple"
+                android:gravity="center"
+                android:text="一" />
 
-            <RadioButton
-                android:id="@+id/radioButton1"
+            <CheckBox
+                android:id="@+id/checkBox2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="一"
-                android:textSize="14sp" />
+                android:button="@null"
+                android:drawableBottom="?android:attr/listChoiceIndicatorMultiple"
+                android:gravity="center"
+                android:text="二" />
 
-            <RadioButton
-                android:id="@+id/radioButton2"
+            <CheckBox
+                android:id="@+id/checkBox3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="二"
-                android:textSize="14sp" />
+                android:button="@null"
+                android:drawableBottom="?android:attr/listChoiceIndicatorMultiple"
+                android:gravity="center"
+                android:text="三" />
 
-            <RadioButton
-                android:id="@+id/radioButton3"
+            <CheckBox
+                android:id="@+id/checkBox4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="三"
-                android:textSize="14sp" />
+                android:button="@null"
+                android:drawableBottom="?android:attr/listChoiceIndicatorMultiple"
+                android:gravity="center"
+                android:text="四" />
 
-            <RadioButton
-                android:id="@+id/radioButton4"
+            <CheckBox
+                android:id="@+id/checkBox5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="四"
-                android:textSize="14sp" />
+                android:button="@null"
+                android:drawableBottom="?android:attr/listChoiceIndicatorMultiple"
+                android:gravity="center"
+                android:text="五" />
 
-            <RadioButton
-                android:id="@+id/radioButton5"
+            <CheckBox
+                android:id="@+id/checkBox6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="五"
-                android:textSize="14sp" />
+                android:button="@null"
+                android:drawableBottom="?android:attr/listChoiceIndicatorMultiple"
+                android:gravity="center"
+                android:text="六" />
 
-            <RadioButton
-                android:id="@+id/radioButton6"
+            <CheckBox
+                android:id="@+id/checkBox7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="六"
-                android:textSize="14sp" />
+                android:button="@null"
+                android:drawableBottom="?android:attr/listChoiceIndicatorMultiple"
+                android:gravity="center"
+                android:text="日" />
         </LinearLayout>
 
         <Button
@@ -212,6 +215,19 @@
             app:layout_constraintStart_toStartOf="@+id/guideline22"
             app:layout_constraintTop_toTopOf="@+id/guideline24"
             app:layout_constraintVertical_bias="0.291" />
+
+        <TextView
+            android:id="@+id/repeat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="36dp"
+            android:text="是否重复"
+            app:layout_constraintBottom_toTopOf="@+id/guideline21"
+            app:layout_constraintEnd_toStartOf="@+id/guideline17"
+            app:layout_constraintHorizontal_bias="0.565"
+            app:layout_constraintStart_toStartOf="@+id/guideline22"
+            app:layout_constraintTop_toBottomOf="@+id/setPeroidTemperature"
+            app:layout_constraintVertical_bias="1.0" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

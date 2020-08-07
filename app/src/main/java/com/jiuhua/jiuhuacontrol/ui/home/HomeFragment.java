@@ -75,21 +75,18 @@ public class HomeFragment extends Fragment {
         buttonECO = view.findViewById(R.id.buttonEco);
         buttonSleep = view.findViewById(R.id.buttonSleep);
 
-        buttonInHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //temporary test code
-                homeViewModel.insertRoomName(new BasicInfoDB("客厅", "扬子风盘", "FP-51", true, true,
-                        true, null, null, false));
-                homeViewModel.insertRoomName(new BasicInfoDB("餐厅", "约克", "FP-68", false, true,
-                        true, null, null, false));
-                homeViewModel.insertRoomName(new BasicInfoDB("主卧室", "麦克维尔", "FP-120", true, false,
-                        true, null, null, false));
-                homeViewModel.insertRoomName(new BasicInfoDB("次卧室", "约克", "FP-68", false, true,
-                        true, null, null, false));
-                homeViewModel.insertRoomName(new BasicInfoDB("北卧室", "麦克维尔", "FP-120", true, false,
-                        true, null, null, false));
-            }
+        buttonInHome.setOnClickListener(v -> {
+            //temporary test code
+            homeViewModel.insertRoomName(new BasicInfoDB(1,"客厅",0, "扬子风盘", "FP-51", true, true,
+                    true, null, null, false));
+            homeViewModel.insertRoomName(new BasicInfoDB(2,"餐厅", 0,"约克", "FP-68", false, true,
+                    true, null, null, false));
+            homeViewModel.insertRoomName(new BasicInfoDB(3,"主卧室",0, "麦克维尔", "FP-120", true, false,
+                    true, null, null, false));
+            homeViewModel.insertRoomName(new BasicInfoDB(4,"次卧室",0, "约克", "FP-68", false, true,
+                    true, null, null, false));
+            homeViewModel.insertRoomName(new BasicInfoDB(5,"北卧室",0, "麦克维尔", "FP-120", true, false,
+                    true, null, null, false));
         });
 
         buttonOutHome.setOnClickListener(new View.OnClickListener() {
@@ -98,17 +95,11 @@ public class HomeFragment extends Fragment {
                 homeViewModel.deleteAllRoomsName();
             }
         });
-        buttonECO.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //pass
-            }
+        buttonECO.setOnClickListener(v -> {
+            //pass
         });
-        buttonSleep.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //pass
-            }
+        buttonSleep.setOnClickListener(v -> {
+            //pass
         });
     }
 }

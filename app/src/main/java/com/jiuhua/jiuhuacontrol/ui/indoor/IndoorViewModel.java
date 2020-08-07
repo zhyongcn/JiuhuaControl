@@ -1,80 +1,111 @@
 package com.jiuhua.jiuhuacontrol.ui.indoor;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.google.gson.Gson;
 import com.jiuhua.jiuhuacontrol.CommandESP;
 import com.jiuhua.jiuhuacontrol.MyRepository;
+import com.jiuhua.jiuhuacontrol.database.DayPeriod;
 import com.jiuhua.jiuhuacontrol.database.IndoorDB;
 import com.jiuhua.jiuhuacontrol.database.PeriodDB;
 
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 public class IndoorViewModel extends AndroidViewModel {
 
     MyRepository myRepository;
-    List<IndoorDB> allLatestIndoorDBs;   //room1,room2...`s settingtempreature etc.
-    List<PeriodDB> allLatestPeriodDBs;   //room1,room2...`s period.
-    IndoorDB latestIndoorDB;
+    List<IndoorDB> allLatestIndoorDBs = new ArrayList<>();   //room1,room2...`s settingtempreature etc.
+    List<PeriodDB> allLatestPeriodDBs = new ArrayList<>();   //room1,room2...`s period.
+    IndoorDB currentlyIndoorDB = new IndoorDB();
     CommandESP commandESP = new CommandESP();
+    PeriodDB currentlyPeriodDB;  //currently room`s one weekly period.
 
-    //变量及其getter & setter 方法
-    private int roomNameId;
-    private String roomName;
 
-    public int getRoomNameId() {
-        return roomNameId;
+    private int currentlyRoomId;
+    private String currentlyRoomName;
+
+    Gson gson = new Gson();
+
+    //变量getter & setter 方法
+    public int getCurrentlyRoomId() {
+        return currentlyRoomId;
     }
 
-    public void setRoomNameId(int roomNameId) {
-        this.roomNameId = roomNameId;
+    public void setCurrentlyRoomId(int currentlyRoomId) {
+        this.currentlyRoomId = currentlyRoomId;
     }
 
-    public String getRoomName() {
-        return roomName;
+    public String getCurrentlyRoomName() {
+        return currentlyRoomName;
     }
 
-    public void setRoomName(String roomName) {
-        this.roomName = roomName;
-    }
-
-    public IndoorDB getLatestIndoorDB() {
-        return latestIndoorDB;
-    }
-
-    public void setLatestIndoorDB(IndoorDB latestIndoorDB) {
-        this.latestIndoorDB = latestIndoorDB;
+    public void setCurrentlyRoomName(String currentlyRoomName) {
+        this.currentlyRoomName = currentlyRoomName;
     }
 
     public void setAllLatestIndoorDBs(List<IndoorDB> allLatestIndoorDBsLive) {
         this.allLatestIndoorDBs = allLatestIndoorDBsLive;
-        if (roomNameId < allLatestIndoorDBsLive.size()) {  //TODO 临时的需要解决超出队列边界的问题
-            this.latestIndoorDB = allLatestIndoorDBsLive.get(roomNameId - 1);
-            commandESP.setRoomId(latestIndoorDB.getRoomId());
-            commandESP.setDeviceType(latestIndoorDB.getDeviceType());
-            commandESP.setRoomState(latestIndoorDB.getRoomStatus());
-            commandESP.setSetting_temp(latestIndoorDB.getSettingTemperature());
-            commandESP.setSetting_humidity(latestIndoorDB.getSettingHumidity());
-            commandESP.setSettingfanSpeed(latestIndoorDB.getSettingFanStatus());
-        } else {//fixme: 单纯非空还是不解决问题
-            this.latestIndoorDB = new IndoorDB();
+        if (allLatestIndoorDBs.size() > 0) {
+            for (IndoorDB indoorDB : allLatestIndoorDBs) {
+                if (indoorDB.getRoomId() == currentlyRoomId) {
+                    this.currentlyIndoorDB = indoorDB;
+
+                    commandESP.setRoomId(currentlyIndoorDB.getRoomId());
+                    commandESP.setDeviceType(currentlyIndoorDB.getDeviceType());
+                    commandESP.setRoomState(currentlyIndoorDB.getRoomStatus());
+                    commandESP.setSetting_temp(currentlyIndoorDB.getSettingTemperature());
+                    commandESP.setSetting_humidity(currentlyIndoorDB.getSettingHumidity());
+                    commandESP.setSettingfanSpeed(currentlyIndoorDB.getSettingFanStatus());
+                }
+            }
+        }
+        if (currentlyIndoorDB.getRoomId() == 0) {
+            currentlyIndoorDB.setRoomId(currentlyRoomId);
+            commandESP.setRoomId(currentlyRoomId);
         }
     }
 
-    public void setAllLatestPeriodDBs(List<PeriodDB> allLatestPeriodDBs) {
-        this.allLatestPeriodDBs = allLatestPeriodDBs;
+    public void setAllLatestPeriodDBs(List<PeriodDB> allLatestPeriodDBsLive) {
+        this.allLatestPeriodDBs = allLatestPeriodDBsLive;
+        if (allLatestPeriodDBs.size() > 0) {
+            for (PeriodDB periodDB : allLatestPeriodDBs) {
+                if (periodDB.getRoomId() == currentlyRoomId) {
+                    this.currentlyPeriodDB = periodDB;
+                }
+            }
+            if (currentlyPeriodDB == null){ //如果迭代完成还没有被赋值，说明没有这个房间的数据，新建一个房间的基础数据
+                currentlyPeriodDB = new PeriodDB();
+                currentlyPeriodDB.setRoomId(currentlyRoomId);
+                currentlyPeriodDB.setOneRoomWeeklyPeriod(new ArrayList<>());
+            }
+        }else {//说明在开始的状态没有任何数据，新建一个房间的基础数据
+            currentlyPeriodDB = new PeriodDB();
+            currentlyPeriodDB.setRoomId(currentlyRoomId);
+            currentlyPeriodDB.setOneRoomWeeklyPeriod(new ArrayList<>());
+        }
     }
 
     //构造方法
     public IndoorViewModel(@NonNull Application application) {
         super(application);
         this.myRepository = new MyRepository(application);
-        
     }
 
+    /**
+     * 设备设置调整页面的各种实现方法，供其调用
+     */
     //停止按钮实现方法，停止房间所有设备
     public void stopRoomDevice(int roomid) {
         commandESP.setRoomId(roomid);
@@ -177,11 +208,21 @@ public class IndoorViewModel extends AndroidViewModel {
     }
 
 
+    /**
+     * 包装 myRepository 里的方法：
+     */
     public LiveData<List<IndoorDB>> getAllLatestIndoorDBsLive() {
         return myRepository.getAllLatestIndoorDBsLive();
     }
 
-    public LiveData<List<PeriodDB>> getAllLatestPeriodDBs() {
+    public LiveData<List<PeriodDB>> getAllLatestPeriodDBsLive() {
         return myRepository.getAllLatestPeriodDBsLive();
     }
+
+    public void insertPeriodDB(int roomId) {
+        currentlyPeriodDB.setRoomId(roomId);
+        currentlyPeriodDB.setTimeStamp(new Date().getTime() / 1000);  //这个方法得到的是毫秒，this method return ms。
+        myRepository.insertPeriodDB(currentlyPeriodDB);
+    }
+
 }

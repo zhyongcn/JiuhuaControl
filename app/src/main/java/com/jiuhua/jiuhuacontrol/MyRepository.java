@@ -45,7 +45,7 @@ public class MyRepository implements IGetMessageCallBack {
 //        allBasicInfo = indoorDao.loadAllBasicInfo();  //相关于Dao里面的一个有问题的方法。好像不能用。
         allBasicInfoLive = indoorDao.loadAllBasicInfoLive();
         allLatestIndoorDBsLive = indoorDao.loadLatestIndoorDBsLive();
-        allLatestPeriodDBsLive = indoorDao.loadLatestPeriodDBsLive();//需要先判空？？ 出问题的语句！！（系统先试行了插入，发现使用了主线程,this is not answer.）
+        allLatestPeriodDBsLive = indoorDao.loadLatestPeriodDBsLive();
 
         serviceConnection = new MyServiceConnection();//新建连接服务的实例
         serviceConnection.setIGetMessageCallBack(MyRepository.this);//把本活动传入
@@ -64,7 +64,7 @@ public class MyRepository implements IGetMessageCallBack {
         Log.d("jsonToDevice", jsonCommandESP);
     }
 
-    /********实现 Dao 的所有方法*******************************************/
+    /**  ******实现 Dao 的所有方法*********************************   */
     /**
      * basic room information
      */
@@ -115,19 +115,26 @@ public class MyRepository implements IGetMessageCallBack {
 
     //获取普通房间的全部信息
     public LiveData<List<IndoorDB>> getAllLatestIndoorDBsLive() {
-        //一般查询系统会自动安排在非主线程，不需要自己写。其他的需要自己写非主线程。
+        //一般查询系统会自动安排在非主线程，不需要自己写。其他的需要自己写非主线程。？？right？？
         return allLatestIndoorDBsLive;
     }
 
     /**
      * the period information of room
      */
+    //插入某个房间一周运行的周期
     public void insertPeriodDB(PeriodDB... periodDBS) {
-        new InsertPeriodDBAsyncTask(indoorDao).execute();
+        new InsertPeriodDBAsyncTask(indoorDao).execute(periodDBS);
+        //FIXME: 这里没有写入参数periodDBs ，导致数据库没有写入，耽误了两三天时间。没有报错误。
+        //FIXME： 再放弃的时候，才发现。应该是基本的概念不清楚，只知道照抄代码，抄的不仔细。
+        //FIXME： 如果概念清楚，会发现灰色的 periodDBs 没有被使用，肯定不能写入数据库。
+        //FIXME： 异步执行的函数也不是很了解，不知道 execute 是要执行什么的！
+        //FIXME： 难以表述的痛苦，为什么在这里耽误了这么长的时间，甚至怀疑了room的功能。
     }
 
+    //删除某个房间一周运行的周期
     public void deletePeriodDB(PeriodDB... periodDBS) {
-        new DeletePeriodDBAsyncTask(indoorDao).execute();
+        new DeletePeriodDBAsyncTask(indoorDao).execute(periodDBS);
     }
 
     //获取所有房间的周期
@@ -233,7 +240,7 @@ public class MyRepository implements IGetMessageCallBack {
 
         @Override
         protected Void doInBackground(PeriodDB... periodDBS) {
-            indoorDao.insertPeroidDB(periodDBS);
+            indoorDao.insertPeriodDB(periodDBS);
             return null;
         }
     }
@@ -247,7 +254,7 @@ public class MyRepository implements IGetMessageCallBack {
 
         @Override
         protected Void doInBackground(PeriodDB... periodDBS) {
-            indoorDao.deletePeroidDB(periodDBS);
+            indoorDao.deletePeriodDB(periodDBS);
             return null;
         }
     }
