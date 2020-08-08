@@ -60,17 +60,32 @@ public class PeriodFragment extends Fragment {
             myView.getWeeklyPeriod(indoorViewModel.currentlyPeriodDB.getOneRoomWeeklyPeriod());
         });
 
-        myView.setClickCrossListener((weekday, hour) -> {
+        myView.setClickCrossListener((weekday, hour, dayPeriod) -> {
             int clickedweekday = weekday - 1;//调整为： 周一 0
             int clickedhour = hour;
-            Bundle bundle = new Bundle();
-            bundle.putInt("roomId", roomId);
-            bundle.putString("roomName", roomName);
-            bundle.putInt("clickedweekday", clickedweekday);
-            bundle.putInt("clickedhour", clickedhour);
-            Navigation.findNavController(getView()).navigate(R.id.peroidSettingFragment, bundle);
-            //id是目的地的id，不是动作的id，fuck,一天的时间。
-
+            DayPeriod checkedDayPeriod = dayPeriod;
+            if (dayPeriod != null){
+                int st = dayPeriod.getStartMinuteStamp();
+                int et = dayPeriod.getEndMinuteStamp();
+                int tm = dayPeriod.getTempreature();
+                int we = dayPeriod.getWeekday();
+                Bundle bundle = new Bundle();
+                bundle.putInt("roomId", roomId);
+                bundle.putString("roomName", roomName);
+                bundle.putInt("startMinute", st);
+                bundle.putInt("endMinute", et);
+                bundle.putInt("temperature", tm);
+                bundle.putInt("weekday", we);
+                Navigation.findNavController(getView()).navigate(R.id.periodDeleteFragment, bundle);
+            }else {
+                Bundle bundle = new Bundle();
+                bundle.putInt("roomId", roomId);
+                bundle.putString("roomName", roomName);
+                bundle.putInt("clickedweekday", clickedweekday);
+                bundle.putInt("clickedhour", clickedhour);
+                Navigation.findNavController(getView()).navigate(R.id.peroidSettingFragment, bundle);
+                //id是目的地的id，不是动作的id，fuck,一天的时间。
+            }
         });
 
     }

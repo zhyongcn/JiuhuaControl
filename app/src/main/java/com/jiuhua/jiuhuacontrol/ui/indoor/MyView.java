@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.google.gson.Gson;
 import com.jiuhua.jiuhuacontrol.database.DayPeriod;
 
 import java.util.List;
@@ -27,8 +28,11 @@ public class MyView extends View {
     private Paint linePaint1;
     private Paint textPaint;
     private Paint textPaintCross;//画“+”的笔 the paint to draw cross.
-    private List<DayPeriod> weeklyPeriod;
     private Paint rectPaint;
+    private Paint deepRectPaint;
+    private List<DayPeriod> weeklyPeriod;
+    private DayPeriod checkedDayPeriod;
+    private DayPeriod tempDayPeriod;
 
 
     public MyView(Context context, AttributeSet attrs) { //这个attrs参数，如何把布局传进来？？
@@ -75,6 +79,11 @@ public class MyView extends View {
         rectPaint.setColor(Color.argb(255, 0, 255, 0));
         rectPaint.setStyle(Paint.Style.FILL);
         rectPaint.setAntiAlias(true);
+
+        deepRectPaint = new Paint();
+        deepRectPaint.setColor(Color.argb(255, 0, 200, 0));
+        deepRectPaint.setStyle(Paint.Style.FILL);
+        deepRectPaint.setAntiAlias(true);
     }
 
     @SuppressLint("DefaultLocale")
@@ -91,7 +100,7 @@ public class MyView extends View {
         for (int i = 1; i <= 8; i++) {
             canvas.drawLine(square * i + 30, 0, square * i + 30, square * 24, linePaint);
         }
-        //画时间段的块，时段名称，设置温度 //TODO: for each 迭代？？
+        //画时间段的块，时段名称，设置温度
         //画时间段的块
         if (weeklyPeriod != null) {//读取null对象依然是问题。
             for (DayPeriod dayPeriod : weeklyPeriod) {
@@ -115,6 +124,25 @@ public class MyView extends View {
             }
         }
 
+        if (checkedDayPeriod != null) {
+            canvas.drawRoundRect(square * (checkedDayPeriod.getWeekday() + 1) + 30,
+                    checkedDayPeriod.getStartMinuteStamp() * square / 60,
+                    square * (checkedDayPeriod.getWeekday() + 2) + 30,
+                    checkedDayPeriod.getEndMinuteStamp() * square / 60,
+                    20,//倒角的数据 the parameter of chamfering
+                    20,//圆角的数据 the argument of chamfering
+                    deepRectPaint);
+            //计算机的除法是取整“/”和取余数“%”，所以先乘为大数在取整60
+
+            if (checkedDayPeriod.getTempreature() != 0) {  //判断一下，去除未设置，0，的干扰
+                //写 时间段的名称
+                canvas.drawText("时段", square * (checkedDayPeriod.getWeekday() + 1) + 90,
+                        checkedDayPeriod.getStartMinuteStamp() * square / 60 + 50, textPaintCross);
+                //写 设置的温度
+                canvas.drawText(String.format("%d C", checkedDayPeriod.getTempreature()), square * (checkedDayPeriod.getWeekday() + 1) + 80,
+                        checkedDayPeriod.getStartMinuteStamp() * square / 60 + 90, textPaintCross);
+            }
+        }
 
         //画“ + ” 号
         if (clickedX != 0) {
@@ -130,10 +158,8 @@ public class MyView extends View {
 
     //从调用的periodFragment获取周期数据，并存储于本类的数组
     public void getWeeklyPeriod(List<DayPeriod> list) {
-//        if (list != null) {
-            this.weeklyPeriod = list;
-            invalidate();//重绘
-//        }
+        this.weeklyPeriod = list;
+        invalidate();//重绘
     }
 
     //自定义view点击的通用的做法。
@@ -150,18 +176,40 @@ public class MyView extends View {
             case MotionEvent.ACTION_MOVE:
                 break;
             case MotionEvent.ACTION_UP:
-                //TODO 还有先判断在哪个时间段之内。空白的时间段再执行下面的代码。
-                if (clickedX == (int) ((x - 30) / square) && clickedX != 0 && clickedY == (int) (y / square)) {
-                    //传出clickedX 1是周一，7是周日  clieckedY 0是0:00  23是23:00
-                    //把信息传送到调用的fragment，由fragment去处理，解耦。这个类只管图形和传出图形相关的数据。
-                    clickCrossListener.onClick(clickedX, clickedY);
-//                    Toast.makeText(getContext(), "clickedX = " + clickedX + "  clickedY = " + clickedY, Toast.LENGTH_SHORT).show();
-
-                } else {
-                    clickedX = (int) ((x - 30) / square);
-                    clickedY = (int) (y / square);
-                    invalidate();//重绘
+                // ***这一段逻辑太复杂了，终于搞出来了，以后直接套用***
+                tempDayPeriod = null;
+                //先判断在哪个时间段之内。
+                for (DayPeriod dayPeriod : weeklyPeriod) {
+                    if (x > square * (dayPeriod.getWeekday() + 1) + 30
+                            && x < square * (dayPeriod.getWeekday() + 2) + 30
+                            && y > dayPeriod.getStartMinuteStamp() * square / 60
+                            && y < dayPeriod.getEndMinuteStamp() * square / 60) {
+                        tempDayPeriod = dayPeriod;
+                    }
                 }
+
+                if (tempDayPeriod != null) {
+                    if (tempDayPeriod == checkedDayPeriod) {
+                        clickCrossListener.onClick(clickedX, clickedY, checkedDayPeriod);
+                    } else {
+                        checkedDayPeriod = tempDayPeriod;
+                        clickedX = 0;
+                        clickedY = 0;
+                    }
+                } else {
+                    //不在时间段执行下面的代码。
+                    if (clickedX == (int) ((x - 30) / square) && clickedX != 0 && clickedY == (int) (y / square)) {
+                        //传出clickedX 1是周一，7是周日  clieckedY 0是0:00  23是23:00
+                        //把信息传送到调用的fragment，由fragment去处理，解耦。这个类只管图形和传出图形相关的数据。
+                        clickCrossListener.onClick(clickedX, clickedY, checkedDayPeriod);
+                    } else {//第一次点击给 clickedX，clickedY 先赋值，提供给第二次比较，如果不同继续赋值。
+                        clickedX = (int) ((x - 30) / square);
+                        clickedY = (int) (y / square);
+                        checkedDayPeriod = null;
+                    }
+                }
+
+                invalidate();
                 break;
         }
 //        return super.onTouchEvent(event); //究竟返回什么？？
@@ -172,13 +220,13 @@ public class MyView extends View {
     private ClickCrossListener clickCrossListener;
 
     //设置接口的函数（供外部程序调用），传入了接口
-    public void setClickCrossListener(ClickCrossListener l) {
-        this.clickCrossListener = l;
+    public void setClickCrossListener(ClickCrossListener listener) {
+        this.clickCrossListener = listener;
     }
 
     //创建一个接口，并写一个函数原型（此原型可以用来传参）
     public interface ClickCrossListener {
-        public void onClick(int weekday, int hour);
+        public void onClick(int weekday, int hour, DayPeriod dayPeriod);
     }
 
 }

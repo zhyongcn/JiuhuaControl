@@ -58,6 +58,9 @@
         <action
             android:id="@+id/action_peroidFragment_to_peroidSettingFragment"
             app:destination="@id/peroidSettingFragment" />
+        <action
+            android:id="@+id/action_peroidFragment_to_periodDeleteFragment"
+            app:destination="@id/periodDeleteFragment" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"
@@ -82,5 +85,10 @@
         android:name="com.jiuhua.jiuhuacontrol.ui.indoor.PeriodSettingFragment"
         android:label="fragment_peroid_setting"
         tools:layout="@layout/fragment_peroid_setting" />
+    <fragment
+        android:id="@+id/periodDeleteFragment"
+        android:name="com.jiuhua.jiuhuacontrol.ui.indoor.PeriodDeleteFragment"
+        android:label="fragment_period_delete"
+        tools:layout="@layout/fragment_period_delete" />
 
 </navigation>
