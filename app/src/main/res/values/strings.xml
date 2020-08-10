@@ -32,11 +32,13 @@
 
     <string name="menu_home">运行情况</string>
     <string name="menu_userinfo">用户信息</string>
-    <string name="menu_equipment">设备手册</string>
-    <string name="menu_service">服务商</string>
+    <string name="menu_equipment">配件</string>
+    <string name="menu_esptouch">配置联网信息</string>
+    <string name="menu_service">待建功能</string>
+    <string name="menu_store">待建功能</string>
     <string name="communicate">Communicate</string>
-    <string name="menu_share">分享</string>
-    <string name="menu_send">发送邮件</string>
+    <string name="menu_share">待建功能</string>
+    <string name="menu_send">待建功能</string>
     <string name="coilvalveopen">两通阀开</string>
     <string name="coilvalveshut">两通阀关</string>
     <string name="floorvalveopen">地暖运行</string>

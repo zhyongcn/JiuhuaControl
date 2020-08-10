@@ -21,7 +21,7 @@ public class HomeViewModel extends AndroidViewModel {
     }
 
 
-    //TODO　包装 Repository 里面的 Dao 方法
+    //包装 Repository 里面的 Dao 方法
     public void insertRoomName(BasicInfoDB... basicInfoDBS) {
         myRepository.insertBasicInfo(basicInfoDBS);
     }

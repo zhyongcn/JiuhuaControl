@@ -46,7 +46,7 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
     private Context context;
     private IndoorViewModel indoorViewModel;
 
-    TextView textViewTitle, textViewStartTime, textViewEndTime, textViewSettingTemperature, textViewRepeat;
+    TextView textViewTitle, textViewPeriodName, textViewStartTime, textViewEndTime, textViewSettingTemperature, textViewRepeat;
     CheckBox SunCheckBox, MonCheckBox, TueCheckBox, WedCheckBox, ThuCheckBox, FriCheckBox, SatCheckBox;
     Button buttonPeriodComfirm, buttonPeriodCancel;
 
@@ -81,13 +81,13 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
         });
 
         //创建一个DayPeriod，供将来写入，或者删除使用。
-        //TODO： 新建使用下面的参数，如果是点击已有时段，需要传入该时段的参数。
         dayPeriod.setStartMinuteStamp(clickedHour * 60);
         dayPeriod.setEndMinuteStamp((clickedHour + 1) * 60);
         dayPeriod.setTempreature(temperature);
         dayPeriod.setWeekday(clickedWeekday);
 
         textViewTitle = view.findViewById(R.id.run_time_title);
+        textViewPeriodName = view.findViewById(R.id.periodname);
         textViewStartTime = view.findViewById(R.id.starttime);
         textViewEndTime = view.findViewById(R.id.endtime);
         textViewSettingTemperature = view.findViewById(R.id.setPeroidTemperature);
@@ -130,11 +130,12 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
         buttonPeriodComfirm = view.findViewById(R.id.buttonperiodcomfirm);
 
         textViewTitle.setText(roomName + "运行时段设置");
-        textViewStartTime.setText("开始时间                 " + clickedHour + ":" + "00");
-        textViewEndTime.setText("结束时间                 " + valueOf(clickedHour + 1) + ":" + "00");
-        textViewSettingTemperature.setText("设置温度                 " + temperature + " C");
+        textViewPeriodName.setText("时段名称：                 ");
+        textViewStartTime.setText("开始时间：                 " + clickedHour + ":" + "00");
+        textViewEndTime.setText("结束时间：                 " + valueOf(clickedHour + 1) + ":" + "00");
+        textViewSettingTemperature.setText("设置温度：                 " + temperature + " C");
 
-        //TODO 业务逻辑混乱！！（数据架构渐趋合理）
+        //业务逻辑
         MonCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 //当前周期在周一重复,检查有无冲突，无冲突写入数组。
@@ -292,8 +293,11 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
                 break;
             case R.id.buttonperiodcomfirm:
                 if (check_daily_fragment_add_to_Weekly_list(clickedWeekday) == 1) {
-                    //TODO 参数应该是一个修改好的 list<Dayperiod> 。
+                    //写入数据库
                     indoorViewModel.insertPeriodDB(roomId);
+                    //send MQTT message
+                    indoorViewModel.periodToDevice(roomId, indoorViewModel.currentlyPeriodDB.getOneRoomWeeklyPeriod());
+                    getActivity().onBackPressed();
                 }
                 break;
         }

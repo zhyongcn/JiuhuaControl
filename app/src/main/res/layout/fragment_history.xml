@@ -3,14 +3,4 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.indoor.HistoryFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="运行记录"
-        android:textSize="18sp" />
-
-</FrameLayout>
+    tools:context=".ui.indoor.HistoryFragment"/>

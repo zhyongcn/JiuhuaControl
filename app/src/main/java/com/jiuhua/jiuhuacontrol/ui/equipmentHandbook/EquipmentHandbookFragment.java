@@ -23,11 +23,9 @@ public class EquipmentHandbookFragment extends Fragment {
         equipmentHandbookViewModel =
                 ViewModelProviders.of(this).get(EquipmentHandbookViewModel.class);
         View root = inflater.inflate(R.layout.fragment_equipment_handbook, container, false);
-        final TextView textView = root.findViewById(R.id.equipmentHandbook);
         equipmentHandbookViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
-                textView.setText(s);
             }
         });
         return root;

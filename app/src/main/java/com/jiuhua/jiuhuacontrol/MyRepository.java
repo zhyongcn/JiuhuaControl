@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 
 import com.google.gson.Gson;
 import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
+import com.jiuhua.jiuhuacontrol.database.DayPeriod;
 import com.jiuhua.jiuhuacontrol.database.IndoorDB;
 import com.jiuhua.jiuhuacontrol.database.IndoorDao;
 import com.jiuhua.jiuhuacontrol.database.MyIndoorsDatabase;
@@ -54,7 +55,7 @@ public class MyRepository implements IGetMessageCallBack {
     }
 
     //发送指令
-    public void jsonToDevice(CommandESP commandESP) {
+    public void commandToDevice(CommandESP commandESP) {
         int roomID = commandESP.getRoomId();
         String jsonCommandESP = gson.toJson(commandESP);
 
@@ -62,6 +63,16 @@ public class MyRepository implements IGetMessageCallBack {
 //        mqttService.publish("86518/JYCFGC/6-2-3401/Room" + roomID, mqttString, 1, true);
         MQTTService.publish("86518/JYCFGC/6-2-3401/Room" + roomID, jsonCommandESP, 1, true);
         Log.d("jsonToDevice", jsonCommandESP);
+    }
+
+    //period to device
+    public void periodToDevice(PeriodDB periodDB){
+        int roomid = periodDB.getRoomId();
+        List<DayPeriod> dayPeriods = periodDB.getOneRoomWeeklyPeriod();
+        //传给模块的id通过topic信道号传递，不需要传递时间戳。模块只能有一个房间的一套周周期。
+        String s = gson.toJson(dayPeriods);
+        MQTTService.publish("86518/JYCFGC/6-2-3401/Room" + roomid, s, 1, true);
+        Log.d("periodToDevice", s);
     }
 
     /**  ******实现 Dao 的所有方法*********************************   */

@@ -22,7 +22,7 @@ public class UserInfoViewModel extends AndroidViewModel {
         myRepository = new MyRepository(application);
     }
 
-    //TODO　包装 Repository 里面的 Dao 方法
+    //包装 Repository 里面的 Dao 方法
     public void insertBasicInfo(BasicInfoDB... basicInfoDBS) {
         myRepository.insertBasicInfo(basicInfoDBS);
     }

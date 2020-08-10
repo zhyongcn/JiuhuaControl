@@ -108,8 +108,8 @@ public class MyView extends View {
                         dayPeriod.getStartMinuteStamp() * square / 60,
                         square * (dayPeriod.getWeekday() + 2) + 30,
                         dayPeriod.getEndMinuteStamp() * square / 60,
-                        20,//倒角的数据 the parameter of chamfering
-                        20,//圆角的数据 the argument of chamfering
+                        30,//倒角的数据 the parameter of chamfering
+                        30,//圆角的数据 the argument of chamfering
                         rectPaint);
                 //计算机的除法是取整“/”和取余数“%”，所以先乘为大数在取整60
 

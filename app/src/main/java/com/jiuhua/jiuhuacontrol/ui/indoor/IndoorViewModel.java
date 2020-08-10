@@ -1,10 +1,8 @@
 package com.jiuhua.jiuhuacontrol.ui.indoor;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
@@ -15,13 +13,9 @@ import com.jiuhua.jiuhuacontrol.database.DayPeriod;
 import com.jiuhua.jiuhuacontrol.database.IndoorDB;
 import com.jiuhua.jiuhuacontrol.database.PeriodDB;
 
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 public class IndoorViewModel extends AndroidViewModel {
 
@@ -112,18 +106,18 @@ public class IndoorViewModel extends AndroidViewModel {
         commandESP.setDeviceType(Constants.deviceType_fancoil);
         commandESP.setRoomState(Constants.roomState_OFF);
         commandESP.setSettingfanSpeed(Constants.fanSpeed_STOP);
-        myRepository.jsonToDevice(commandESP);
+        myRepository.commandToDevice(commandESP);
         commandESP.setRoomId(roomid);
         commandESP.setDeviceType(Constants.deviceType_floorheater);
         commandESP.setRoomState(Constants.roomState_OFF);
-        myRepository.jsonToDevice(commandESP);
+        myRepository.commandToDevice(commandESP);
     }
 
     //手动按钮实现方法
     public void manualRoomDevice(int roomid) {
         commandESP.setRoomId(roomid);
         commandESP.setRoomState(Constants.roomState_MANUAL);
-        myRepository.jsonToDevice(commandESP);
+        myRepository.commandToDevice(commandESP);
     }
 
     //周期自动按钮实现方法
@@ -131,7 +125,7 @@ public class IndoorViewModel extends AndroidViewModel {
         commandESP.setRoomId(roomid);
         commandESP.setRoomState(Constants.roomState_AUTO);
         commandESP.setSettingfanSpeed(Constants.fanSpeed_AUTO);
-        myRepository.jsonToDevice(commandESP);
+        myRepository.commandToDevice(commandESP);
     }
 
     //宴会按钮实现方法，这个好像没有用到。
@@ -144,7 +138,7 @@ public class IndoorViewModel extends AndroidViewModel {
         } else {
             commandESP.setRoomState(Constants.roomState_FEAST);
         }
-        myRepository.jsonToDevice(commandESP);
+        myRepository.commandToDevice(commandESP);
     }
 
     //除湿按钮实现方法
@@ -157,21 +151,21 @@ public class IndoorViewModel extends AndroidViewModel {
             commandESP.setSettingfanSpeed(Constants.roomState_DEHUMIDITY);
             commandESP.setSettingfanSpeed(Constants.fanSpeed_LOW);
         }
-        myRepository.jsonToDevice(commandESP);
+        myRepository.commandToDevice(commandESP);
     }
 
     //地暖按钮实现方法
     public void floorRoomDevice(int roomid) {
         commandESP.setRoomId(roomid);
         commandESP.setDeviceType(Constants.deviceType_floorheater);
-        myRepository.jsonToDevice(commandESP);
+        myRepository.commandToDevice(commandESP);
     }
 
     //空调按钮实现方法
     public void fancoilRoomDevice(int roomid) {
         commandESP.setRoomId(roomid);
         commandESP.setDeviceType(Constants.deviceType_fancoil);
-        myRepository.jsonToDevice(commandESP);
+        myRepository.commandToDevice(commandESP);
     }
 
     //风速按钮实现方法
@@ -180,7 +174,7 @@ public class IndoorViewModel extends AndroidViewModel {
         commandESP.setDeviceType(Constants.deviceType_fancoil);
         commandESP.setRoomState(Constants.roomState_MANUAL);//yes 改成手动运行
         commandESP.setSettingfanSpeed(fanSpeed);
-        myRepository.jsonToDevice(commandESP);
+        myRepository.commandToDevice(commandESP);
     }
 
     //传送温度
@@ -188,11 +182,11 @@ public class IndoorViewModel extends AndroidViewModel {
         commandESP.setRoomId(roomid);
         commandESP.setDeviceType(Constants.deviceType_fancoil);
         commandESP.setSetting_temp(temp);//传输的X10 的假浮点
-        myRepository.jsonToDevice(commandESP);
+        myRepository.commandToDevice(commandESP);
         commandESP.setRoomId(roomid);
         commandESP.setDeviceType(Constants.deviceType_floorheater);
         commandESP.setSetting_temp(temp);//传输的X10 的假浮点
-        myRepository.jsonToDevice(commandESP);
+        myRepository.commandToDevice(commandESP);
     }
 
     //传送湿度
@@ -200,11 +194,11 @@ public class IndoorViewModel extends AndroidViewModel {
         commandESP.setRoomId(roomid);
         commandESP.setDeviceType(Constants.deviceType_fancoil);
         commandESP.setSetting_humidity(temp);//传输的X10 的假浮点
-        myRepository.jsonToDevice(commandESP);
+        myRepository.commandToDevice(commandESP);
         commandESP.setRoomId(roomid);
         commandESP.setDeviceType(Constants.deviceType_floorheater);
         commandESP.setSetting_humidity(temp);//传输的X10 的假浮点
-        myRepository.jsonToDevice(commandESP);
+        myRepository.commandToDevice(commandESP);
     }
 
 
@@ -223,6 +217,14 @@ public class IndoorViewModel extends AndroidViewModel {
         currentlyPeriodDB.setRoomId(roomId);
         currentlyPeriodDB.setTimeStamp(new Date().getTime() / 1000);  //这个方法得到的是毫秒，this method return ms。
         myRepository.insertPeriodDB(currentlyPeriodDB);
+    }
+
+    //把周期传递给模块
+    public void periodToDevice(int roomid, List<DayPeriod> dayPeriods){
+        currentlyPeriodDB.setRoomId(roomid);
+//        currentlyPeriodDB.setTimeStamp(new Date().getTime()/1000);//没有必要
+        currentlyPeriodDB.setOneRoomWeeklyPeriod(dayPeriods);
+        myRepository.periodToDevice(currentlyPeriodDB);
     }
 
 }

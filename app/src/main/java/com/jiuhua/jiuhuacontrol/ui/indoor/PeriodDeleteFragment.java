@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.jiuhua.jiuhuacontrol.R;
 import com.jiuhua.jiuhuacontrol.database.DayPeriod;
+import com.jiuhua.mqttsample.MQTTService;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static java.lang.String.valueOf;
@@ -44,7 +45,7 @@ public class PeriodDeleteFragment extends Fragment implements View.OnClickListen
 
     private IndoorViewModel indoorViewModel;
 
-    TextView textViewTitle, textViewStartTime, textViewEndTime, textViewSettingTemperature;
+    TextView textViewTitle, textViewPeriodName, textViewStartTime, textViewEndTime, textViewSettingTemperature;
     CheckBox SunCheckBox, MonCheckBox, TueCheckBox, WedCheckBox, ThuCheckBox, FriCheckBox, SatCheckBox;
     Button buttonPeriodDelete, buttonPeriodCancel;
 
@@ -80,13 +81,13 @@ public class PeriodDeleteFragment extends Fragment implements View.OnClickListen
         });
 
         //创建一个DayPeriod，供将来写入，或者删除使用。
-        //TODO： 新建使用下面的参数，如果是点击已有时段，需要传入该时段的参数。
         dayPeriod.setStartMinuteStamp(startMinute);
         dayPeriod.setEndMinuteStamp(endMinute);
         dayPeriod.setTempreature(temperature);
         dayPeriod.setWeekday(weekday);
 
         textViewTitle = view.findViewById(R.id.run_title);
+        textViewPeriodName = view.findViewById(R.id.period_name);
         textViewStartTime = view.findViewById(R.id.start_time);
         textViewEndTime = view.findViewById(R.id.end_time);
         textViewSettingTemperature = view.findViewById(R.id.set_PeroidTemperature);
@@ -99,7 +100,6 @@ public class PeriodDeleteFragment extends Fragment implements View.OnClickListen
         SatCheckBox = view.findViewById(R.id.checkBox_6);
         SunCheckBox = view.findViewById(R.id.checkBox_7);
 
-        //依据传入的clickedweekday 当前缺省的星期，显示默认的勾选日。
         switch (weekday) {
             case Constants.Monday:
                 MonCheckBox.setChecked(true);
@@ -128,9 +128,10 @@ public class PeriodDeleteFragment extends Fragment implements View.OnClickListen
         buttonPeriodDelete = view.findViewById(R.id.button_period_delete);
 
         textViewTitle.setText(roomName + "运行时段详情");
-        textViewStartTime.setText("开始时间                 " + startMinute / 60 + ":" + startMinute % 60);
-        textViewEndTime.setText("结束时间                 " + endMinute / 60 + ":" + endMinute % 60);
-        textViewSettingTemperature.setText("设置温度                " + temperature + " C");
+        textViewPeriodName.setText("时段名称：                 ");
+        textViewStartTime.setText("开始时间：                 " + startMinute / 60 + ":" + startMinute % 60);
+        textViewEndTime.setText("结束时间：                 " + endMinute / 60 + ":" + endMinute % 60);
+        textViewSettingTemperature.setText("设置温度：                " + temperature + " C");
 
         buttonPeriodCancel.setOnClickListener(this);
         buttonPeriodDelete.setOnClickListener(this);
@@ -145,7 +146,11 @@ public class PeriodDeleteFragment extends Fragment implements View.OnClickListen
                 break;
             case R.id.button_period_delete:
                 remove_daily_fragment_from_weekly_list(weekday);
+                //新的周期写入数据库
                 indoorViewModel.insertPeriodDB(roomId);
+                //send MQTT message
+                indoorViewModel.periodToDevice(roomId, indoorViewModel.currentlyPeriodDB.getOneRoomWeeklyPeriod());
+                getActivity().onBackPressed();
                 break;
         }
 

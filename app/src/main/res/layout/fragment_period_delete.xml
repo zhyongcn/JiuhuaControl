@@ -36,7 +36,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="165dp" />
+            app:layout_constraintGuide_begin="189dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline29"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="108dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline35"
@@ -57,14 +64,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="213dp" />
+            app:layout_constraintGuide_begin="233dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline38"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="126dp" />
+            app:layout_constraintGuide_begin="145dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline39"
@@ -85,10 +92,21 @@
             app:layout_constraintTop_toTopOf="@+id/guideline39" />
 
         <TextView
+            android:id="@+id/period_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="时段名称："
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline29"
+            app:layout_constraintEnd_toStartOf="@+id/guideline33"
+            app:layout_constraintStart_toStartOf="@+id/guideline32"
+            app:layout_constraintTop_toTopOf="@+id/guideline29" />
+
+        <TextView
             android:id="@+id/start_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="开始时间"
+            android:text="开始时间："
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/guideline38"
             app:layout_constraintEnd_toStartOf="@+id/guideline31"
@@ -99,7 +117,7 @@
             android:id="@+id/end_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="结束时间"
+            android:text="结束时间："
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/guideline34"
             app:layout_constraintEnd_toStartOf="@+id/guideline31"
@@ -110,7 +128,7 @@
             android:id="@+id/set_PeroidTemperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="设定温度"
+            android:text="设定温度："
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/guideline37"
             app:layout_constraintEnd_toStartOf="@+id/guideline31"

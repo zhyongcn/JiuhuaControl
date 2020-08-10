@@ -61,16 +61,6 @@ public class IndoorFragment extends Fragment {
 
         indoorViewModel.getAllLatestIndoorDBsLive().observe(getViewLifecycleOwner(), indoorDBS -> {
             indoorViewModel.setAllLatestIndoorDBs(indoorDBS);
-
-            //            //先判断一下，避免数组越界  TODO 似乎多余，在view model里面已经做了赋值。
-            //            if (indoorDBS.size() > 0) {
-            //                for (IndoorDB indoorDB : indoorDBS){
-            //                    if (indoorDB.getRoomId() == roomId){
-            //                        indoorViewModel.setCurrentlyIndoorDB(indoorDB);
-            //                    }
-            //                }
-            //            }
-
             //****数据驱动界面改变,所以代码要放在fragment或者Activity里面。只处理界面****
             //显示两通阀的开关
             if (indoorViewModel.currentlyIndoorDB.isCoilValveOpen()) {

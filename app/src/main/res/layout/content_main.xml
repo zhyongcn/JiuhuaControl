@@ -10,6 +10,7 @@
     <!--ide的自动提示错了，这里用fragment，碎片的底座，id，name都特殊，name是系统的导航组件，不是自己写的
     重要参数，defaultNavHost=true，会拦截系统的返回按钮
     app：navGraph=“@nabigation/mobile_navigation”  你需要指定导航图表-->
+
     <fragment
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"

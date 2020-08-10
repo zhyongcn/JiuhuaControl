@@ -13,9 +13,9 @@
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/menu_userinfo" />
         <item
-            android:id="@+id/nav_equipmentManual"
+            android:id="@+id/esptouchDemoActivity"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_equipment" />
+            android:title="@string/menu_esptouch" />
         <item
             android:id="@+id/nav_service"
             android:icon="@drawable/ic_menu_manage"
@@ -23,7 +23,7 @@
         <item
             android:id="@+id/nav_partsstore"
             android:icon="@drawable/ic_menu_manage"
-            android:title="配件商城" />
+            android:title="@string/menu_store" />
     </group>
 
     <item android:title="@string/communicate">
