@@ -115,7 +115,7 @@ public class MyView extends View {
 
                 if (dayPeriod.getTempreature() != 0) {  //判断一下，去除未设置，0，的干扰
                     //写 时间段的名称
-                    canvas.drawText("时段", square * (dayPeriod.getWeekday() + 1) + 90,
+                    canvas.drawText(dayPeriod.getDayPeriodName(), square * (dayPeriod.getWeekday() + 1) + 90,
                             dayPeriod.getStartMinuteStamp() * square / 60 + 50, textPaintCross);
                     //写 设置的温度
                     canvas.drawText(String.format("%d C", dayPeriod.getTempreature()), square * (dayPeriod.getWeekday() + 1) + 80,
@@ -136,7 +136,7 @@ public class MyView extends View {
 
             if (checkedDayPeriod.getTempreature() != 0) {  //判断一下，去除未设置，0，的干扰
                 //写 时间段的名称
-                canvas.drawText("时段", square * (checkedDayPeriod.getWeekday() + 1) + 90,
+                canvas.drawText(checkedDayPeriod.getDayPeriodName(), square * (checkedDayPeriod.getWeekday() + 1) + 90,
                         checkedDayPeriod.getStartMinuteStamp() * square / 60 + 50, textPaintCross);
                 //写 设置的温度
                 canvas.drawText(String.format("%d C", checkedDayPeriod.getTempreature()), square * (checkedDayPeriod.getWeekday() + 1) + 80,

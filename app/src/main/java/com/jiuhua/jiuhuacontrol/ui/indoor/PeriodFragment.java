@@ -65,6 +65,7 @@ public class PeriodFragment extends Fragment {
             int clickedhour = hour;
             DayPeriod checkedDayPeriod = dayPeriod;
             if (dayPeriod != null){
+                String dn = dayPeriod.getDayPeriodName();
                 int st = dayPeriod.getStartMinuteStamp();
                 int et = dayPeriod.getEndMinuteStamp();
                 int tm = dayPeriod.getTempreature();
@@ -72,6 +73,7 @@ public class PeriodFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putInt("roomId", roomId);
                 bundle.putString("roomName", roomName);
+                bundle.putString("dayPeriodName", dn);
                 bundle.putInt("startMinute", st);
                 bundle.putInt("endMinute", et);
                 bundle.putInt("temperature", tm);
@@ -80,6 +82,7 @@ public class PeriodFragment extends Fragment {
             }else {
                 Bundle bundle = new Bundle();
                 bundle.putInt("roomId", roomId);
+                bundle.putString("roomName", roomName);
                 bundle.putString("roomName", roomName);
                 bundle.putInt("clickedweekday", clickedweekday);
                 bundle.putInt("clickedhour", clickedhour);

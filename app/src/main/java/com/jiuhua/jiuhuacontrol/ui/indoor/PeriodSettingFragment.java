@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -47,6 +48,7 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
     private IndoorViewModel indoorViewModel;
 
     TextView textViewTitle, textViewPeriodName, textViewStartTime, textViewEndTime, textViewSettingTemperature, textViewRepeat;
+    EditText editTextDayperiodName;
     CheckBox SunCheckBox, MonCheckBox, TueCheckBox, WedCheckBox, ThuCheckBox, FriCheckBox, SatCheckBox;
     Button buttonPeriodComfirm, buttonPeriodCancel;
 
@@ -87,7 +89,8 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
         dayPeriod.setWeekday(clickedWeekday);
 
         textViewTitle = view.findViewById(R.id.run_time_title);
-        textViewPeriodName = view.findViewById(R.id.periodname);
+//        textViewPeriodName = view.findViewById(R.id.periodname);
+        editTextDayperiodName = view.findViewById(R.id.editperiodname);
         textViewStartTime = view.findViewById(R.id.starttime);
         textViewEndTime = view.findViewById(R.id.endtime);
         textViewSettingTemperature = view.findViewById(R.id.setPeroidTemperature);
@@ -130,7 +133,7 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
         buttonPeriodComfirm = view.findViewById(R.id.buttonperiodcomfirm);
 
         textViewTitle.setText(roomName + "运行时段设置");
-        textViewPeriodName.setText("时段名称：                 ");
+//        textViewPeriodName.setText("时段名称：                 ");
         textViewStartTime.setText("开始时间：                 " + clickedHour + ":" + "00");
         textViewEndTime.setText("结束时间：                 " + valueOf(clickedHour + 1) + ":" + "00");
         textViewSettingTemperature.setText("设置温度：                 " + temperature + " C");
@@ -293,6 +296,7 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
                 break;
             case R.id.buttonperiodcomfirm:
                 if (check_daily_fragment_add_to_Weekly_list(clickedWeekday) == 1) {
+                    dayPeriod.setDayPeriodName(editTextDayperiodName.getText().toString());
                     //写入数据库
                     indoorViewModel.insertPeriodDB(roomId);
                     //send MQTT message
@@ -322,6 +326,7 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
         String s = gson.toJson(this.dayPeriod);
         dayPeriodFromJson = gson.fromJson(s, DayPeriod.class);
         dayPeriodFromJson.setWeekday(weekday);
+        dayPeriodFromJson.setDayPeriodName(editTextDayperiodName.getText().toString());
 
         int start = dayPeriodFromJson.getStartMinuteStamp();
         int end = dayPeriodFromJson.getEndMinuteStamp();

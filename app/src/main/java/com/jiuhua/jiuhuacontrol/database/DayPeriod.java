@@ -6,7 +6,7 @@ public class DayPeriod {
     int endMinuteStamp;
     int tempreature; //default 24 C .
     int weekday;//0 -- Monday
-    String dayPeriodName;
+    String dayPeriodName = "     ";
 
     public DayPeriod() {
     }

@@ -36,6 +36,7 @@ public class PeriodDeleteFragment extends Fragment implements View.OnClickListen
 
     private int roomId;
     private String roomName;
+    private String dayPeriodName;
     private int startMinute;
     private int endMinute;
     private int weekday;
@@ -65,6 +66,7 @@ public class PeriodDeleteFragment extends Fragment implements View.OnClickListen
         temperature = getArguments().getInt("temperature");
         startMinute = getArguments().getInt("startMinute");// 0是0:00  23是23:00
         endMinute = getArguments().getInt("endMinute");
+        dayPeriodName = getArguments().getString("dayPeriodName");
 
         indoorViewModel = new ViewModelProvider(this).get(IndoorViewModel.class);
         indoorViewModel.setCurrentlyRoomId(roomId);
@@ -128,7 +130,7 @@ public class PeriodDeleteFragment extends Fragment implements View.OnClickListen
         buttonPeriodDelete = view.findViewById(R.id.button_period_delete);
 
         textViewTitle.setText(roomName + "运行时段详情");
-        textViewPeriodName.setText("时段名称：                 ");
+        textViewPeriodName.setText("时段名称：                 " + dayPeriodName);
         textViewStartTime.setText("开始时间：                 " + startMinute / 60 + ":" + startMinute % 60);
         textViewEndTime.setText("结束时间：                 " + endMinute / 60 + ":" + endMinute % 60);
         textViewSettingTemperature.setText("设置温度：                " + temperature + " C");
