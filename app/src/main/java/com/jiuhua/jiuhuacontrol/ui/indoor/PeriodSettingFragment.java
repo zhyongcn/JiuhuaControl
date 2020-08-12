@@ -140,6 +140,10 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
 
         //业务逻辑
         MonCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            //如果点击了星期，就不能再设置开始时间，结束时间，温度参数了。
+            textViewStartTime.setClickable(false);
+            textViewEndTime.setClickable(false);
+            textViewSettingTemperature.setClickable(false);
             if (isChecked) {
                 //当前周期在周一重复,检查有无冲突，无冲突写入数组。
                 check_daily_fragment_add_to_Weekly_list(Constants.Monday); //include write to List.
@@ -149,6 +153,9 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
             }
         });
         TueCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            textViewStartTime.setClickable(false);
+            textViewEndTime.setClickable(false);
+            textViewSettingTemperature.setClickable(false);
             if (isChecked) {
                 check_daily_fragment_add_to_Weekly_list(Constants.Tuesday);
             } else {
@@ -156,6 +163,9 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
             }
         });
         WedCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            textViewStartTime.setClickable(false);
+            textViewEndTime.setClickable(false);
+            textViewSettingTemperature.setClickable(false);
             if (isChecked) {
                 check_daily_fragment_add_to_Weekly_list(Constants.Wednesday);
             } else {
@@ -163,6 +173,9 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
             }
         });
         ThuCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            textViewStartTime.setClickable(false);
+            textViewEndTime.setClickable(false);
+            textViewSettingTemperature.setClickable(false);
             if (isChecked) {
                 check_daily_fragment_add_to_Weekly_list(Constants.Thursday);
             } else {
@@ -170,6 +183,9 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
             }
         });
         FriCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            textViewStartTime.setClickable(false);
+            textViewEndTime.setClickable(false);
+            textViewSettingTemperature.setClickable(false);
             if (isChecked) {
                 check_daily_fragment_add_to_Weekly_list(Constants.Friday);
             } else {
@@ -177,6 +193,9 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
             }
         });
         SatCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            textViewStartTime.setClickable(false);
+            textViewEndTime.setClickable(false);
+            textViewSettingTemperature.setClickable(false);
             if (isChecked) {
                 check_daily_fragment_add_to_Weekly_list(Constants.Saturday);
             } else {
@@ -184,6 +203,9 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
             }
         });
         SunCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            textViewStartTime.setClickable(false);
+            textViewEndTime.setClickable(false);
+            textViewSettingTemperature.setClickable(false);
             if (isChecked) {
                 check_daily_fragment_add_to_Weekly_list(Constants.Sunday);
             } else {

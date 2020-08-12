@@ -214,15 +214,17 @@ public class IndoorViewModel extends AndroidViewModel {
     }
 
     public void insertPeriodDB(int roomId) {
+        currentlyPeriodDB.setId(currentlyPeriodDB.getId()+allLatestPeriodDBs.size());
+                    //id是从数据库里取出的，加上有几个房间，不会冲掉数据。id不同，数据库认为不是一个数据
         currentlyPeriodDB.setRoomId(roomId);
         currentlyPeriodDB.setTimeStamp(new Date().getTime() / 1000);  //这个方法得到的是毫秒，this method return ms。
         myRepository.insertPeriodDB(currentlyPeriodDB);
     }
 
-    //把周期传递给模块
+    //把周期传递给模块  TODO： 还是传送大数组！！period[100][4]
     public void periodToDevice(int roomid, List<DayPeriod> dayPeriods){
         currentlyPeriodDB.setRoomId(roomid);
-//        currentlyPeriodDB.setTimeStamp(new Date().getTime()/1000);//没有必要
+        currentlyPeriodDB.setTimeStamp(new Date().getTime()/1000);//没有必要
         currentlyPeriodDB.setOneRoomWeeklyPeriod(dayPeriods);
         myRepository.periodToDevice(currentlyPeriodDB);
     }

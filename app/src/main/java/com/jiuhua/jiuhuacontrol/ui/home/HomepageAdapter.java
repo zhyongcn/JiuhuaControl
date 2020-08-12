@@ -28,7 +28,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyView
         this.homeViewModel = homeViewModel;
     }
 
-    public void setAllBasicInfo(List<BasicInfoDB> allBasicInfo) {//homeFragment观察到变化就调用此方法设置basicinfo。
+    public void setAllBasicInfo(List<BasicInfoDB> allBasicInfo) { // homeFragment 观察到变化就调用此方法设置 basicinfo。
         this.allBasicInfo = allBasicInfo;
     }
 

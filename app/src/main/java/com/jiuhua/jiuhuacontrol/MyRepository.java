@@ -54,7 +54,7 @@ public class MyRepository implements IGetMessageCallBack {
         context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);//绑定服务MQTTservice
     }
 
-    //发送指令
+    //发送指令 command to device
     public void commandToDevice(CommandESP commandESP) {
         int roomID = commandESP.getRoomId();
         String jsonCommandESP = gson.toJson(commandESP);
@@ -68,9 +68,9 @@ public class MyRepository implements IGetMessageCallBack {
     //period to device
     public void periodToDevice(PeriodDB periodDB){
         int roomid = periodDB.getRoomId();
-        List<DayPeriod> dayPeriods = periodDB.getOneRoomWeeklyPeriod();
-        //传给模块的id通过topic信道号传递，不需要传递时间戳。模块只能有一个房间的一套周周期。
-        String s = gson.toJson(dayPeriods);
+        // send currentlyPeriodDB. 传递 currentlyPeriodDB 。
+        //TODO： 把周期变成 int[100][4] 数组。
+        String s = gson.toJson(periodDB);
         MQTTService.publish("86518/JYCFGC/6-2-3401/Room" + roomid, s, 1, true);
         Log.d("periodToDevice", s);
     }
@@ -143,7 +143,7 @@ public class MyRepository implements IGetMessageCallBack {
         //FIXME： 难以表述的痛苦，为什么在这里耽误了这么长的时间，甚至怀疑了room的功能。
     }
 
-    //删除某个房间一周运行的周期
+    //TODO 不用就删除掉：删除某个房间一周运行的周期
     public void deletePeriodDB(PeriodDB... periodDBS) {
         new DeletePeriodDBAsyncTask(indoorDao).execute(periodDBS);
     }
