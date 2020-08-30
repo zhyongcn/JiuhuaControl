@@ -11,8 +11,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.jiuhua.jiuhuacontrol.R;
 import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
+import com.jiuhua.jiuhuacontrol.ui.indoor.Constants;
+import com.jiuhua.mqttsample.MQTTService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +92,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.MyView
 
         holder.editTextRoomName.setText(basicInfoDB.getRoomName());
         holder.editTextRoomId.setText(String.valueOf(basicInfoDB.getRoomId()));
-        holder.editTextSensorCalibration.setText(String.valueOf(basicInfoDB.getSensorCalibration()));
+        holder.editTextSensorCalibration.setText(String.valueOf(basicInfoDB.getTemperatureSensorCalibration()));
         holder.editTextFancoilTradeMark.setText(basicInfoDB.getFancoilTrademark());
         holder.editTextFancoilType.setText(basicInfoDB.getFanCoilType());
         holder.checkBoxCoilvalve.setChecked(basicInfoDB.isHasCoilValve());
@@ -108,11 +112,12 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.MyView
                 //TODO 检查一下，房间编号必填。同时不能重复。
                 if (Integer.parseInt(holder.editTextRoomId.getText().toString()) != 0) {
                     BasicInfoDB basicInfoDB = new BasicInfoDB();
+                    basicInfoDB.setId(allBasicInfo.get(k).getId());//update是通过主键 id 匹配的。
                     basicInfoDB.setRoomName(holder.editTextRoomName.getText().toString());
                     basicInfoDB.setRoomId(Integer.parseInt(holder.editTextRoomId.getText().toString()));
-                    basicInfoDB.setSensorCalibration(Integer.parseInt(holder.editTextSensorCalibration.getText().toString()));
+                    basicInfoDB.setTemperatureSensorCalibration(Integer.parseInt(holder.editTextSensorCalibration.getText().toString()));
                     basicInfoDB.setFancoilTrademark(holder.editTextFancoilTradeMark.getText().toString());
-                    basicInfoDB.setFanCoilType(holder.editTextRadiatorType.getText().toString());
+                    basicInfoDB.setFanCoilType(holder.editTextFancoilType.getText().toString());
                     basicInfoDB.setHasCoilValve(holder.checkBoxCoilvalve.isChecked());
                     basicInfoDB.setFloorHeat(holder.checkBoxHasFloorHeating.isChecked());
                     basicInfoDB.setFloorAuto(holder.checkBoxIsFloorHeatingAuto.isChecked());
@@ -122,6 +127,16 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.MyView
 
                     userInfoViewModel.updateBasicInfo(basicInfoDB);
                     Toast.makeText(v.getContext(), "你修改了房间信息", Toast.LENGTH_SHORT).show();
+                    //TODO send the calibration to module.
+                    Gson gson = new Gson();
+                    JsonObject jsonObject = new JsonObject(); //temp object for send temperatureSensorCalibration information.
+                    jsonObject.addProperty("roomId", basicInfoDB.getRoomId());
+                    jsonObject.addProperty("deviceType", Constants.deviceType_DHTsensor);
+                    //假浮点，在手机上转换，减轻模块压力。
+                    jsonObject.addProperty("adjustingTemperature", basicInfoDB.getTemperatureSensorCalibration() * 10);
+                    String msg = gson.toJson(jsonObject);
+                    MQTTService.publish("86518/JYCFGC/6-2-3401/Room" + basicInfoDB.getRoomId(), msg, 1, false);
+
                 } else {
                     Toast.makeText(v.getContext(), "房间编号必须填写", Toast.LENGTH_SHORT).show();
                 }

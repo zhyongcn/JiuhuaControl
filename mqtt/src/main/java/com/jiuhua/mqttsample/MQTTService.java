@@ -32,7 +32,7 @@ public class MQTTService extends Service {
     private String host = "tcp://106.13.114.16:1883";// wyybaiducloud
     private String userName = "admin";
     private String passWord = "password";
-    private static String myTopic = "86518/JYCFGC/6-2-3401/HandT";      //要订阅的主题
+    private static String familyTopic = "86518/JYCFGC/6-2-3401/HandT";      //要订阅的主题
     private String clientId = "androidId--JYCFGC6-2-3401";//客户端标识
     private IGetMessageCallBack IGetMessageCallBack;//将在什么地方使用？mqttcallback实例当中改写原来的方法
 
@@ -83,7 +83,7 @@ public class MQTTService extends Service {
         boolean doConnect = true;//这个变量用来标识状态
         String message = "{\"terminal_uid\":\"" + clientId + "\"}";//这个就是遗嘱消息，客户端的ID，知道是哪一个客户端。
         Log.e(getClass().getName(), "message是:" + message);
-        String topic = myTopic;//***这里又使用了主题***  注意：我们会不会更换主题（应对多个房间）？
+        String topic = familyTopic;//***这里又使用了主题***  注意：我们会不会更换主题（应对多个房间）？
         Integer qos = 0;//遗嘱的发送没有质量要求
         Boolean retained = false;//在服务器上不保留
         if ((!message.equals("")) || (!topic.equals(""))) {
@@ -140,7 +140,7 @@ public class MQTTService extends Service {
             Log.i(TAG, "连接成功 ");
             try {
                 // ***订阅myTopic话题***
-                client.subscribe(myTopic,0);//订阅的主题质量要求必须传到。
+                client.subscribe(familyTopic,1);//订阅的主题质量要求必须传到。
                 //可以订阅多个主题，消息混在一起，需要注意处理
                 //发送信道的topic 没有必要订阅了吧。
 //                client.subscribe("86518/JYCFGC/6-2-3401/Room1", 1);

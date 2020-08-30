@@ -35,10 +35,6 @@ public class UserInfoViewModel extends AndroidViewModel {
         myRepository.deleteBasicInfo(basicInfoDBS);
     }
 
-    public void deleteAllBasicInfo(){
-        myRepository.deleteAllBasicInfo();
-    }
-
 //    public List<BasicInfoDB> getAllBasicInfo(){
 //        return myRepository.getAllBasicInfo();
 //    }

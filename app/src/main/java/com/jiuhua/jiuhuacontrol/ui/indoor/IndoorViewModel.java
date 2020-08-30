@@ -221,7 +221,7 @@ public class IndoorViewModel extends AndroidViewModel {
         myRepository.insertPeriodDB(currentlyPeriodDB);
     }
 
-    //把周期传递给模块  TODO： 还是传送大数组！！period[100][4]
+    //把周期传递给模块 period[15][3]
     public void periodToDevice(int roomid, List<DayPeriod> dayPeriods){
         currentlyPeriodDB.setRoomId(roomid);
         currentlyPeriodDB.setTimeStamp(new Date().getTime()/1000);//没有必要

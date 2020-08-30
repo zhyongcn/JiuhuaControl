@@ -32,14 +32,14 @@ public class IndoorDB {
     @SerializedName("settingTemp")
     private int settingTemperature;//10X 之后的假浮点。
     @ColumnInfo(name = "current_temperature")
-    @SerializedName("currentTemp")
+    @SerializedName("currentlyTemperature")
     private int currentTemperature;//模块 10X 之后的假浮点。
 
     @ColumnInfo(name = "setting_humidity")
     @SerializedName("settingHumidity")
     private int settingHumidity;
     @ColumnInfo(name = "current_humidity")
-    @SerializedName("currentHumidity")
+    @SerializedName("currentlyHumidity")
     private int currentHumidity;
     //
     @ColumnInfo(name = "current_fan_status")//不要使用枚举，占用太多资源，还需要转换器。

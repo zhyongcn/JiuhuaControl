@@ -39,7 +39,7 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
     private int clickedHour;
     private int hour;
     private int minute;
-    private int temperature = 24;//default temperature is 24 C .
+    private int temperature = 24; //default temperature is 24 C 。
     private int temp;//临时存储的温度值
 
     private DayPeriod dayPeriod = new DayPeriod();
@@ -89,7 +89,7 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
         dayPeriod.setWeekday(clickedWeekday);
 
         textViewTitle = view.findViewById(R.id.run_time_title);
-//        textViewPeriodName = view.findViewById(R.id.periodname);
+//        textViewPeriodName = view.findViewById(R.id.periodname);//仅提示而已，没有其他作用。
         editTextDayperiodName = view.findViewById(R.id.editperiodname);
         textViewStartTime = view.findViewById(R.id.starttime);
         textViewEndTime = view.findViewById(R.id.endtime);
@@ -133,7 +133,6 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
         buttonPeriodComfirm = view.findViewById(R.id.buttonperiodcomfirm);
 
         textViewTitle.setText(roomName + "运行时段设置");
-//        textViewPeriodName.setText("时段名称：                 ");
         textViewStartTime.setText("开始时间：                 " + clickedHour + ":" + "00");
         textViewEndTime.setText("结束时间：                 " + valueOf(clickedHour + 1) + ":" + "00");
         textViewSettingTemperature.setText("设置温度：                 " + temperature + " C");
@@ -212,7 +211,6 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
                 remove_daily_fragment_from_weekly_list(Constants.Sunday);
             }
         });
-
 
         textViewStartTime.setOnClickListener(this);
         textViewEndTime.setOnClickListener(this);

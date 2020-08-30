@@ -29,6 +29,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="用户基本信息"
+                android:textColor="@color/mr_cast_meta_black_scrim"
                 android:textSize="18sp" />
 
             <EditText

@@ -2,11 +2,12 @@ package com.jiuhua.jiuhuacontrol.database;
 
 public class DayPeriod {
 
+    String dayPeriodName = "     ";
     int startMinuteStamp;  //the minutes after 0:00
     int endMinuteStamp;
     int tempreature; //default 24 C .
     int weekday;//0 -- Monday
-    String dayPeriodName = "     ";
+
 
     public DayPeriod() {
     }

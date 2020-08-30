@@ -15,8 +15,9 @@ public class BasicInfoDB {
     private int roomId;
     @ColumnInfo(name = "roomname")
     private String roomName;
-    @ColumnInfo(name = "sensorCalibration")
-    private int sensorCalibration;
+    //温度校准，TODO:是否需要湿度校准？？
+    @ColumnInfo(name = "temperatureSensorCalibration")
+    private int temperatureSensorCalibration;
     //风机盘管的情况
     @ColumnInfo(name = "fancoiltrademark")
     private String fancoilTrademark;
@@ -50,12 +51,12 @@ public class BasicInfoDB {
     }
 
     @Ignore
-    public BasicInfoDB(int roomId, String roomName, int sensorCalibration, String fancoilTrademark, String fanCoilType,
+    public BasicInfoDB(int roomId, String roomName, int temperatureSensorCalibration, String fancoilTrademark, String fanCoilType,
                        boolean hasCoilValve, boolean isFloorHeat, boolean isFloorAuto,
                        String radiatorTrademark, String radiatorType, boolean isRadiatorAuto) {
         this.roomId = roomId;
         this.roomName = roomName;
-        this.sensorCalibration = sensorCalibration;
+        this.temperatureSensorCalibration = temperatureSensorCalibration;
         this.fancoilTrademark = fancoilTrademark;
         this.fanCoilType = fanCoilType;
         this.hasCoilValve = hasCoilValve;
@@ -90,12 +91,12 @@ public class BasicInfoDB {
         this.roomName = roomName;
     }
 
-    public int getSensorCalibration() {
-        return sensorCalibration;
+    public int getTemperatureSensorCalibration() {
+        return temperatureSensorCalibration;
     }
 
-    public void setSensorCalibration(int sensorCalibration) {
-        this.sensorCalibration = sensorCalibration;
+    public void setTemperatureSensorCalibration(int temperatureSensorCalibration) {
+        this.temperatureSensorCalibration = temperatureSensorCalibration;
     }
 
     //风机盘管参数相关

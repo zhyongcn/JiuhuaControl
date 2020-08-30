@@ -65,14 +65,32 @@ public class MyRepository implements IGetMessageCallBack {
         Log.d("jsonToDevice", jsonCommandESP);
     }
 
-    //period to device
-    public void periodToDevice(PeriodDB periodDB){
+    //period to device  send currentlyPeriodDB. 发送 currentlyPeriodDB 。
+    public void periodToDevice(PeriodDB periodDB) {
         int roomid = periodDB.getRoomId();
-        // send currentlyPeriodDB. 传递 currentlyPeriodDB 。
-        //TODO： 把周期变成 int[100][4] 数组。
-        String s = gson.toJson(periodDB);
-        MQTTService.publish("86518/JYCFGC/6-2-3401/Room" + roomid, s, 1, true);
-        Log.d("periodToDevice", s);
+
+        for (int wd = 0; wd < 7; wd++) {
+            CommandPeriod commandPeriod = new CommandPeriod();
+            commandPeriod.setRoomId(roomid);
+            int[][] temparray = new int[15][3];
+            int k = 0;
+            commandPeriod.setWeekday(wd);
+            for (int i = 0; i < periodDB.getOneRoomWeeklyPeriod().size(); i++) {
+                if (wd == periodDB.getOneRoomWeeklyPeriod().get(i).getWeekday()) {
+                    temparray[k][0] = periodDB.getOneRoomWeeklyPeriod().get(i).getStartMinuteStamp();
+                    temparray[k][1] = periodDB.getOneRoomWeeklyPeriod().get(i).getEndMinuteStamp();
+                    temparray[k][2] = periodDB.getOneRoomWeeklyPeriod().get(i).getTempreature();
+                    k++;
+                }
+
+            }
+            commandPeriod.setPeriod(temparray);
+            String s = gson.toJson(commandPeriod);
+            MQTTService.publish("86518/JYCFGC/6-2-3401/Room" + roomid, s, 1, true);
+
+            Log.d("periodToDevice", s);
+        }
+
     }
 
     /**  ******实现 Dao 的所有方法*********************************   */
@@ -143,10 +161,7 @@ public class MyRepository implements IGetMessageCallBack {
         //FIXME： 难以表述的痛苦，为什么在这里耽误了这么长的时间，甚至怀疑了room的功能。
     }
 
-    //TODO 不用就删除掉：删除某个房间一周运行的周期
-    public void deletePeriodDB(PeriodDB... periodDBS) {
-        new DeletePeriodDBAsyncTask(indoorDao).execute(periodDBS);
-    }
+    //不用删除某个房间一周运行的周期
 
     //获取所有房间的周期
     public LiveData<List<PeriodDB>> getAllLatestPeriodDBsLive() {
@@ -276,7 +291,7 @@ public class MyRepository implements IGetMessageCallBack {
      */
     @Override
     public void setMessage(final String message) {
-        //TODO 解析json和写入数据库，且不能在UI线程，是否应该开辟一个线程池来处理。
+        //解析json和写入数据库，不能在UI线程，是否应该开辟一个线程池来处理??。
         //use mqtt message here.
         //回传手机的信息都在 86518/JYCFGC/6-2-3401/HandT 。
 

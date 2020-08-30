@@ -64,8 +64,8 @@ public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyView
         holder.textViewRoomName.setText(basicInfoDB.getRoomName());
         if (position < allLatestIndoorDBs.size()) {
             IndoorDB indoorDB = allLatestIndoorDBs.get(position);//在这个给 position+1 会导致闪退的。
-            holder.textViewRoomTemperature.setText("当前温度：" + indoorDB.getCurrentTemperature() + " C");
-            holder.textViewRoomHumidity.setText("当前湿度：" + indoorDB.getCurrentHumidity() + "%RH");
+            holder.textViewRoomTemperature.setText("当前温度：" + indoorDB.getCurrentTemperature() / 10 + " C");
+            holder.textViewRoomHumidity.setText("当前湿度：" + indoorDB.getCurrentHumidity() / 10 + "%RH");
             switch (indoorDB.getRoomStatus()) {
                 case 0:
                     holder.textViewRoomStatus.setText("当前状态：停止运行");
