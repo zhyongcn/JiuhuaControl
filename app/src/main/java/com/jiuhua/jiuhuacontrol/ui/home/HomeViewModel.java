@@ -37,5 +37,10 @@ public class HomeViewModel extends AndroidViewModel {
         return myRepository.getAllLatestIndoorDBsLive();
     }
 
+    //获取普通房间的名字
+    public String loadRoomName(int roomid) {
+        return myRepository.loadRoomName(roomid);
+    }
+
 
 }

@@ -40,7 +40,8 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.MyView
         this.allBasicInfo = allBasicInfo;
     }
 
-    //TODO 添加校准温湿度的逻辑。
+    //TODO 添加校准温湿度的逻辑。发送的MQTTmessage 的qos必须是1，或2，0是不行的。！！
+    // 接收端的.disable_clean_session = 1 禁止清除会话，可以理解为mqtt的缓存
 
     @NonNull
     @Override

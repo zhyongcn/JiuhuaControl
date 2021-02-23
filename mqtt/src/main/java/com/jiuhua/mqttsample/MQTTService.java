@@ -29,11 +29,12 @@ public class MQTTService extends Service {
     private static MqttAndroidClient client;//在init（）里面新建
     private MqttConnectOptions conOpt;//在init（）里面新建
 
-    private String host = "tcp://106.13.114.16:1883";// wyybaiducloud
+//    private String host = "tcp://106.13.114.16:1883";// wyybaiducloud
+    private String host = "tcp://180.102.131.255:1883";// ctyun
     private String userName = "admin";
     private String passWord = "password";
-    private static String familyTopic = "86518/JYCFGC/6-2-3401/HandT";      //要订阅的主题
-    private String clientId = "androidId--JYCFGC6-2-3401";//客户端标识
+    private static String familyTopic = "86518/QXGY/2-4-102/phone";      //要订阅的主题
+    private String clientId = "androidId--QXGY2-4-102";//客户端标识
     private IGetMessageCallBack IGetMessageCallBack;//将在什么地方使用？mqttcallback实例当中改写原来的方法
 
 
@@ -69,7 +70,7 @@ public class MQTTService extends Service {
 
         conOpt = new MqttConnectOptions();//新建一个用于连接操作的实例
         // 清除缓存
-        conOpt.setCleanSession(true);
+        conOpt.setCleanSession(false);//TODO: try false .
         // 设置超时时间，单位：秒
         conOpt.setConnectionTimeout(10);
         // 心跳包发送间隔，单位：秒

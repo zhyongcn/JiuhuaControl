@@ -35,8 +35,8 @@ public interface IndoorDao {
     @Query("SELECT * FROM BasicInfoDB")
     LiveData<List<BasicInfoDB>> loadAllBasicInfoLive();   //only can use LiveData<> !
 
-    @Query("SELECT roomname FROM BasicInfoDB WHERE id = :ID")
-    String loadRoomName(int ID);
+    @Query("SELECT roomname FROM BasicInfoDB WHERE roomId = :roomid")
+    String loadRoomName(int roomid);
 
     /**
      * IndoorDB的相关方法

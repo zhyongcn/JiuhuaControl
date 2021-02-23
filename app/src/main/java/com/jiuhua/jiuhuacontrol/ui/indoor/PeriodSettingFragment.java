@@ -224,7 +224,7 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
 
 
     @Override
-    public void onClick(View v) {
+    public void onClick(View v) {  //FIXME: 周期传送出去的温度不是 X10 的伪浮点！！
         switch (v.getId()) {
             case R.id.starttime:
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);//新建构造器
@@ -319,7 +319,7 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
                     dayPeriod.setDayPeriodName(editTextDayperiodName.getText().toString());
                     //写入数据库
                     indoorViewModel.insertPeriodDB(roomId);
-                    //send MQTT message
+                    //send MQTT message  TODO: 统一在传出环节使用假浮点？？
                     indoorViewModel.periodToDevice(roomId, indoorViewModel.currentlyPeriodDB.getOneRoomWeeklyPeriod());
                     getActivity().onBackPressed();
                 }

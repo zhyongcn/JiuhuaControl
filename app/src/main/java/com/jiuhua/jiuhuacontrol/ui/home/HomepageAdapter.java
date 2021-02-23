@@ -42,17 +42,15 @@ public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyView
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());  //首先要获取父图层的内容
         View itemView = layoutInflater.inflate(R.layout.home_cell_layout, parent, false);  //view是在父图层的基础上再吹气子图层
         final MyViewHolder holder = new MyViewHolder(itemView);  //赋值于一个句柄以方便其他操作。
-        holder.itemView.setOnClickListener(new View.OnClickListener() {  //单个条目的整体点击。
-            @Override
-            public void onClick(View v) {
-                int k = holder.getAdapterPosition();   //获取具体哪个条目了
-                int roomId = allBasicInfo.get(k).getRoomId();
-                String currentRoomName = allBasicInfo.get(k).getRoomName();
-                Bundle bundle = new Bundle();
-                bundle.putInt("roomId", roomId);//因为roomid还没有确定好，所以暂时不传这个参数。
-                bundle.putString("roomName", currentRoomName);
-                Navigation.findNavController(v).navigate(R.id.action_nav_home_to_indoorHostFragment, bundle);
-            }
+        //单个条目的整体点击。
+        holder.itemView.setOnClickListener(v -> {
+            int k = holder.getAdapterPosition();   //获取具体哪个条目了
+            int roomId = allBasicInfo.get(k).getRoomId();
+            String currentRoomName = allBasicInfo.get(k).getRoomName();
+            Bundle bundle = new Bundle();
+            bundle.putInt("roomId", roomId);//因为roomid还没有确定好，所以暂时不传这个参数。
+            bundle.putString("roomName", currentRoomName);
+            Navigation.findNavController(v).navigate(R.id.action_nav_home_to_indoorHostFragment, bundle);
         });
         return holder;
     }

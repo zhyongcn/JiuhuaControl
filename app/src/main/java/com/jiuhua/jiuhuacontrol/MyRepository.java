@@ -18,6 +18,7 @@ import com.jiuhua.mqttsample.IGetMessageCallBack;
 import com.jiuhua.mqttsample.MQTTService;
 import com.jiuhua.mqttsample.MyServiceConnection;
 
+import java.util.Date;
 import java.util.List;
 
 public class MyRepository implements IGetMessageCallBack {
@@ -123,8 +124,8 @@ public class MyRepository implements IGetMessageCallBack {
     }
 
     //获取普通房间的名字
-    public String loadRoomName(int id) {
-        return indoorDao.loadRoomName(id);
+    public String loadRoomName(int roomid) {
+        return indoorDao.loadRoomName(roomid);
     }
 
     /**
@@ -293,7 +294,7 @@ public class MyRepository implements IGetMessageCallBack {
     public void setMessage(final String message) {
         //解析json和写入数据库，不能在UI线程，是否应该开辟一个线程池来处理??。
         //use mqtt message here.
-        //回传手机的信息都在 86518/JYCFGC/6-2-3401/HandT 。
+        //回传手机的信息都在 86518/JYCFGC/6-2-3401/phone
 
         new Thread(new Runnable() {
             IndoorDB indoorDB;
@@ -306,6 +307,7 @@ public class MyRepository implements IGetMessageCallBack {
                     Log.d("recivedMQTT", message);
                     indoorDB = gson.fromJson(message, IndoorDB.class);
                     if (indoorDB != null) {
+                        indoorDB.setTimeStamp(new Date().getTime()/1000);
                         insertIndoorDB(indoorDB);
                         Log.d("IndoorDB", gson.toJson(indoorDB));
                     }
