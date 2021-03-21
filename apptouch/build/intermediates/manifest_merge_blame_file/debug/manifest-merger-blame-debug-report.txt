@@ -28,17 +28,23 @@
 16    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 16-->D:\Git\androidproject\JiuhuaControl\apptouch\src\main\AndroidManifest.xml:10:5-81
 16-->D:\Git\androidproject\JiuhuaControl\apptouch\src\main\AndroidManifest.xml:10:22-78
-17
-18    <application android:allowBackup="true" >
-18-->D:\Git\androidproject\JiuhuaControl\apptouch\src\main\AndroidManifest.xml:12:5-19:19
-18-->D:\Git\androidproject\JiuhuaControl\apptouch\src\main\AndroidManifest.xml:13:9-35
-19        <activity
-19-->D:\Git\androidproject\JiuhuaControl\apptouch\src\main\AndroidManifest.xml:14:9-18:20
-20            android:name="com.espressif.iot.esptouch.demo_activity.EsptouchDemoActivity"
-20-->D:\Git\androidproject\JiuhuaControl\apptouch\src\main\AndroidManifest.xml:15:13-89
-21            android:screenOrientation="portrait" >
-21-->D:\Git\androidproject\JiuhuaControl\apptouch\src\main\AndroidManifest.xml:16:13-49
-22        </activity>
-23    </application>
-24
-25</manifest>
+17    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+17-->D:\Git\androidproject\JiuhuaControl\apptouch\src\main\AndroidManifest.xml:11:5-84
+17-->D:\Git\androidproject\JiuhuaControl\apptouch\src\main\AndroidManifest.xml:11:22-82
+18    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+18-->D:\Git\androidproject\JiuhuaControl\apptouch\src\main\AndroidManifest.xml:12:5-78
+18-->D:\Git\androidproject\JiuhuaControl\apptouch\src\main\AndroidManifest.xml:12:22-76
+19
+20    <application android:allowBackup="true" >
+20-->D:\Git\androidproject\JiuhuaControl\apptouch\src\main\AndroidManifest.xml:14:5-21:19
+20-->D:\Git\androidproject\JiuhuaControl\apptouch\src\main\AndroidManifest.xml:15:9-35
+21        <activity
+21-->D:\Git\androidproject\JiuhuaControl\apptouch\src\main\AndroidManifest.xml:16:9-20:20
+22            android:name="com.espressif.iot.esptouch.demo_activity.EsptouchDemoActivity"
+22-->D:\Git\androidproject\JiuhuaControl\apptouch\src\main\AndroidManifest.xml:17:13-89
+23            android:screenOrientation="portrait" >
+23-->D:\Git\androidproject\JiuhuaControl\apptouch\src\main\AndroidManifest.xml:18:13-49
+24        </activity>
+25    </application>
+26
+27</manifest>
