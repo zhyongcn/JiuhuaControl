@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">九华暖通</string>
+    <string name="app_name">JiuHua HVAC</string>
     <string name="button1name">状态/刷新</string>
     <string name="button2name">文档/报修</string>
     <string name="button3name">手动</string>
@@ -58,8 +58,8 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
-    <string name="menu_item_about">About App</string>
-    <string name="about_app_version">App Version: %s</string>
+    <string name="menu_item_about">About EspTouch</string>
+    <string name="about_app_version">EspTouch Version: %s</string>
 
     <string name="esptouch_message_permission">APP require Location permission to get Wi-Fi information. \nClick to request permission</string>
     <string name="esptouch_message_location">Please turn on GPS to get Wi-Fi information.</string>

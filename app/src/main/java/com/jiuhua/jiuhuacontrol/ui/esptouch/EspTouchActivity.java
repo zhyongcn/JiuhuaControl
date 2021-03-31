@@ -1,8 +1,13 @@
 package com.jiuhua.jiuhuacontrol.ui.esptouch;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +18,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.espressif.iot.esptouch.EsptouchTask;
 import com.espressif.iot.esptouch.IEsptouchResult;
@@ -24,8 +32,10 @@ import com.jiuhua.jiuhuacontrol.databinding.ActivityEsptouchBinding;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class EspTouchActivity extends EspTouchActivityAbs {
     private static final String TAG = com.jiuhua.jiuhuacontrol.ui.esptouch.EspTouchActivity.class.getSimpleName();
@@ -40,6 +50,25 @@ public class EspTouchActivity extends EspTouchActivityAbs {
     private byte[] mSsidBytes;
     private String mBssid;
 
+    private MutableLiveData<String> mBroadcastData;
+    private Map<String, Object> mCacheMap;
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action == null) {
+                return;
+            }
+
+            switch (action) {
+                case WifiManager.NETWORK_STATE_CHANGED_ACTION:
+                case LocationManager.PROVIDERS_CHANGED_ACTION:
+                    mBroadcastData.setValue(action);
+                    break;
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +76,7 @@ public class EspTouchActivity extends EspTouchActivityAbs {
         setContentView(mBinding.getRoot());
         mBinding.confirmBtn.setOnClickListener(v -> executeEsptouch());
 
-        mBinding.cancelButton.setOnClickListener( v-> {
+        mBinding.cancelButton.setOnClickListener(v -> {
             showProgress(false);
             if (mTask != null) {
                 mTask.cancelEsptouch();
@@ -59,7 +88,15 @@ public class EspTouchActivity extends EspTouchActivityAbs {
             requestPermissions(permissions, REQUEST_PERMISSION);
         }
 
-        EspTouchApp.getInstance().observeBroadcast(this, broadcast -> {
+        mCacheMap = new HashMap<>();
+        mBroadcastData = new MutableLiveData<>();
+        IntentFilter filter = new IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            filter.addAction(LocationManager.PROVIDERS_CHANGED_ACTION);
+        }
+        registerReceiver(mReceiver, filter);
+
+        observeBroadcast(this, broadcast -> {
             Log.d(TAG, "onCreate: Broadcast=" + broadcast);
             onWifiChanged();
         });
@@ -68,6 +105,27 @@ public class EspTouchActivity extends EspTouchActivityAbs {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(mReceiver);
+    }
+    public void observeBroadcast(LifecycleOwner owner, Observer<String> observer) {
+        mBroadcastData.observe(owner, observer);
+    }
+    public void observeBroadcastForever(Observer<String> observer) {
+        mBroadcastData.observeForever(observer);
+    }
+    public void removeBroadcastObserver(Observer<String> observer) {
+        mBroadcastData.removeObserver(observer);
+    }
+    public void putCache(String key, Object value) {
+        mCacheMap.put(key, value);
+    }
+    public Object takeCache(String key) {
+        return mCacheMap.remove(key);
     }
 
     @Override

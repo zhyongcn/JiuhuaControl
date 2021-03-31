@@ -12,7 +12,6 @@
 
     <!--EspTouchApp是否占用了唯一的application资源，对以后的开发不利 //TODO：   -->
     <application
-        android:name=".ui.esptouch.EspTouchApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:supportsRtl="true"
