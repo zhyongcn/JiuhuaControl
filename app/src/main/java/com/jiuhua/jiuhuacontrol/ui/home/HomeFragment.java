@@ -43,7 +43,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView = view.findViewById(R.id.recyclerView_esp);
 
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         homepageAdapter = new HomepageAdapter(homeViewModel);//这个类以及需要的参数是自己写的。

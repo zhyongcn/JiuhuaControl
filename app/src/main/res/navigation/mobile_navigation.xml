@@ -84,8 +84,9 @@
         android:label="删除周期"
         tools:layout="@layout/fragment_period_delete" />
     <activity
-        android:id="@+id/esptouchDemoActivity"
-        android:name="com.espressif.iot.esptouch.demo_activity.EsptouchDemoActivity"
-        android:label="EsptouchDemoActivity" />
+        android:id="@+id/espTouchActivity"
+        android:name="com.jiuhua.jiuhuacontrol.ui.esptouch.EspTouchActivity"
+        android:label="EspTouchActivity"
+        android:layout="@layout/activity_esptouch" />
 
 </navigation>
