@@ -25,11 +25,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar); //顶部的工具条
         setSupportActionBar(toolbar); //appcompatactivity的一个方法，
-        FloatingActionButton fab = findViewById(R.id.fab);//浮动的工具园
-        fab.setOnClickListener(view -> {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-        });
+//        FloatingActionButton fab = findViewById(R.id.fab);//浮动的工具园
+//        fab.setOnClickListener(view -> {
+////                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+////                        .setAction("Action", null).show();
+//        });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);//滑动的侧边栏
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each

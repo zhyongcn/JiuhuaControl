@@ -50,6 +50,7 @@ public class EspTouchActivity extends EspTouchActivityAbs {
     private byte[] mSsidBytes;
     private String mBssid;
 
+    //以下三句来自EspTouchApp
     private MutableLiveData<String> mBroadcastData;
     private Map<String, Object> mCacheMap;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -88,6 +89,7 @@ public class EspTouchActivity extends EspTouchActivityAbs {
             requestPermissions(permissions, REQUEST_PERMISSION);
         }
 
+        //以下五句来自EspTouchApp
         mCacheMap = new HashMap<>();
         mBroadcastData = new MutableLiveData<>();
         IntentFilter filter = new IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION);
@@ -96,6 +98,7 @@ public class EspTouchActivity extends EspTouchActivityAbs {
         }
         registerReceiver(mReceiver, filter);
 
+        //修改了
         observeBroadcast(this, broadcast -> {
             Log.d(TAG, "onCreate: Broadcast=" + broadcast);
             onWifiChanged();
@@ -107,6 +110,7 @@ public class EspTouchActivity extends EspTouchActivityAbs {
         }
     }
 
+    //以下六个方法来自EspTpuchApp
     @Override
     protected void onDestroy() {
         super.onDestroy();
