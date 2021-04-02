@@ -15,7 +15,7 @@
         android:icon="@drawable/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
-        android:label="周先生雅居"
+        android:label="周control"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".MainActivity"
