@@ -1,0 +1,23 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.espressif.iot.esptouch2"
+4    android:versionCode="4"
+5    android:versionName="2.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+8-->D:\Git\androidproject\JiuhuaControl\esptouch-v2\src\main\AndroidManifest.xml
+9        android:targetSdkVersion="30" />
+9-->D:\Git\androidproject\JiuhuaControl\esptouch-v2\src\main\AndroidManifest.xml
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->D:\Git\androidproject\JiuhuaControl\esptouch-v2\src\main\AndroidManifest.xml:4:5-67
+11-->D:\Git\androidproject\JiuhuaControl\esptouch-v2\src\main\AndroidManifest.xml:4:22-64
+12    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+12-->D:\Git\androidproject\JiuhuaControl\esptouch-v2\src\main\AndroidManifest.xml:5:5-76
+12-->D:\Git\androidproject\JiuhuaControl\esptouch-v2\src\main\AndroidManifest.xml:5:22-73
+13    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+13-->D:\Git\androidproject\JiuhuaControl\esptouch-v2\src\main\AndroidManifest.xml:6:5-86
+13-->D:\Git\androidproject\JiuhuaControl\esptouch-v2\src\main\AndroidManifest.xml:6:22-83
+14
+15</manifest>

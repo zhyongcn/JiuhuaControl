@@ -21,6 +21,7 @@ public class UserinfoActivity extends AppCompatActivity {
     private String room7name;
     private String room8name;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
