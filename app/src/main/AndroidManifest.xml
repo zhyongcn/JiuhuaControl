@@ -30,6 +30,7 @@
         <activity android:name=".ui.esptouch.EspTouchActivity"
             android:exported="true"
             android:label="@string/esptouch1_title"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.esptouch.EspTouchActivityAbs"/>
 
