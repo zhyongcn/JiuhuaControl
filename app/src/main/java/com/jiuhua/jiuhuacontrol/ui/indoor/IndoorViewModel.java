@@ -108,7 +108,7 @@ public class IndoorViewModel extends AndroidViewModel {
         commandESP.setSettingfanSpeed(Constants.fanSpeed_STOP);
         myRepository.commandToDevice(commandESP);
         commandESP.setRoomId(roomid);
-        commandESP.setDeviceType(Constants.deviceType_floorheater);
+        commandESP.setDeviceType(Constants.deviceType_floorwatershed);
         commandESP.setRoomState(Constants.roomState_OFF);
         myRepository.commandToDevice(commandESP);
     }
@@ -131,7 +131,7 @@ public class IndoorViewModel extends AndroidViewModel {
     //宴会按钮实现方法，这个好像没有用到。
     public void feastRoomDevice(int roomid) {
         commandESP.setRoomId(roomid);
-        commandESP.setDeviceType(Constants.deviceType_floorheater);
+        commandESP.setDeviceType(Constants.deviceType_floorwatershed);
         //判断一下是否在宴会状态
         if (commandESP.getRoomState() == Constants.roomState_FEAST) {
             commandESP.setRoomState(Constants.roomState_MANUAL);
@@ -157,7 +157,7 @@ public class IndoorViewModel extends AndroidViewModel {
     //地暖按钮实现方法
     public void floorRoomDevice(int roomid) {
         commandESP.setRoomId(roomid);
-        commandESP.setDeviceType(Constants.deviceType_floorheater);
+        commandESP.setDeviceType(Constants.deviceType_floorwatershed);
         myRepository.commandToDevice(commandESP);
     }
 
@@ -184,7 +184,7 @@ public class IndoorViewModel extends AndroidViewModel {
         commandESP.setSetting_temp(temp);//传输的X10 的假浮点
         myRepository.commandToDevice(commandESP);
         commandESP.setRoomId(roomid);
-        commandESP.setDeviceType(Constants.deviceType_floorheater);
+        commandESP.setDeviceType(Constants.deviceType_floorwatershed);
         commandESP.setSetting_temp(temp);//传输的X10 的假浮点
         myRepository.commandToDevice(commandESP);
     }
@@ -196,7 +196,7 @@ public class IndoorViewModel extends AndroidViewModel {
         commandESP.setSetting_humidity(temp);//传输的X10 的假浮点
         myRepository.commandToDevice(commandESP);
         commandESP.setRoomId(roomid);
-        commandESP.setDeviceType(Constants.deviceType_floorheater);
+        commandESP.setDeviceType(Constants.deviceType_floorwatershed);
         commandESP.setSetting_humidity(temp);//传输的X10 的假浮点
         myRepository.commandToDevice(commandESP);
     }

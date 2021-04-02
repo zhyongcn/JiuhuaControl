@@ -15,11 +15,13 @@ public interface Constants {
     int fanSpeed_AUTO = 4;
 
     int deviceType_fancoil = 0;
-    int deviceType_floorheater = 1;
+    int deviceType_floorwatershed = 1;
     int deviceType_radiator = 2;
     int deviceType_boiler = 3;
     int deviceType_heatpump = 4;
     int deviceType_DHTsensor = 5;
+    int deviceType_NTCsensor = 6;
+    int deviceType_phone = 7;
 
     int Monday = 0;
     int Tuesday = 1;

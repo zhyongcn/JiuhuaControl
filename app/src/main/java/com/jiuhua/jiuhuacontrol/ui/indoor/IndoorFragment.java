@@ -15,14 +15,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.jiuhua.jiuhuacontrol.R;
-import com.jiuhua.jiuhuacontrol.database.IndoorDB;
 import com.jiuhua.jiuhuacontrol.databinding.FragmentIndoorBinding;
-
-import java.util.List;
 
 public class IndoorFragment extends Fragment {
 
@@ -217,7 +213,7 @@ public class IndoorFragment extends Fragment {
         binding.buttonFeastDehumidity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (indoorViewModel.commandESP.getDeviceType() == Constants.deviceType_floorheater) {
+                if (indoorViewModel.commandESP.getDeviceType() == Constants.deviceType_floorwatershed) {
                     indoorViewModel.feastRoomDevice(roomId);
                     binding.buttonFeastDehumidity.setBackgroundColor(Color.parseColor("#00FF00"));//先显示，模块数据回来会更改的
                     binding.buttonStop.setBackgroundColor(Color.argb(20, 0, 0, 0));
