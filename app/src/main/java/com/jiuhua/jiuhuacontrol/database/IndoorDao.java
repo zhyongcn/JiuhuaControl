@@ -48,8 +48,8 @@ public interface IndoorDao {
     void deleteAllIndoorDB();
 
     //    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)  //TODO  每次编译都出错，能正常运行，太烦了，才加上的。
-    @Query( "SELECT * , MAX(timeStamp)  FROM IndoorDB WHERE device_type = :devicetype GROUP BY room_id" )
-    LiveData<List<IndoorDB>> loadLatestIndoorDBsLive(int devicetype);   //only can use LiveData<> !   这里添加了Max（timestamp）一列，但是IndoorDB里面没有。
+    @Query( "SELECT * , MAX(timeStamp)  FROM IndoorDB WHERE device_type = :devicetypeId GROUP BY room_id" )
+    LiveData<List<IndoorDB>> loadLatestIndoorDBsLive(int devicetypeId);   //only can use LiveData<> !   这里添加了Max（timestamp）一列，但是IndoorDB里面没有。
 
     /**
      * PeroidDB的相关方法
