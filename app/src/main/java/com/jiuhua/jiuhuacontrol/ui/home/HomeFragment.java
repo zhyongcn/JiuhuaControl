@@ -77,15 +77,29 @@ public class HomeFragment extends Fragment {
 
         buttonInHome.setOnClickListener(v -> {
             //temporary test code
-            homeViewModel.insertRoomName(new BasicInfoDB(1,"客厅",0, "扬子风盘", "FP-51", true, true,
+            homeViewModel.insertRoomName(new BasicInfoDB(1,"房间一",0, "扬子风盘", "FP-51", true, true,
                     true, null, null, false));
-            homeViewModel.insertRoomName(new BasicInfoDB(2,"餐厅", 0,"约克", "FP-68", false, true,
+            homeViewModel.insertRoomName(new BasicInfoDB(2,"房间二", 0,"约克", "FP-68", false, true,
                     true, null, null, false));
-            homeViewModel.insertRoomName(new BasicInfoDB(3,"主卧室",0, "麦克维尔", "FP-120", true, false,
+            homeViewModel.insertRoomName(new BasicInfoDB(3,"房间三",0, "麦克维尔", "FP-120", true, false,
                     true, null, null, false));
-            homeViewModel.insertRoomName(new BasicInfoDB(4,"次卧室",0, "约克", "FP-68", false, true,
+            homeViewModel.insertRoomName(new BasicInfoDB(4,"房间四",0, "约克", "FP-68", false, true,
                     true, null, null, false));
-            homeViewModel.insertRoomName(new BasicInfoDB(5,"北卧室",0, "麦克维尔", "FP-120", true, false,
+            homeViewModel.insertRoomName(new BasicInfoDB(5,"房间五",0, "麦克维尔", "FP-120", true, false,
+                    true, null, null, false));
+            homeViewModel.insertRoomName(new BasicInfoDB(6,"房间六",0, "扬子风盘", "FP-51", true, true,
+                    true, null, null, false));
+            homeViewModel.insertRoomName(new BasicInfoDB(7,"房间七", 0,"约克", "FP-68", false, true,
+                    true, null, null, false));
+            homeViewModel.insertRoomName(new BasicInfoDB(8,"房间八",0, "麦克维尔", "FP-120", true, false,
+                    true, null, null, false));
+            homeViewModel.insertRoomName(new BasicInfoDB(9,"房间九",0, "约克", "FP-68", false, true,
+                    true, null, null, false));
+            homeViewModel.insertRoomName(new BasicInfoDB(10,"房间十",0, "麦克维尔", "FP-120", true, false,
+                    true, null, null, false));
+            homeViewModel.insertRoomName(new BasicInfoDB(11,"房间十一",0, "麦克维尔", "FP-120", true, false,
+                    true, null, null, false));
+            homeViewModel.insertRoomName(new BasicInfoDB(12,"房间十二",0, "麦克维尔", "FP-120", true, false,
                     true, null, null, false));
         });
 

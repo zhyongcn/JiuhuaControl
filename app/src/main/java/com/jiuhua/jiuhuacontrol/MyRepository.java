@@ -13,6 +13,7 @@ import com.jiuhua.jiuhuacontrol.database.IndoorDB;
 import com.jiuhua.jiuhuacontrol.database.IndoorDao;
 import com.jiuhua.jiuhuacontrol.database.MyIndoorsDatabase;
 import com.jiuhua.jiuhuacontrol.database.PeriodDB;
+import com.jiuhua.jiuhuacontrol.ui.indoor.Constants;
 import com.jiuhua.mqttsample.IGetMessageCallBack;
 import com.jiuhua.mqttsample.MQTTService;
 import com.jiuhua.mqttsample.MyServiceConnection;
@@ -45,7 +46,7 @@ public class MyRepository implements IGetMessageCallBack {
         //获取数据库里的数据
 //        allBasicInfo = indoorDao.loadAllBasicInfo();  //相关于Dao里面的一个有问题的方法。好像不能用。
         allBasicInfoLive = indoorDao.loadAllBasicInfoLive();
-        allLatestIndoorDBsLive = indoorDao.loadLatestIndoorDBsLive();
+        allLatestIndoorDBsLive = indoorDao.loadLatestIndoorDBsLive(Constants.deviceType_floorwatershed);
         allLatestPeriodDBsLive = indoorDao.loadLatestPeriodDBsLive();
 
         serviceConnection = new MyServiceConnection();//新建连接服务的实例

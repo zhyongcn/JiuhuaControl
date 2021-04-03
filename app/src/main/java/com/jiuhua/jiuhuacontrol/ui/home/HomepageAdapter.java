@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jiuhua.jiuhuacontrol.R;
 import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
 import com.jiuhua.jiuhuacontrol.database.IndoorDB;
+import com.jiuhua.jiuhuacontrol.ui.indoor.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +49,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyView
             int roomId = allBasicInfo.get(k).getRoomId();
             String currentRoomName = allBasicInfo.get(k).getRoomName();
             Bundle bundle = new Bundle();
-            bundle.putInt("roomId", roomId);//因为roomid还没有确定好，所以暂时不传这个参数。
+            bundle.putInt("roomId", roomId);
             bundle.putString("roomName", currentRoomName);
             Navigation.findNavController(v).navigate(R.id.action_nav_home_to_indoorHostFragment, bundle);
         });
@@ -65,14 +66,20 @@ public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyView
             holder.textViewRoomTemperature.setText("当前温度：" + indoorDB.getCurrentTemperature() / 10 + " C");
             holder.textViewRoomHumidity.setText("当前湿度：" + indoorDB.getCurrentHumidity() / 10 + "%RH");
             switch (indoorDB.getRoomStatus()) {
-                case 0:
+                case Constants.roomState_OFF:
                     holder.textViewRoomStatus.setText("当前状态：停止运行");
                     break;
-                case 1:
+                case Constants.roomState_MANUAL:
                     holder.textViewRoomStatus.setText("当前状态：手动运行");
                     break;
-                case 2:
+                case Constants.roomState_AUTO:
                     holder.textViewRoomStatus.setText("当前状态：自动运行");
+                    break;
+                case Constants.roomState_DEHUMIDITY:
+                    holder.textViewRoomStatus.setText("当前状态： 除湿运行");
+                    break;
+                case Constants.roomState_FEAST:
+                    holder.textViewRoomStatus.setText("当前状态： 宴会运行");
                     break;
             }
         }
