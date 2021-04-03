@@ -29,12 +29,11 @@ public class MQTTService extends Service {
     private static MqttAndroidClient client;//在init（）里面新建
     private MqttConnectOptions conOpt;//在init（）里面新建
 
-//    private String host = "tcp://106.13.114.16:1883";// wyybaiducloud
     private String host = "tcp://180.102.131.255:1883";// ctyun
     private String userName = "admin";
     private String passWord = "password";
-    private static String familyTopic = "86518/YXHY/12-1-101/phone";      //要订阅的主题
-    private String clientId = "androidId--YXHY12-1-101";//客户端标识
+    private static String familyTopic = "86518/YXHY/12-1-101/phone";      //FIXME:要订阅的主题
+    private String clientId = "androidId--YXHY12-1-101";//FIXME: 不同的用户需要不同的客户端标识
     private IGetMessageCallBack IGetMessageCallBack;//将在什么地方使用？mqttcallback实例当中改写原来的方法
 
 
@@ -42,7 +41,7 @@ public class MQTTService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.e(getClass().getName(), "onCreate");
-        init();//放在onCreate里面，这个service启动的时候调用了。
+        init();//放在onCreate里面，这个service启动的时候调用了。TODO：上面的参数（host，id等等）是否可以传入？？
     }
 
     //public static void publish(String msg){//定义了发布的方法，其他的地方就可以调用了

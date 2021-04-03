@@ -22,11 +22,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.jiuhua.jiuhuacontrol.Constants;
 import com.jiuhua.jiuhuacontrol.R;
 import com.jiuhua.jiuhuacontrol.database.DayPeriod;
-
-import java.util.Iterator;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static java.lang.String.valueOf;

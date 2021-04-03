@@ -13,7 +13,6 @@ import com.jiuhua.jiuhuacontrol.database.IndoorDB;
 import com.jiuhua.jiuhuacontrol.database.IndoorDao;
 import com.jiuhua.jiuhuacontrol.database.MyIndoorsDatabase;
 import com.jiuhua.jiuhuacontrol.database.PeriodDB;
-import com.jiuhua.jiuhuacontrol.ui.indoor.Constants;
 import com.jiuhua.mqttsample.IGetMessageCallBack;
 import com.jiuhua.mqttsample.MQTTService;
 import com.jiuhua.mqttsample.MyServiceConnection;
@@ -61,7 +60,7 @@ public class MyRepository implements IGetMessageCallBack {
 
         mqttService = serviceConnection.getMqttService();  //这句可有可无，有就用小写的，没有就用大写的MQTTService
 //        mqttService.publish("86518/JYCFGC/6-2-3401/Room" + roomID, mqttString, 1, true);
-        MQTTService.publish("86518/JYCFGC/6-2-3401/Room" + roomID, jsonCommandESP, 1, true);
+        MQTTService.publish(Constants.MQTT_publish_Topic_prefix + roomID, jsonCommandESP, 1, true);
         Log.d("jsonToDevice", jsonCommandESP);
     }
 
@@ -86,7 +85,7 @@ public class MyRepository implements IGetMessageCallBack {
             }
             commandPeriod.setPeriod(temparray);
             String s = gson.toJson(commandPeriod);
-            MQTTService.publish("86518/JYCFGC/6-2-3401/Room" + roomid, s, 1, true);
+            MQTTService.publish(Constants.MQTT_publish_Topic_prefix + roomid, s, 1, true);
 
             Log.d("periodToDevice", s);
         }

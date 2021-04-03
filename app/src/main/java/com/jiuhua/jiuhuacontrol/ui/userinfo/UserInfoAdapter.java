@@ -15,7 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.jiuhua.jiuhuacontrol.R;
 import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
-import com.jiuhua.jiuhuacontrol.ui.indoor.Constants;
+import com.jiuhua.jiuhuacontrol.Constants;
 import com.jiuhua.mqttsample.MQTTService;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.jiuhua.jiuhuacontrol.ui.indoor;
+package com.jiuhua.jiuhuacontrol;
 
 //通过接口使用常量，比象C语言那样define定义，比枚举更好，少占用空间。速度快。
 public interface Constants {
@@ -30,5 +30,13 @@ public interface Constants {
     int Friday = 4;
     int Saturday = 5;
     int Sunday = 6;
+
+    //TODO: 字符串常量 接受的topic 发送的Topic等等 ^=^
+    String MQTT_HOST = "tcp://180.102.131.255:1883";
+    String MQTT_userName = "jiuhuaHVAC";
+    String MQTT_password = "password";
+    String MQTT_clientId = "androidId--YXHY12-1-101";
+    String FAMILY_TOPIC = "86518/YXHY/12-1-101/phone";
+    String MQTT_publish_Topic_prefix = "86518/YXHY/12-1-101/Room";
 
 }

@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jiuhua.jiuhuacontrol.R;
 import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
 import com.jiuhua.jiuhuacontrol.database.IndoorDB;
-import com.jiuhua.jiuhuacontrol.ui.indoor.Constants;
+import com.jiuhua.jiuhuacontrol.Constants;
 
 import java.util.List;
 
@@ -53,14 +53,18 @@ public class HomeFragment extends Fragment {
         recyclerView.setAdapter(homepageAdapter);//adapter肯定是必须的！！
 
         //
-        homeViewModel.getAllBasicInfoLive().observe(getViewLifecycleOwner(), new Observer<List<BasicInfoDB>>() {
-            @Override
-            public void onChanged(List<BasicInfoDB> basicInfoDBS) {
+        homeViewModel.getAllBasicInfoLive().observe(getViewLifecycleOwner(), basicInfoDBS -> {
 //                int temp = homepageAdapter.getItemCount();
-                homepageAdapter.setAllBasicInfo(basicInfoDBS);   //设置数据
+            homepageAdapter.setAllBasicInfo(basicInfoDBS);   //设置数据
 //                homepageAdapter.notifyDataSetChanged();     //没有必要两次去刷新视图
-            }
         });
+//非lambda用法
+//        homeViewModel.getAllBasicInfoLive().observe(getViewLifecycleOwner(), new Observer<List<BasicInfoDB>>() {
+//            @Override
+//            public void onChanged(List<BasicInfoDB> basicInfoDBS) {
+//                homepageAdapter.setAllBasicInfo(basicInfoDBS);   //设置数据
+//            }
+//        });
 
         homeViewModel.getAllLatestIndoorDBsLive(Constants.deviceType_floorwatershed).observe(getViewLifecycleOwner(), new Observer<List<IndoorDB>>() {
             @Override

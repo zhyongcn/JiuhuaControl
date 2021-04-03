@@ -8,7 +8,6 @@ import androidx.lifecycle.LiveData;
 import com.jiuhua.jiuhuacontrol.MyRepository;
 import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
 import com.jiuhua.jiuhuacontrol.database.IndoorDB;
-import com.jiuhua.jiuhuacontrol.ui.indoor.Constants;
 
 import java.util.List;
 

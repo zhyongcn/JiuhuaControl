@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jiuhua.jiuhuacontrol.R;
 import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
 import com.jiuhua.jiuhuacontrol.database.IndoorDB;
-import com.jiuhua.jiuhuacontrol.ui.indoor.Constants;
+import com.jiuhua.jiuhuacontrol.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
