@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jiuhua.jiuhuacontrol.R;
 import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
 import com.jiuhua.jiuhuacontrol.database.IndoorDB;
+import com.jiuhua.jiuhuacontrol.ui.indoor.Constants;
 
 import java.util.List;
 
@@ -61,7 +62,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        homeViewModel.getAllLatestIndoorDBsLive().observe(getViewLifecycleOwner(), new Observer<List<IndoorDB>>() {
+        homeViewModel.getAllLatestIndoorDBsLive(Constants.deviceType_floorwatershed).observe(getViewLifecycleOwner(), new Observer<List<IndoorDB>>() {
             @Override
             public void onChanged(List<IndoorDB> indoorDBS) {
                 homepageAdapter.setAllLatestIndoorDBs(indoorDBS);//设置数据

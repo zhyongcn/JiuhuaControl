@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import com.jiuhua.jiuhuacontrol.MyRepository;
 import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
 import com.jiuhua.jiuhuacontrol.database.IndoorDB;
+import com.jiuhua.jiuhuacontrol.ui.indoor.Constants;
 
 import java.util.List;
 
@@ -33,8 +34,8 @@ public class HomeViewModel extends AndroidViewModel {
         return myRepository.getAllBasicInfoLive();
     }
 
-    public LiveData<List<IndoorDB>> getAllLatestIndoorDBsLive() {
-        return myRepository.getAllLatestIndoorDBsLive();
+    public LiveData<List<IndoorDB>> getAllLatestIndoorDBsLive(int devicetypeId) {
+        return myRepository.getAllLatestIndoorDBsLive(devicetypeId);
     }
 
     //获取普通房间的名字

@@ -1,6 +1,6 @@
 package com.jiuhua.jiuhuacontrol.ui.indoor;
 
-//todo: 如果使用 static final const define int roomStateOFF = 0 就像C语言的define 常量是不是更好，少占用空间。速度快。
+//通过接口使用常量，比象C语言那样define定义，比枚举更好，少占用空间。速度快。
 public interface Constants {
     int roomState_OFF = 0;
     int roomState_MANUAL = 1;

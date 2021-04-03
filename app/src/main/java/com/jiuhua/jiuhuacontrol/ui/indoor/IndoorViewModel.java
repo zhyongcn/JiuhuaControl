@@ -205,8 +205,8 @@ public class IndoorViewModel extends AndroidViewModel {
     /**
      * 包装 myRepository 里的方法：
      */
-    public LiveData<List<IndoorDB>> getAllLatestIndoorDBsLive() {
-        return myRepository.getAllLatestIndoorDBsLive();
+    public LiveData<List<IndoorDB>> getAllLatestIndoorDBsLive(int devicetypeId) {
+        return myRepository.getAllLatestIndoorDBsLive(devicetypeId);
     }
 
     public LiveData<List<PeriodDB>> getAllLatestPeriodDBsLive() {

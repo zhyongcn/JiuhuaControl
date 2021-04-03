@@ -46,7 +46,6 @@ public class MyRepository implements IGetMessageCallBack {
         //获取数据库里的数据
 //        allBasicInfo = indoorDao.loadAllBasicInfo();  //相关于Dao里面的一个有问题的方法。好像不能用。
         allBasicInfoLive = indoorDao.loadAllBasicInfoLive();
-        allLatestIndoorDBsLive = indoorDao.loadLatestIndoorDBsLive(Constants.deviceType_floorwatershed);
         allLatestPeriodDBsLive = indoorDao.loadLatestPeriodDBsLive();
 
         serviceConnection = new MyServiceConnection();//新建连接服务的实例
@@ -144,7 +143,9 @@ public class MyRepository implements IGetMessageCallBack {
     }
 
     //获取普通房间的全部信息
-    public LiveData<List<IndoorDB>> getAllLatestIndoorDBsLive() {
+    public LiveData<List<IndoorDB>> getAllLatestIndoorDBsLive( int devicetypeId) {
+        //获取房间的最新信息指定了参数设备类型，继续包装下去，让调用者决定设备的类型。
+        allLatestIndoorDBsLive = indoorDao.loadLatestIndoorDBsLive(devicetypeId);
         //一般查询系统会自动安排在非主线程，不需要自己写。其他的需要自己写非主线程。？？right？？
         return allLatestIndoorDBsLive;
     }
