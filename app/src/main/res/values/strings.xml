@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">九华暖通</string>
+    <string name="app_name">JiuHua HVAC</string>
     <string name="button1name">状态/刷新</string>
     <string name="button2name">文档/报修</string>
     <string name="button3name">手动</string>
@@ -14,5 +14,75 @@
     <string name="textview5name">开发中（敬请期待）</string>
     <string name="textview6name">室外温度等等</string>
     <string name="textview7name">定时设置</string>
+    <string name="button_inhome">在家</string>
+    <string name="button_outhome">离家</string>
+    <string name="button_is_confort">舒适/经济</string>
+    <string name="button_is_sleep">起床/睡觉</string>
+    <string name="image">底纹图片</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">运行情况</string>
+    <string name="menu_userinfo">用户信息</string>
+    <string name="menu_equipment">配件</string>
+    <string name="menu_esptouch">配置联网信息</string>
+    <string name="menu_service">待建功能</string>
+    <string name="menu_store">待建功能</string>
+    <string name="communicate">Communicate</string>
+    <string name="menu_share">待建功能</string>
+    <string name="menu_send">待建功能</string>
+    <string name="coilvalveopen">两通阀开</string>
+    <string name="coilvalveshut">两通阀关</string>
+    <string name="floorvalveopen">地暖运行</string>
+    <string name="floorvalveshut">地暖关闭</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+    <string name="menu_item_about">About EspTouch</string>
+    <string name="about_app_version">EspTouch Version: %s</string>
+
+    <string name="esptouch_message_permission">APP require Location permission to get Wi-Fi information. \nClick to request permission</string>
+    <string name="esptouch_message_location">Please turn on GPS to get Wi-Fi information.</string>
+    <string name="esptouch_message_wifi_connection">Please connect Wi-Fi first.</string>
+    <string name="esptouch_message_wifi_frequency">Current Wi-Fi connection is 5G, but the device just support 2.4G.</string>
+
+    <string name="esptouch1_title">EspTouch</string>
+    <string name="esptouch1_about_version">EspTouch Version: %s</string>
+    <string name="esptouch1_ssid_title">SSID: </string>
+    <string name="esptouch1_bssid_title">BSSID: </string>
+    <string name="esptouch1_password_title">Password: </string>
+    <string name="esptouch1_device_count_title">Device count: </string>
+    <string name="esptouch1_package_broadcast">Broadcast</string>
+    <string name="esptouch1_package_multicast">Multicast</string>
+    <string name="esptouch1_confirm">Confirm</string>
+    <string name="esptouch1_wifi_5g_message">Device don\'t support 5G Wi-Fi, please make sure the currently connected Wi-Fi is 2.4G, or you can try multicast</string>
+    <string name="esptouch1_location_permission_title">⚠️Warning</string>
+    <string name="esptouch1_location_permission_message">On Android M or higher version, App can\'t get Wi-Fi connection information if you forbid Location permission.</string>
+    <string name="esptouch1_configuring_message">Esptouch is configuring, please wait for a moment…</string>
+    <string name="esptouch1_configure_wifi_change_message">Wi-Fi disconnected or changed</string>
+    <string name="esptouch1_configure_result_failed">EspTouch failed</string>
+    <string name="esptouch1_configure_result_failed_port">Create EspTouch task failed, the EspTouch port could be used by other thread</string>
+    <string name="esptouch1_configure_result_success">EspTouch 完成</string>
+    <string name="esptouch1_configure_result_success_item">BSSID = %1$s, InetAddress = %2$s</string>
 
 </resources>

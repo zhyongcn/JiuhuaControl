@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/nav_home"
+    tools:ignore="UnusedNavigation">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.jiuhua.jiuhuacontrol.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_nav_home_to_indoorHostFragment"
+            app:destination="@id/indoorHostFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_userinfo"
+        android:name="com.jiuhua.jiuhuacontrol.ui.userinfo.UserInfoFragment"
+        tools:layout="@layout/fragment_userinfo" />
+    <fragment
+        android:id="@+id/nav_equipmentManual"
+        android:name="com.jiuhua.jiuhuacontrol.ui.equipmentHandbook.EquipmentHandbookFragment"
+        tools:layout="@layout/fragment_equipment_handbook" />
+    <fragment
+        android:id="@+id/nav_service"
+        android:name="com.jiuhua.jiuhuacontrol.ui.service.ServiceFragment"
+        tools:layout="@layout/fragment_service" />
+    <fragment
+        android:id="@+id/nav_partsstore"
+        android:name="com.jiuhua.jiuhuacontrol.ui.partsstore.PartsStoreFragment"
+        tools:layout="@layout/fragment_service" />
+    <fragment
+        android:id="@+id/nav_share"
+        android:name="com.jiuhua.jiuhuacontrol.ui.share.ShareFragment"
+        tools:layout="@layout/fragment_share" />
+    <fragment
+        android:id="@+id/nav_send"
+        android:name="com.jiuhua.jiuhuacontrol.ui.send.SendFragment"
+        tools:layout="@layout/fragment_send" />
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.jiuhua.jiuhuacontrol.ui.indoor.HistoryFragment"
+        tools:layout="@layout/fragment_history" />
+    <fragment
+        android:id="@+id/peroidFragment"
+        android:name="com.jiuhua.jiuhuacontrol.ui.indoor.PeriodFragment"
+        android:label="周期设置"
+        tools:layout="@layout/fragment_peroid">
+        <action
+            android:id="@+id/action_peroidFragment_to_peroidSettingFragment"
+            app:destination="@id/peroidSettingFragment" />
+        <action
+            android:id="@+id/action_peroidFragment_to_periodDeleteFragment"
+            app:destination="@id/periodDeleteFragment" />
+    </fragment>
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.jiuhua.jiuhuacontrol.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" />
+    <fragment
+        android:id="@+id/indoorFragment"
+        android:name="com.jiuhua.jiuhuacontrol.ui.indoor.IndoorFragment"
+        android:label="运行情况" />
+    <fragment
+        android:id="@+id/indoorHostFragment"
+        android:name="com.jiuhua.jiuhuacontrol.ui.indoor.IndoorHostFragment"
+        android:label="运行情况"
+        tools:layout="@layout/fragment_indoor_host">
+        <action
+            android:id="@+id/action_indoorHostFragment_to_indoorFragment"
+            app:destination="@id/indoorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/peroidSettingFragment"
+        android:name="com.jiuhua.jiuhuacontrol.ui.indoor.PeriodSettingFragment"
+        android:label="新建运行时段"
+        tools:layout="@layout/fragment_peroid_setting" />
+    <fragment
+        android:id="@+id/periodDeleteFragment"
+        android:name="com.jiuhua.jiuhuacontrol.ui.indoor.PeriodDeleteFragment"
+        android:label="删除周期"
+        tools:layout="@layout/fragment_period_delete" />
+    <activity
+        android:id="@+id/espTouchActivity"
+        android:name="com.jiuhua.jiuhuacontrol.ui.esptouch.EspTouchActivity"
+        android:label="EspTouchActivity"
+        android:layout="@layout/activity_esptouch" />
+
+</navigation>

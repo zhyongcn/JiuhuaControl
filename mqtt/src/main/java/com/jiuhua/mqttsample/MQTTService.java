@@ -29,11 +29,11 @@ public class MQTTService extends Service {
     private static MqttAndroidClient client;//在init（）里面新建
     private MqttConnectOptions conOpt;//在init（）里面新建
 
-    private String host = "tcp://106.13.114.16:1883";// wyybaiducloud
+    private String host = "tcp://180.102.131.255:1883";// ctyun
     private String userName = "admin";
     private String passWord = "password";
-    private static String myTopic = "86518/JYCFGC/6-2-3401/HandT";      //要订阅的主题
-    private String clientId = "androidId-JYCFGC6-2-3401";//客户端标识
+    private static String familyTopic = "86518/YXHY/12-1-101/phone";      //FIXME:要订阅的主题
+    private String clientId = "androidId--YXHY12-1-101";//FIXME: 不同的用户需要不同的客户端标识
     private IGetMessageCallBack IGetMessageCallBack;//将在什么地方使用？mqttcallback实例当中改写原来的方法
 
 
@@ -41,7 +41,7 @@ public class MQTTService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.e(getClass().getName(), "onCreate");
-        init();//放在onCreate里面，这个service启动的时候调用了。
+        init();//放在onCreate里面，这个service启动的时候调用了。TODO：上面的参数（host，id等等）是否可以传入？？
     }
 
     //public static void publish(String msg){//定义了发布的方法，其他的地方就可以调用了
@@ -69,7 +69,7 @@ public class MQTTService extends Service {
 
         conOpt = new MqttConnectOptions();//新建一个用于连接操作的实例
         // 清除缓存
-        conOpt.setCleanSession(true);
+        conOpt.setCleanSession(false);//TODO: try false .
         // 设置超时时间，单位：秒
         conOpt.setConnectionTimeout(10);
         // 心跳包发送间隔，单位：秒
@@ -83,7 +83,7 @@ public class MQTTService extends Service {
         boolean doConnect = true;//这个变量用来标识状态
         String message = "{\"terminal_uid\":\"" + clientId + "\"}";//这个就是遗嘱消息，客户端的ID，知道是哪一个客户端。
         Log.e(getClass().getName(), "message是:" + message);
-        String topic = myTopic;//***这里又使用了主题***  注意：我们会不会更换主题（应对多个房间）？
+        String topic = familyTopic;//***这里又使用了主题***  注意：我们会不会更换主题（应对多个房间）？
         Integer qos = 0;//遗嘱的发送没有质量要求
         Boolean retained = false;//在服务器上不保留
         if ((!message.equals("")) || (!topic.equals(""))) {
@@ -140,8 +140,17 @@ public class MQTTService extends Service {
             Log.i(TAG, "连接成功 ");
             try {
                 // ***订阅myTopic话题***
-                client.subscribe(myTopic,0);//订阅的主题质量要求必须传到。
-                client.subscribe("86518/DRHY/3-1-1603/Room1", 1);//可以订阅多个主题，消息混在一起，需要注意处理
+                client.subscribe(familyTopic,1);//订阅的主题质量要求必须传到。
+                //可以订阅多个主题，消息混在一起，需要注意处理
+                //发送信道的topic 没有必要订阅了吧。
+//                client.subscribe("86518/JYCFGC/6-2-3401/Room1", 1);
+//                client.subscribe("86518/JYCFGC/6-2-3401/Room2", 1);
+//                client.subscribe("86518/JYCFGC/6-2-3401/Room3", 1);
+//                client.subscribe("86518/JYCFGC/6-2-3401/Room4", 1);
+//                client.subscribe("86518/JYCFGC/6-2-3401/Room5", 1);
+//                client.subscribe("86518/JYCFGC/6-2-3401/Room6", 1);
+//                client.subscribe("86518/JYCFGC/6-2-3401/Room7", 1);
+//                client.subscribe("86518/JYCFGC/6-2-3401/Room8", 1);
             } catch (MqttException e) {
                 e.printStackTrace();
             }
@@ -160,7 +169,7 @@ public class MQTTService extends Service {
         @Override
         public void messageArrived(String topic, MqttMessage message) throws Exception {
                                    //这里的参数调用者会自动赋予
-            String str1 = new String(message.getPayload());//获取消息内容
+            String str1 = new String(message.getPayload());//获取消息内容  //TODO 是不是可以在这里转到工作线程？？
             if (IGetMessageCallBack != null){
                 IGetMessageCallBack.setMessage(str1);//IGetMessageCallBack的唯一方法
             }

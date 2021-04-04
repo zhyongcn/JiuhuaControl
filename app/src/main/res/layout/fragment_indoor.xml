@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="data"
+            type="com.jiuhua.jiuhuacontrol.ui.indoor.IndoorViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.indoor.IndoorFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.50" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.05" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.95" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.05" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.59" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.8" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.69" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.92" />
+
+            <TextView
+                android:id="@+id/textViewCoilValve"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/guideline7"
+                app:layout_constraintEnd_toStartOf="@+id/guideline8"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toTopOf="@+id/guideline7"
+                tools:text="两通阀状态" />
+
+            <TextView
+                android:id="@+id/textViewRoomName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{data.getCurrentlyRoomName}"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toTopOf="@+id/guideline7"
+                app:layout_constraintEnd_toStartOf="@+id/guideline10"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toTopOf="@+id/guideline7"
+                tools:text="房间名称" />
+
+            <TextView
+                android:id="@+id/textViewFloorValve"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/guideline7"
+                app:layout_constraintEnd_toStartOf="@+id/guideline10"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/guideline8"
+                app:layout_constraintTop_toTopOf="@+id/guideline7"
+                tools:text="地暖状态" />
+
+            <TextView
+                android:id="@+id/temp_temperaturextview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="72sp"
+                app:layout_constraintBottom_toTopOf="@+id/guideline11"
+                app:layout_constraintEnd_toStartOf="@+id/guideline10"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toTopOf="@+id/guideline7"
+                tools:text="临时显示" />
+
+            <SeekBar
+                android:id="@+id/temperatureSeekBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:max="350"
+                android:min="120"
+                app:layout_constraintBottom_toTopOf="@+id/guideline11"
+                app:layout_constraintEnd_toStartOf="@+id/guideline10"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toTopOf="@+id/guideline11" />
+
+            <TextView
+                android:id="@+id/temp_humidityTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@+id/guideline12"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toTopOf="@+id/guideline12"
+                app:layout_constraintVertical_bias="0.526"
+                tools:text="湿度临时" />
+
+            <SeekBar
+                android:id="@+id/humiditySeekBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:max="900"
+                android:min="100"
+                app:layout_constraintBottom_toTopOf="@+id/guideline12"
+                app:layout_constraintEnd_toStartOf="@+id/guideline10"
+                app:layout_constraintStart_toEndOf="@+id/temp_humidityTextView"
+                app:layout_constraintTop_toTopOf="@+id/guideline12" />
+
+            <Button
+                android:id="@+id/button_feast_dehumidity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:shadowColor="#FFFFFF"
+                android:text="除湿/宴会"
+                app:layout_constraintBottom_toTopOf="@+id/guideline13"
+                app:layout_constraintEnd_toStartOf="@+id/guideline8"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toTopOf="@+id/guideline13" />
+
+            <RadioGroup
+                android:id="@+id/fanspeed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toTopOf="@+id/guideline14"
+                app:layout_constraintEnd_toEndOf="@+id/guideline10"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toTopOf="@+id/guideline14">
+
+                <RadioButton
+                    android:id="@+id/radioButtonlowfan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="低速风" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonmiddlefan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="中速风" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonhighfan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="高速风" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonautofan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="自动风" />
+            </RadioGroup>
+
+
+            <Button
+                android:id="@+id/buttonStop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="停止"
+                app:layout_constraintBottom_toTopOf="@+id/guideline15"
+                app:layout_constraintEnd_toStartOf="@+id/guideline8"
+                app:layout_constraintHorizontal_bias="0.179"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toTopOf="@+id/guideline15"
+                app:layout_constraintVertical_bias="0.458" />
+
+            <Switch
+                android:id="@+id/switch_manual_auto"
+                android:layout_width="167dp"
+                android:layout_height="102dp"
+                android:checked="false"
+                android:showText="true"
+                android:splitTrack="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textOff="手动运行"
+                android:textOn="周期自动"
+                android:textSize="144sp"
+                android:thumb="@drawable/my_thumb"
+                android:thumbTintMode="multiply"
+                android:visibility="visible"
+                app:layout_constraintBottom_toTopOf="@+id/guideline13"
+                app:layout_constraintEnd_toStartOf="@+id/guideline10"
+                app:layout_constraintTop_toTopOf="@+id/guideline13"
+                tools:ignore="MissingConstraints" />
+
+            <Switch
+                android:id="@+id/switch_fancoil_or_floor"
+                android:layout_width="115dp"
+                android:layout_height="60dp"
+                android:layout_marginEnd="80dp"
+                android:checked="false"
+                android:showText="true"
+                android:splitTrack="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textOff="空调"
+                android:textOn="地暖"
+                android:textSize="144sp"
+                android:thumb="@drawable/my_thumb"
+                android:thumbTintMode="multiply"
+                android:visibility="visible"
+                app:layout_constraintBottom_toTopOf="@+id/guideline15"
+                app:layout_constraintEnd_toStartOf="@+id/guideline10"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/buttonStop"
+                app:layout_constraintTop_toTopOf="@+id/guideline15"
+                app:layout_constraintVertical_bias="0.539"
+                tools:checked="true" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
+</layout>
