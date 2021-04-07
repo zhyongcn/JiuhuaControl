@@ -34,10 +34,6 @@ public class IndoorViewModel extends AndroidViewModel {
     Gson gson = new Gson();
 
     //变量getter & setter 方法
-    public int getCurrentlyRoomId() {
-        return currentlyRoomId;
-    }
-
     public void setCurrentlyRoomId(int currentlyRoomId) {
         this.currentlyRoomId = currentlyRoomId;
     }

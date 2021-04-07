@@ -133,10 +133,10 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.MyView
                     JsonObject jsonObject = new JsonObject(); //temp object for send temperatureSensorCalibration information.
                     jsonObject.addProperty("roomId", basicInfoDB.getRoomId());
                     jsonObject.addProperty("deviceType", Constants.deviceType_DHTsensor);
-                    //假浮点，在手机上转换，减轻模块压力。
+                    //Todo:假浮点，在手机上转换，减轻模块压力。
                     jsonObject.addProperty("adjustingTemperature", basicInfoDB.getTemperatureSensorCalibration() * 10);
                     String msg = gson.toJson(jsonObject);
-                    MQTTService.publish("86518/JYCFGC/6-2-3401/Room" + basicInfoDB.getRoomId(), msg, 1, false);
+                    MQTTService.myPublishToDevice(basicInfoDB.getRoomId(), msg, 1, false);
 
                 } else {
                     Toast.makeText(v.getContext(), "房间编号必须填写", Toast.LENGTH_SHORT).show();

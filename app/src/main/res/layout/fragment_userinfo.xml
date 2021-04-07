@@ -99,6 +99,7 @@
                     android:text="空气源热泵" />
             </RadioGroup>
 
+
             <EditText
                 android:id="@+id/equipmetgrade"
                 android:layout_width="match_parent"
@@ -114,6 +115,88 @@
                 android:ems="10"
                 android:hint="主机规格型号"
                 android:inputType="textPersonName" />
+
+            <TextView
+                android:id="@+id/blank1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="       "
+                android:textSize="18sp" />
+
+
+            <TextView
+                android:id="@+id/mqttinfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="MQTT相关信息"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/host"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="host"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/mqtt_client_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="mqtt_client_name"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/mqtt_client_passwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="mqtt_client_passwd"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/mqtt_family_topic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="mqtt_family_topic"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/MQTT_publish_topic_prefix"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="MQTT_publish_topic_prefix"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/mqtt_client_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="mqtt_client_id"
+                android:inputType="textPersonName" />
+
+            <TextView
+                android:id="@+id/mqttinfoend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="MQTT相关信息设置完毕需要重启app"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/blank"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="       "
+                android:textSize="18sp" />
+
 
             <TextView
                 android:id="@+id/user_roomequipment"

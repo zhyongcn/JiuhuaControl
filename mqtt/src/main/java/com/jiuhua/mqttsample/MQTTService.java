@@ -6,11 +6,14 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Binder;
 import android.os.IBinder;
+
 import androidx.core.app.NotificationCompat;
+
 import android.util.Log;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
@@ -22,36 +25,69 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-public class MQTTService extends Service {
+import static android.content.Intent.getIntent;
 
+public class MQTTService extends Service {
     public static final String TAG = MQTTService.class.getSimpleName();
 
     private static MqttAndroidClient client;//在init（）里面新建
     private MqttConnectOptions conOpt;//在init（）里面新建
 
-    private String host = "tcp://180.102.131.255:1883";// ctyun
-    private String userName = "admin";
-    private String passWord = "password";
-    private static String familyTopic = "86518/YXHY/12-1-101/phone";      //FIXME:要订阅的主题
-    private String clientId = "androidId--YXHY12-1-101";//FIXME: 不同的用户需要不同的客户端标识
+    private static String host = "tcp://180.102.131.255:1883";//ctyun
+    private static String userName = "admin";
+    private static String passWord = "password";
+    private static String familyTopic = "86518/YXHY/12-1-101/phone";      //要订阅的主题  TODO 原始定义采用什么？
+    private static String mqtt_publish_topic_prefix = "86518/YXHY/12-1-101/Room";
+    private static String clientId = "androidId--YXHY12-1-101";//不同的用户需要不同的客户端标识
+
     private IGetMessageCallBack IGetMessageCallBack;//将在什么地方使用？mqttcallback实例当中改写原来的方法
 
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        Log.e(getClass().getName(), "onCreate");
-        init();//放在onCreate里面，这个service启动的时候调用了。TODO：上面的参数（host，id等等）是否可以传入？？
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return super.onStartCommand(intent, flags, startId);
     }
 
-    //public static void publish(String msg){//定义了发布的方法，其他的地方就可以调用了
-    public static void publish(String  topic, String  msg, int qos, boolean retained){
-                                       // 这里修改一下，原来的一个msg参数，改为三个参数，方便以后调用
+    @Override
+    public void onCreate() {
+        //从存储器中读取数据
+        //这个放在开始的部分，利用线程，不耽误其他线程
+        SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
+        host = sharedPreferences.getString("mqtt_host", "tcp://180.102.131.255:1883");
+        userName = sharedPreferences.getString("mqtt_client_name", "admin");
+        passWord = sharedPreferences.getString("mqtt_client_passwd", "password");
+        familyTopic = sharedPreferences.getString("mqtt_family_topic", "86518/YXHY/12-1-101/phone");//TODO: 缺省的填什么好？ 最初定义，统一管理？
+        mqtt_publish_topic_prefix = sharedPreferences.getString("mqtt_publish_topic_prefix", "86518/YXHY/12-1-101/Room");//TODO: 缺省的填什么好？ 最初定义，统一管理？
+        clientId = sharedPreferences.getString("mqtt_client_id", "androidId--YXHY12-1-101");
+        Log.d(TAG, "onCreate: host is  " + host);
+        Log.d(TAG, "onCreate: familytopic is  " + familyTopic);
+
+        super.onCreate();
+        Log.e(getClass().getName(), "onCreate");
+        init();//放在onCreate里面，这个service启动的时候调用了。
+    }
+
+    public static void publish(String topic, String msg, int qos, boolean retained) {
+        // 这里修改一下，原来的一个msg参数，改为三个参数，方便以后调用
 //        String topic = myTopic;
 //        Integer qos = 0;
 //        Boolean retained = false;
         try {
-            if (client != null){
+            if (client != null) {
+                client.publish(topic, msg.getBytes(), qos, retained);  //msg.getBytes(),发布的字符串转变为字节
+            }
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void myPublishToDevice(int roomId, String msg, int qos, boolean retained) {
+        // 这里修改一下，原来的一个msg参数，改为三个参数，方便以后调用
+        String topic = mqtt_publish_topic_prefix + String.valueOf(roomId);
+//        Integer qos = 0;
+//        Boolean retained = false;
+        try {
+            if (client != null) {
                 client.publish(topic, msg.getBytes(), qos, retained);  //msg.getBytes(),发布的字符串转变为字节
             }
         } catch (MqttException e) {
@@ -119,12 +155,14 @@ public class MQTTService extends Service {
         super.onDestroy();//销毁
     }
 
-    /** 连接MQTT服务器 */
+    /**
+     * 连接MQTT服务器
+     */
     private void doClientConnection() {
         if (!client.isConnected() && isConnectIsNormal()) {//判断客户端是否连着，网络是否连着
             try {
                 client.connect(conOpt, null, iMqttActionListener);
-                        //连接需要传入 “操作实例” ，内容是空的，mqtt的动作监听者
+                //连接需要传入 “操作实例” ，内容是空的，mqtt的动作监听者
             } catch (MqttException e) {
                 e.printStackTrace();
             }
@@ -140,7 +178,7 @@ public class MQTTService extends Service {
             Log.i(TAG, "连接成功 ");
             try {
                 // ***订阅myTopic话题***
-                client.subscribe(familyTopic,1);//订阅的主题质量要求必须传到。
+                client.subscribe(familyTopic, 1);//订阅的主题质量要求必须传到。
                 //可以订阅多个主题，消息混在一起，需要注意处理
                 //发送信道的topic 没有必要订阅了吧。
 //                client.subscribe("86518/JYCFGC/6-2-3401/Room1", 1);
@@ -168,9 +206,9 @@ public class MQTTService extends Service {
 
         @Override
         public void messageArrived(String topic, MqttMessage message) throws Exception {
-                                   //这里的参数调用者会自动赋予
+            //这里的参数调用者会自动赋予
             String str1 = new String(message.getPayload());//获取消息内容  //TODO 是不是可以在这里转到工作线程？？
-            if (IGetMessageCallBack != null){
+            if (IGetMessageCallBack != null) {
                 IGetMessageCallBack.setMessage(str1);//IGetMessageCallBack的唯一方法
             }
             String str2 = topic + ";qos:" + message.getQos() + ";retained:" + message.isRetained();
@@ -189,7 +227,9 @@ public class MQTTService extends Service {
         }
     };
 
-    /** 判断网络是否连接 */
+    /**
+     * 判断网络是否连接
+     */
     private boolean isConnectIsNormal() {
         ConnectivityManager connectivityManager = (ConnectivityManager) this.getApplicationContext()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -211,24 +251,25 @@ public class MQTTService extends Service {
         return new CustomBinder();
     }
 
-    public void setIGetMessageCallBack(IGetMessageCallBack IGetMessageCallBack){
+    public void setIGetMessageCallBack(IGetMessageCallBack IGetMessageCallBack) {
         this.IGetMessageCallBack = IGetMessageCallBack;//给域值赋值，都是哪个接口
     }
 
     public class CustomBinder extends Binder {//绑定者子类就是返回当前MQTTservice？？
-        public MQTTService getService(){
+
+        public MQTTService getService() {
             return MQTTService.this;
         }
     }
 
-    public  void toCreateNotification(String message){//发布消息的方法？？
+    public void toCreateNotification(String message) {//发布消息的方法？？
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 1,
-                new Intent(this,MQTTService.class), PendingIntent.FLAG_UPDATE_CURRENT);
+                new Intent(this, MQTTService.class), PendingIntent.FLAG_UPDATE_CURRENT);
         //Pending 未决定的 Intent目的意图 PendingIntent送达服务/单件模式/发送服务
         //再启动一个服务，是本服务的升级方式？？
         //参照底层代码，特别难以理解。
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"chancel1");//新的是不是使用了通道？？
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "chancel1");//新的是不是使用了通道？？
         //3、创建一个通知，属性太多，使用构造器模式
 
         Notification notification = builder//构造器  不是绑定

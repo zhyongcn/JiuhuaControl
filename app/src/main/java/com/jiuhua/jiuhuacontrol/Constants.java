@@ -31,12 +31,7 @@ public interface Constants {
     int Saturday = 5;
     int Sunday = 6;
 
-    //TODO: 字符串常量 接受的topic 发送的Topic等等 ^=^
-    String MQTT_HOST = "tcp://180.102.131.255:1883";
-    String MQTT_userName = "jiuhuaHVAC";
-    String MQTT_password = "password";
-    String MQTT_clientId = "androidId--YXHY12-1-101";
-    String FAMILY_TOPIC = "86518/YXHY/12-1-101/phone";
-    String MQTT_publish_Topic_prefix = "86518/YXHY/12-1-101/Room";
+    //字符串常量 接受的topic 发送的Topic等等 ^=^
+//    String MQTT_publish_topic_prefix = "86518/YXHY/12-1-101/Room";
 
 }

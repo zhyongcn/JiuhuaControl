@@ -1,5 +1,6 @@
 package com.jiuhua.jiuhuacontrol.ui.indoor;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +20,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.jiuhua.jiuhuacontrol.Constants;
 import com.jiuhua.jiuhuacontrol.R;
 import com.jiuhua.jiuhuacontrol.databinding.FragmentIndoorBinding;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class IndoorFragment extends Fragment {
 

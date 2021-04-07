@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.solver.state.State;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -16,6 +17,8 @@ import com.google.android.material.navigation.NavigationView;
 import com.jiuhua.mqttsample.MQTTService;
 
 //FIXME: Dev分支目标是基础的架构，软件架构，数据形式，存储方法，基本逻辑等等，不可见的，共性的。
+//TODO: 在云端使用数据库存储用户的数据，是否可以使用workmanager管理一个任务，定时去获取数据？？
+// 另外：app彻底终止和重启系统，非原生系统有可能终止workmanager的任务。时间不是很精确。
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;//首页需要appbar的一个实例，先新建一个句柄。
@@ -49,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
 
         //start service
         Intent intent = new Intent(this, MQTTService.class);
-        //TODO: 把Constants里面的mqtt相关的常量参数在这里传送，服务启动的时候就有了自己的ID，将来也便于辨识！！
         startService(intent);
     }
 
