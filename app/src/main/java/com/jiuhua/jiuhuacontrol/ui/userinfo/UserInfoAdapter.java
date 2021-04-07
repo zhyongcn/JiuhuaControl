@@ -40,9 +40,6 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.MyView
         this.allBasicInfo = allBasicInfo;
     }
 
-    //TODO 添加校准温湿度的逻辑。发送的MQTTmessage 的qos必须是1，或2，0是不行的。！！
-    // 接收端的.disable_clean_session = 1 禁止清除会话，可以理解为mqtt的缓存
-
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -128,12 +125,14 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.MyView
 
                     userInfoViewModel.updateBasicInfo(basicInfoDB);
                     Toast.makeText(v.getContext(), "你修改了房间信息", Toast.LENGTH_SHORT).show();
-                    //TODO send the calibration to module.
+
+                    //添加校准温湿度的逻辑。发送的MQTTmessage 的qos必须是1，或2，0是不行的。！！
+                    // 接收端的.disable_clean_session = 1 禁止清除会话，可以理解为mqtt的缓存
                     Gson gson = new Gson();
                     JsonObject jsonObject = new JsonObject(); //temp object for send temperatureSensorCalibration information.
                     jsonObject.addProperty("roomId", basicInfoDB.getRoomId());
-                    jsonObject.addProperty("deviceType", Constants.deviceType_DHTsensor);
-                    //Todo:假浮点，在手机上转换，减轻模块压力。
+                    jsonObject.addProperty("deviceType", Constants.deviceType_phone);//好像手机来的命令才接受。
+                    //假浮点，在手机上转换，减轻模块压力。
                     jsonObject.addProperty("adjustingTemperature", basicInfoDB.getTemperatureSensorCalibration() * 10);
                     String msg = gson.toJson(jsonObject);
                     MQTTService.myPublishToDevice(basicInfoDB.getRoomId(), msg, 1, false);

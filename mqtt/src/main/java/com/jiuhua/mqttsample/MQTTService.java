@@ -25,20 +25,18 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-import static android.content.Intent.getIntent;
-
 public class MQTTService extends Service {
     public static final String TAG = MQTTService.class.getSimpleName();
 
     private static MqttAndroidClient client;//在init（）里面新建
     private MqttConnectOptions conOpt;//在init（）里面新建
 
-    private static String host = "tcp://180.102.131.255:1883";//ctyun
-    private static String userName = "admin";
-    private static String passWord = "password";
-    private static String familyTopic = "86518/YXHY/12-1-101/phone";      //要订阅的主题  TODO 原始定义采用什么？
+    private static String mqtt_host = "tcp://180.102.131.255:1883";//ctyun
+    private static String mqtt_client_name = "admin";
+    private static String mqtt_client_passWord = "password";
+    private static String mqtt_sub_familyTopic = "86518/YXHY/12-1-101/phone";      //要订阅的主题  TODO 原始定义采用什么？
     private static String mqtt_publish_topic_prefix = "86518/YXHY/12-1-101/Room";
-    private static String clientId = "androidId--YXHY12-1-101";//不同的用户需要不同的客户端标识
+    private static String mqtt_client_id = "androidId--YXHY12-1-101";//不同的用户需要不同的客户端标识
 
     private IGetMessageCallBack IGetMessageCallBack;//将在什么地方使用？mqttcallback实例当中改写原来的方法
 
@@ -52,15 +50,16 @@ public class MQTTService extends Service {
     public void onCreate() {
         //从存储器中读取数据
         //这个放在开始的部分，利用线程，不耽误其他线程
+        //todo  挂几个老化运行的设备，创建一个demo数据，缺省加载。 //TODO 最初始的时候获取的是空null，不是缺省的。
         SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
-        host = sharedPreferences.getString("mqtt_host", "tcp://180.102.131.255:1883");
-        userName = sharedPreferences.getString("mqtt_client_name", "admin");
-        passWord = sharedPreferences.getString("mqtt_client_passwd", "password");
-        familyTopic = sharedPreferences.getString("mqtt_family_topic", "86518/YXHY/12-1-101/phone");//TODO: 缺省的填什么好？ 最初定义，统一管理？
-        mqtt_publish_topic_prefix = sharedPreferences.getString("mqtt_publish_topic_prefix", "86518/YXHY/12-1-101/Room");//TODO: 缺省的填什么好？ 最初定义，统一管理？
-        clientId = sharedPreferences.getString("mqtt_client_id", "androidId--YXHY12-1-101");
-        Log.d(TAG, "onCreate: host is  " + host);
-        Log.d(TAG, "onCreate: familytopic is  " + familyTopic);
+        mqtt_host = sharedPreferences.getString("mqtt_host", "tcp://180.102.131.255:1883");
+        mqtt_client_name = sharedPreferences.getString("mqtt_client_name", "admin");
+        mqtt_client_passWord = sharedPreferences.getString("mqtt_client_passwd", "password");
+        mqtt_sub_familyTopic = sharedPreferences.getString("mqtt_family_topic", "86518/YXHY/12-1-101/phone");
+        mqtt_publish_topic_prefix = sharedPreferences.getString("mqtt_publish_topic_prefix", "86518/YXHY/12-1-101/Room");
+        mqtt_client_id = sharedPreferences.getString("mqtt_client_id", "androidId--YXHY12-1-101");
+        Log.d(TAG, "onCreate: host is  " + mqtt_host);
+        Log.d(TAG, "onCreate: familytopic is  " + mqtt_sub_familyTopic);
 
         super.onCreate();
         Log.e(getClass().getName(), "onCreate");
@@ -97,8 +96,8 @@ public class MQTTService extends Service {
 
     private void init() {
         // 服务器地址（协议+地址+端口号）
-        String uri = host;//原来就是string，改个名字，方便使用与理解
-        client = new MqttAndroidClient(this, uri, clientId);//一个client ID 一个客户端
+        String uri = mqtt_host;//原来就是string，改个名字，方便使用与理解
+        client = new MqttAndroidClient(this, uri, mqtt_client_id);//一个client ID 一个客户端
         //新建一个Android的mqtt客户端，需要三个参数，上下文this，服务器的协议、地址、端口，第三：客户端ID
         // 设置MQTT监听并且接受消息
         client.setCallback(mqttCallback);//设置回调函数，这里是一个mqttcallback实例。
@@ -111,15 +110,15 @@ public class MQTTService extends Service {
         // 心跳包发送间隔，单位：秒
         conOpt.setKeepAliveInterval(20);
         // 用户名
-        conOpt.setUserName(userName);//注意在这里设置用户名以及密码
+        conOpt.setUserName(mqtt_client_name);//注意在这里设置用户名以及密码
         // 密码
-        conOpt.setPassword(passWord.toCharArray());     //将字符串转换为字符串数组
+        conOpt.setPassword(mqtt_client_passWord.toCharArray());     //将字符串转换为字符串数组
 
         // last will message   设置遗嘱
         boolean doConnect = true;//这个变量用来标识状态
-        String message = "{\"terminal_uid\":\"" + clientId + "\"}";//这个就是遗嘱消息，客户端的ID，知道是哪一个客户端。
+        String message = "{\"terminal_uid\":\"" + mqtt_client_id + "\"}";//这个就是遗嘱消息，客户端的ID，知道是哪一个客户端。
         Log.e(getClass().getName(), "message是:" + message);
-        String topic = familyTopic;//***这里又使用了主题***  注意：我们会不会更换主题（应对多个房间）？
+        String topic = mqtt_sub_familyTopic;//***这里又使用了主题***  注意：我们会不会更换主题（应对多个房间）？
         Integer qos = 0;//遗嘱的发送没有质量要求
         Boolean retained = false;//在服务器上不保留
         if ((!message.equals("")) || (!topic.equals(""))) {
@@ -178,7 +177,7 @@ public class MQTTService extends Service {
             Log.i(TAG, "连接成功 ");
             try {
                 // ***订阅myTopic话题***
-                client.subscribe(familyTopic, 1);//订阅的主题质量要求必须传到。
+                client.subscribe(mqtt_sub_familyTopic, 1);//订阅的主题质量要求必须传到。
                 //可以订阅多个主题，消息混在一起，需要注意处理
                 //发送信道的topic 没有必要订阅了吧。
 //                client.subscribe("86518/JYCFGC/6-2-3401/Room1", 1);
