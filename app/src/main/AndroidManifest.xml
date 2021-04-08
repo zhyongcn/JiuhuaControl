@@ -15,11 +15,7 @@
         android:icon="@drawable/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
-<<<<<<< HEAD
         android:label="周简单热泵"
-=======
-        android:label="周control"
->>>>>>> Dev
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".MainActivity"
