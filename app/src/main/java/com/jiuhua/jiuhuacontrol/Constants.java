@@ -1,6 +1,6 @@
-package com.jiuhua.jiuhuacontrol.ui.indoor;
+package com.jiuhua.jiuhuacontrol;
 
-//todo: 如果使用 static final const define int roomStateOFF = 0 就像C语言的define 常量是不是更好，少占用空间。速度快。
+//通过接口使用常量，比象C语言那样define定义，比枚举更好，少占用空间。速度快。
 public interface Constants {
     int roomState_OFF = 0;
     int roomState_MANUAL = 1;
@@ -30,5 +30,8 @@ public interface Constants {
     int Friday = 4;
     int Saturday = 5;
     int Sunday = 6;
+
+    //字符串常量 接受的topic 发送的Topic等等 ^=^
+//    String MQTT_publish_topic_prefix = "86518/YXHY/12-1-101/Room";
 
 }

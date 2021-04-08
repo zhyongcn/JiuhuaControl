@@ -29,7 +29,9 @@ import static android.content.Context.MODE_PRIVATE;
 public class UserInfoFragment extends Fragment {
 
     private String userName, userPhone, userAddress, userEmail, userWechat, equipmentGrade, equipmentType;
+    private String mqtt_host, mqtt_client_name, mqtt_client_passwd, mqtt_family_topic, mqtt_publish_topic_prefix, mqtt_client_id;//MQTT相关
     private EditText etUserName, etUserPhone, etUserAddress, etUserEmail, etUserWechat, etEquipmentGrade, etEquipmentType;
+    private EditText etMQTT_Host, etMQTT_client_name, etMQTT_client_passwd, etMQTTt_family_topic, etMQTT_publish_topic_prefix, etMQTT_client_id;//MQTT相关
     private boolean isBoiler;
     private RadioButton radioButtonBoiler, radioButtonHeatpump;
 
@@ -53,7 +55,14 @@ public class UserInfoFragment extends Fragment {
         userWechat = sharedPreferences.getString("userWechat", "微信号");
         equipmentGrade = sharedPreferences.getString("equipmentGrade", "主机品牌");
         equipmentType = sharedPreferences.getString("equipmentType", "主机设备型号");
-        isBoiler = sharedPreferences.getBoolean("isBoiler",false);
+        isBoiler = sharedPreferences.getBoolean("isBoiler", false);
+        //MQTT相关
+        mqtt_host = sharedPreferences.getString("mqtt_host", "");
+        mqtt_client_name = sharedPreferences.getString("mqtt_client_name", "");
+        mqtt_client_passwd = sharedPreferences.getString("mqtt_client_passwd", "");
+        mqtt_family_topic = sharedPreferences.getString("mqtt_family_topic", "");
+        mqtt_publish_topic_prefix = sharedPreferences.getString("mqtt_publish_topic_prefix", "");
+        mqtt_client_id = sharedPreferences.getString("mqtt_client_id", "");
 
         userInfoViewModel = new ViewModelProvider(this).get(UserInfoViewModel.class);
         userInfoAdapter = new UserInfoAdapter(userInfoViewModel);
@@ -83,6 +92,13 @@ public class UserInfoFragment extends Fragment {
         etEquipmentType = binding.equipmenttype;
         radioButtonBoiler = binding.userinfoBoiler;
         radioButtonHeatpump = binding.userinfoHeatpump;
+        //MQTT相关
+        etMQTT_Host = binding.host;
+        etMQTT_client_name = binding.mqttClientName;
+        etMQTT_client_passwd = binding.mqttClientPasswd;
+        etMQTTt_family_topic = binding.mqttFamilyTopic;
+        etMQTT_publish_topic_prefix = binding.MQTTPublishTopicPrefix;
+        etMQTT_client_id = binding.mqttClientId;
 
         etUserName.setText(userName);
         etUserPhone.setText(userPhone);
@@ -91,6 +107,13 @@ public class UserInfoFragment extends Fragment {
         etUserWechat.setText(userWechat);
         etEquipmentGrade.setText(equipmentGrade);
         etEquipmentType.setText(equipmentType);
+        //MQTT相关
+        etMQTT_Host.setText(mqtt_host);
+        etMQTT_client_name.setText(mqtt_client_name);
+        etMQTT_client_passwd.setText(mqtt_client_passwd);
+        etMQTTt_family_topic.setText(mqtt_family_topic);
+        etMQTT_publish_topic_prefix.setText(mqtt_publish_topic_prefix);
+        etMQTT_client_id.setText(mqtt_client_id);
 
         radioButtonBoiler.setChecked(isBoiler);
         radioButtonHeatpump.setChecked(!isBoiler);
@@ -109,6 +132,7 @@ public class UserInfoFragment extends Fragment {
 
     }
 
+
     @Override
     public void onPause() {
         super.onPause();
@@ -120,6 +144,13 @@ public class UserInfoFragment extends Fragment {
         equipmentGrade = etEquipmentGrade.getText().toString();
         equipmentType = etEquipmentType.getText().toString();
         isBoiler = radioButtonBoiler.isChecked();
+        //获取MQTT的相关信息
+        mqtt_host = etMQTT_Host.getText().toString();
+        mqtt_client_name = etMQTT_client_name.getText().toString();
+        mqtt_client_passwd = etMQTT_client_passwd.getText().toString();
+        mqtt_family_topic = etMQTTt_family_topic.getText().toString();
+        mqtt_publish_topic_prefix = etMQTT_publish_topic_prefix.getText().toString();
+        mqtt_client_id = etMQTT_client_id.getText().toString();
 
         SharedPreferences.Editor editor = getContext().getSharedPreferences("data", MODE_PRIVATE).edit();
         editor.putString("userName", userName);
@@ -130,6 +161,13 @@ public class UserInfoFragment extends Fragment {
         editor.putString("equipmentGrade", equipmentGrade);
         editor.putString("equipmentType", equipmentType);
         editor.putBoolean("isBoiler", isBoiler);
+        //MQTT相关
+        editor.putString("mqtt_host", mqtt_host);
+        editor.putString("mqtt_client_name", mqtt_client_name);
+        editor.putString("mqtt_client_passwd", mqtt_client_passwd);
+        editor.putString("mqtt_family_topic", mqtt_family_topic);
+        editor.putString("mqtt_publish_topic_prefix", mqtt_publish_topic_prefix);
+        editor.putString("mqtt_client_id", mqtt_client_id);
         editor.apply();
     }
 

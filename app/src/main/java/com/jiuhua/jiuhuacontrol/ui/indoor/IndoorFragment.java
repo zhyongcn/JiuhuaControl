@@ -1,5 +1,6 @@
 package com.jiuhua.jiuhuacontrol.ui.indoor;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -7,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
@@ -17,8 +17,11 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.jiuhua.jiuhuacontrol.Constants;
 import com.jiuhua.jiuhuacontrol.R;
 import com.jiuhua.jiuhuacontrol.databinding.FragmentIndoorBinding;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class IndoorFragment extends Fragment {
 
@@ -55,7 +58,7 @@ public class IndoorFragment extends Fragment {
         indoorViewModel.setCurrentlyRoomId(roomId);
         indoorViewModel.setCurrentlyRoomName(roomName);
 
-        indoorViewModel.getAllLatestIndoorDBsLive().observe(getViewLifecycleOwner(), indoorDBS -> {
+        indoorViewModel.getAllLatestIndoorDBsLive(Constants.deviceType_floorwatershed).observe(getViewLifecycleOwner(), indoorDBS -> {
             indoorViewModel.setAllLatestIndoorDBs(indoorDBS);
             //****数据驱动界面改变,所以代码要放在fragment或者Activity里面。只处理界面****
             //显示两通阀的开关
@@ -178,34 +181,31 @@ public class IndoorFragment extends Fragment {
             }
         });
         //风速：
-        binding.fanspeed.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.radioButtonlowfan:
-                        indoorViewModel.fanSpeedRoomDevice(roomId, Constants.fanSpeed_LOW);
+        binding.fanspeed.setOnCheckedChangeListener((group, checkedId) -> {
+            switch (checkedId) {
+                case R.id.radioButtonlowfan:
+                    indoorViewModel.fanSpeedRoomDevice(roomId, Constants.fanSpeed_LOW);
 //                        Toast.makeText(getContext(), roomName + "风机盘管低风速运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
-                        break;
-                    case R.id.radioButtonmiddlefan:
-                        indoorViewModel.fanSpeedRoomDevice(roomId, Constants.fanSpeed_MEDIUM);
+                    break;
+                case R.id.radioButtonmiddlefan:
+                    indoorViewModel.fanSpeedRoomDevice(roomId, Constants.fanSpeed_MEDIUM);
 //                        Toast.makeText(getContext(), roomName + "风机盘管中风速运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
-                        break;
-                    case R.id.radioButtonhighfan:
-                        indoorViewModel.fanSpeedRoomDevice(roomId, Constants.fanSpeed_HIGH);
+                    break;
+                case R.id.radioButtonhighfan:
+                    indoorViewModel.fanSpeedRoomDevice(roomId, Constants.fanSpeed_HIGH);
 //                        Toast.makeText(getContext(), roomName + "风机盘管高风速运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
-                        break;
-                    case R.id.radioButtonautofan:
-                        indoorViewModel.fanSpeedRoomDevice(roomId, Constants.fanSpeed_AUTO);
+                    break;
+                case R.id.radioButtonautofan:
+                    indoorViewModel.fanSpeedRoomDevice(roomId, Constants.fanSpeed_AUTO);
 //                        Toast.makeText(getContext(), roomName + "风机盘管自动风速运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
-                        break;
+                    break;
 //                    default:  //好像没有必要
 //                        indoorViewModel.fanSpeedRoomDevice(roomNameId, Constants.fanSpeed_STOP);
 //                        Toast.makeText(getContext(), roomName + "风机盘管停止运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
 //                        break;
-                }
-
-                //还是使用从数据库中提取的返回数据来驱动界面，不要多此一举在这里修改了。
             }
+
+            //还是使用从数据库中提取的返回数据来驱动界面，不要多此一举在这里修改了。
         });
 
 

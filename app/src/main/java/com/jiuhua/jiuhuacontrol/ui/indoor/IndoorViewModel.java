@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 
 import com.google.gson.Gson;
 import com.jiuhua.jiuhuacontrol.CommandESP;
+import com.jiuhua.jiuhuacontrol.Constants;
 import com.jiuhua.jiuhuacontrol.MyRepository;
 import com.jiuhua.jiuhuacontrol.database.DayPeriod;
 import com.jiuhua.jiuhuacontrol.database.IndoorDB;
@@ -33,10 +34,6 @@ public class IndoorViewModel extends AndroidViewModel {
     Gson gson = new Gson();
 
     //变量getter & setter 方法
-    public int getCurrentlyRoomId() {
-        return currentlyRoomId;
-    }
-
     public void setCurrentlyRoomId(int currentlyRoomId) {
         this.currentlyRoomId = currentlyRoomId;
     }
@@ -103,12 +100,12 @@ public class IndoorViewModel extends AndroidViewModel {
     //停止按钮实现方法，停止房间所有设备
     public void stopRoomDevice(int roomid) {
         commandESP.setRoomId(roomid);
-        commandESP.setDeviceType(Constants.deviceType_fancoil);
+        commandESP.setDeviceType(Constants.deviceType_phone);
         commandESP.setRoomState(Constants.roomState_OFF);
         commandESP.setSettingfanSpeed(Constants.fanSpeed_STOP);
         myRepository.commandToDevice(commandESP);
         commandESP.setRoomId(roomid);
-        commandESP.setDeviceType(Constants.deviceType_floorwatershed);
+        commandESP.setDeviceType(Constants.deviceType_phone);
         commandESP.setRoomState(Constants.roomState_OFF);
         myRepository.commandToDevice(commandESP);
     }
@@ -116,6 +113,7 @@ public class IndoorViewModel extends AndroidViewModel {
     //手动按钮实现方法
     public void manualRoomDevice(int roomid) {
         commandESP.setRoomId(roomid);
+        commandESP.setDeviceType(Constants.deviceType_phone);
         commandESP.setRoomState(Constants.roomState_MANUAL);
         myRepository.commandToDevice(commandESP);
     }
@@ -123,6 +121,7 @@ public class IndoorViewModel extends AndroidViewModel {
     //周期自动按钮实现方法
     public void autoRoomDevice(int roomid) {
         commandESP.setRoomId(roomid);
+        commandESP.setDeviceType(Constants.deviceType_phone);
         commandESP.setRoomState(Constants.roomState_AUTO);
         commandESP.setSettingfanSpeed(Constants.fanSpeed_AUTO);
         myRepository.commandToDevice(commandESP);
@@ -131,7 +130,7 @@ public class IndoorViewModel extends AndroidViewModel {
     //宴会按钮实现方法，这个好像没有用到。
     public void feastRoomDevice(int roomid) {
         commandESP.setRoomId(roomid);
-        commandESP.setDeviceType(Constants.deviceType_floorwatershed);
+        commandESP.setDeviceType(Constants.deviceType_phone);
         //判断一下是否在宴会状态
         if (commandESP.getRoomState() == Constants.roomState_FEAST) {
             commandESP.setRoomState(Constants.roomState_MANUAL);
@@ -144,7 +143,7 @@ public class IndoorViewModel extends AndroidViewModel {
     //除湿按钮实现方法
     public void dehumidityRoomDevice(int roomid) {
         commandESP.setRoomId(roomid);
-        commandESP.setDeviceType(Constants.deviceType_fancoil);
+        commandESP.setDeviceType(Constants.deviceType_phone);
         if (commandESP.getRoomState() == Constants.roomState_DEHUMIDITY) {
             commandESP.setSettingfanSpeed(Constants.roomState_MANUAL);
         } else {
@@ -157,21 +156,21 @@ public class IndoorViewModel extends AndroidViewModel {
     //地暖按钮实现方法
     public void floorRoomDevice(int roomid) {
         commandESP.setRoomId(roomid);
-        commandESP.setDeviceType(Constants.deviceType_floorwatershed);
+        commandESP.setDeviceType(Constants.deviceType_phone);
         myRepository.commandToDevice(commandESP);
     }
 
     //空调按钮实现方法
     public void fancoilRoomDevice(int roomid) {
         commandESP.setRoomId(roomid);
-        commandESP.setDeviceType(Constants.deviceType_fancoil);
+        commandESP.setDeviceType(Constants.deviceType_phone);
         myRepository.commandToDevice(commandESP);
     }
 
     //风速按钮实现方法
     public void fanSpeedRoomDevice(int roomid, int fanSpeed) {
         commandESP.setRoomId(roomid);
-        commandESP.setDeviceType(Constants.deviceType_fancoil);
+        commandESP.setDeviceType(Constants.deviceType_phone);
         commandESP.setRoomState(Constants.roomState_MANUAL);//yes 改成手动运行
         commandESP.setSettingfanSpeed(fanSpeed);
         myRepository.commandToDevice(commandESP);
@@ -180,11 +179,11 @@ public class IndoorViewModel extends AndroidViewModel {
     //传送温度
     public void temperatureToRoomDevice(int roomid, int temp) {
         commandESP.setRoomId(roomid);
-        commandESP.setDeviceType(Constants.deviceType_fancoil);
+        commandESP.setDeviceType(Constants.deviceType_phone);
         commandESP.setSetting_temp(temp);//传输的X10 的假浮点
         myRepository.commandToDevice(commandESP);
         commandESP.setRoomId(roomid);
-        commandESP.setDeviceType(Constants.deviceType_floorwatershed);
+        commandESP.setDeviceType(Constants.deviceType_phone);
         commandESP.setSetting_temp(temp);//传输的X10 的假浮点
         myRepository.commandToDevice(commandESP);
     }
@@ -192,11 +191,11 @@ public class IndoorViewModel extends AndroidViewModel {
     //传送湿度
     public void humidityToRoomDevice(int roomid, int temp) {
         commandESP.setRoomId(roomid);
-        commandESP.setDeviceType(Constants.deviceType_fancoil);
+        commandESP.setDeviceType(Constants.deviceType_phone);
         commandESP.setSetting_humidity(temp);//传输的X10 的假浮点
         myRepository.commandToDevice(commandESP);
         commandESP.setRoomId(roomid);
-        commandESP.setDeviceType(Constants.deviceType_floorwatershed);
+        commandESP.setDeviceType(Constants.deviceType_phone);
         commandESP.setSetting_humidity(temp);//传输的X10 的假浮点
         myRepository.commandToDevice(commandESP);
     }
@@ -205,8 +204,8 @@ public class IndoorViewModel extends AndroidViewModel {
     /**
      * 包装 myRepository 里的方法：
      */
-    public LiveData<List<IndoorDB>> getAllLatestIndoorDBsLive() {
-        return myRepository.getAllLatestIndoorDBsLive();
+    public LiveData<List<IndoorDB>> getAllLatestIndoorDBsLive(int devicetypeId) {
+        return myRepository.getAllLatestIndoorDBsLive(devicetypeId);
     }
 
     public LiveData<List<PeriodDB>> getAllLatestPeriodDBsLive() {

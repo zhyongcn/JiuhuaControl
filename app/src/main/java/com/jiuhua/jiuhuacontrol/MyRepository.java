@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 public class MyRepository implements IGetMessageCallBack {
+    private final String TAG = getClass().getName();
 
     long TimeStamp;
     LiveData<List<BasicInfoDB>> allBasicInfoLive;
@@ -45,7 +46,6 @@ public class MyRepository implements IGetMessageCallBack {
         //获取数据库里的数据
 //        allBasicInfo = indoorDao.loadAllBasicInfo();  //相关于Dao里面的一个有问题的方法。好像不能用。
         allBasicInfoLive = indoorDao.loadAllBasicInfoLive();
-        allLatestIndoorDBsLive = indoorDao.loadLatestIndoorDBsLive();
         allLatestPeriodDBsLive = indoorDao.loadLatestPeriodDBsLive();
 
         serviceConnection = new MyServiceConnection();//新建连接服务的实例
@@ -60,8 +60,8 @@ public class MyRepository implements IGetMessageCallBack {
         String jsonCommandESP = gson.toJson(commandESP);
 
         mqttService = serviceConnection.getMqttService();  //这句可有可无，有就用小写的，没有就用大写的MQTTService
-//        mqttService.publish("86518/JYCFGC/6-2-3401/Room" + roomID, mqttString, 1, true);
-        MQTTService.publish("86518/JYCFGC/6-2-3401/Room" + roomID, jsonCommandESP, 1, true);
+//        mqttService.myPublishToDevice(roomID, jsonCommandESP, 1, true);
+        MQTTService.myPublishToDevice(roomID, jsonCommandESP, 1, true);
         Log.d("jsonToDevice", jsonCommandESP);
     }
 
@@ -72,22 +72,20 @@ public class MyRepository implements IGetMessageCallBack {
         for (int wd = 0; wd < 7; wd++) {
             CommandPeriod commandPeriod = new CommandPeriod();
             commandPeriod.setRoomId(roomid);
-            int[][] temparray = new int[15][3];
+            int[][] temperatureArray = new int[15][3];
             int k = 0;
             commandPeriod.setWeekday(wd);
             for (int i = 0; i < periodDB.getOneRoomWeeklyPeriod().size(); i++) {
                 if (wd == periodDB.getOneRoomWeeklyPeriod().get(i).getWeekday()) {
-                    temparray[k][0] = periodDB.getOneRoomWeeklyPeriod().get(i).getStartMinuteStamp();
-                    temparray[k][1] = periodDB.getOneRoomWeeklyPeriod().get(i).getEndMinuteStamp();
-                    temparray[k][2] = periodDB.getOneRoomWeeklyPeriod().get(i).getTempreature();
+                    temperatureArray[k][0] = periodDB.getOneRoomWeeklyPeriod().get(i).getStartMinuteStamp();
+                    temperatureArray[k][1] = periodDB.getOneRoomWeeklyPeriod().get(i).getEndMinuteStamp();
+                    temperatureArray[k][2] = periodDB.getOneRoomWeeklyPeriod().get(i).getTempreature();
                     k++;
                 }
-
             }
-            commandPeriod.setPeriod(temparray);
+            commandPeriod.setPeriod(temperatureArray);
             String s = gson.toJson(commandPeriod);
-            MQTTService.publish("86518/JYCFGC/6-2-3401/Room" + roomid, s, 1, true);
-
+            MQTTService.myPublishToDevice(roomid, s, 1, true);
             Log.d("periodToDevice", s);
         }
 
@@ -143,7 +141,9 @@ public class MyRepository implements IGetMessageCallBack {
     }
 
     //获取普通房间的全部信息
-    public LiveData<List<IndoorDB>> getAllLatestIndoorDBsLive() {
+    public LiveData<List<IndoorDB>> getAllLatestIndoorDBsLive( int devicetypeId) {
+        //获取房间的最新信息指定了参数设备类型，继续包装下去，让调用者决定设备的类型。
+        allLatestIndoorDBsLive = indoorDao.loadLatestIndoorDBsLive(devicetypeId);
         //一般查询系统会自动安排在非主线程，不需要自己写。其他的需要自己写非主线程。？？right？？
         return allLatestIndoorDBsLive;
     }
@@ -308,7 +308,7 @@ public class MyRepository implements IGetMessageCallBack {
                     if (indoorDB != null) {
                         indoorDB.setTimeStamp(new Date().getTime()/1000);
                         insertIndoorDB(indoorDB);
-                        Log.d("IndoorDB", gson.toJson(indoorDB));
+                        Log.d("HomeViewModel", gson.toJson(indoorDB));
                     }
                 } else {
                     Log.d("the message is not json", message);

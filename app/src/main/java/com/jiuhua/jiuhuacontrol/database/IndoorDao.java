@@ -29,13 +29,13 @@ public interface IndoorDao {
     @Delete
     void deleteBasicInfoDB(BasicInfoDB... basicInfoDBS);
 
-    @Query("DELETE FROM BasicInfoDB")
+    @Query( "DELETE FROM BasicInfoDB" )
     void deleteAllBasicInfo();
 
-    @Query("SELECT * FROM BasicInfoDB")
+    @Query( "SELECT * FROM BasicInfoDB" )
     LiveData<List<BasicInfoDB>> loadAllBasicInfoLive();   //only can use LiveData<> !
 
-    @Query("SELECT roomname FROM BasicInfoDB WHERE roomId = :roomid")
+    @Query( "SELECT roomname FROM BasicInfoDB WHERE roomId = :roomid" )
     String loadRoomName(int roomid);
 
     /**
@@ -44,24 +44,24 @@ public interface IndoorDao {
     @Insert
     void insertIndoorDB(IndoorDB... indoorDBS);
 
-    @Query("DELETE FROM IndoorDB")
+    @Query( "DELETE FROM IndoorDB" )
     void deleteAllIndoorDB();
 
-//    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)  //TODO  每次编译都出错，能正常运行，太烦了，才加上的。
-    @Query("SELECT * , MAX(timeStamp)  FROM IndoorDB GROUP BY room_id")
-    LiveData<List<IndoorDB>> loadLatestIndoorDBsLive();   //only can use LiveData<> !   这里添加了Max（timestamp）一列，但是IndoorDB里面没有。
+    //    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)  //TODO  每次编译都出错，能正常运行，太烦了，才加上的。
+    @Query( "SELECT * , MAX(timeStamp)  FROM IndoorDB WHERE device_type = :devicetypeId GROUP BY room_id" )
+    LiveData<List<IndoorDB>> loadLatestIndoorDBsLive(int devicetypeId);   //only can use LiveData<> !   这里添加了Max（timestamp）一列，但是IndoorDB里面没有。
 
     /**
      * PeroidDB的相关方法
      */
-    @Insert(onConflict = REPLACE)
+    @Insert( onConflict = REPLACE )
     void insertPeriodDB(PeriodDB... periodDBS);
 
     @Delete
     void deletePeriodDB(PeriodDB... periodDBS);
 
-    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)  //TODO  每次编译都出错，能正常运行，太烦了，才加上的。
-    @Query("SELECT * , MAX(timestamp) FROM PeriodDB GROUP BY room_id")
+    @SuppressWarnings( RoomWarnings.CURSOR_MISMATCH )  //TODO  每次编译都出错，能正常运行，太烦了，才加上的。
+    @Query( "SELECT * , MAX(timestamp) FROM PeriodDB GROUP BY room_id" )
     LiveData<List<PeriodDB>> loadLatestPeriodDBsLive();  //only can use LiveData<> ! 加了转换器居然编译通过了。//FIXME ??其实多出来一项，entity里面没有的。
 
     /**

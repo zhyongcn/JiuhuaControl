@@ -33,8 +33,8 @@ public class HomeViewModel extends AndroidViewModel {
         return myRepository.getAllBasicInfoLive();
     }
 
-    public LiveData<List<IndoorDB>> getAllLatestIndoorDBsLive() {
-        return myRepository.getAllLatestIndoorDBsLive();
+    public LiveData<List<IndoorDB>> getAllLatestIndoorDBsLive(int devicetypeId) {
+        return myRepository.getAllLatestIndoorDBsLive(devicetypeId);
     }
 
     //获取普通房间的名字

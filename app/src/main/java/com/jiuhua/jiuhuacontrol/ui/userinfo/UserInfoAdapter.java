@@ -15,7 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.jiuhua.jiuhuacontrol.R;
 import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
-import com.jiuhua.jiuhuacontrol.ui.indoor.Constants;
+import com.jiuhua.jiuhuacontrol.Constants;
 import com.jiuhua.mqttsample.MQTTService;
 
 import java.util.ArrayList;
@@ -39,9 +39,6 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.MyView
     public void setAllBasicInfo(List<BasicInfoDB> allBasicInfo) {
         this.allBasicInfo = allBasicInfo;
     }
-
-    //TODO 添加校准温湿度的逻辑。发送的MQTTmessage 的qos必须是1，或2，0是不行的。！！
-    // 接收端的.disable_clean_session = 1 禁止清除会话，可以理解为mqtt的缓存
 
     @NonNull
     @Override
@@ -128,15 +125,17 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.MyView
 
                     userInfoViewModel.updateBasicInfo(basicInfoDB);
                     Toast.makeText(v.getContext(), "你修改了房间信息", Toast.LENGTH_SHORT).show();
-                    //TODO send the calibration to module.
+
+                    //添加校准温湿度的逻辑。发送的MQTTmessage 的qos必须是1，或2，0是不行的。！！
+                    // 接收端的.disable_clean_session = 1 禁止清除会话，可以理解为mqtt的缓存
                     Gson gson = new Gson();
                     JsonObject jsonObject = new JsonObject(); //temp object for send temperatureSensorCalibration information.
                     jsonObject.addProperty("roomId", basicInfoDB.getRoomId());
-                    jsonObject.addProperty("deviceType", Constants.deviceType_DHTsensor);
+                    jsonObject.addProperty("deviceType", Constants.deviceType_phone);//好像手机来的命令才接受。
                     //假浮点，在手机上转换，减轻模块压力。
                     jsonObject.addProperty("adjustingTemperature", basicInfoDB.getTemperatureSensorCalibration() * 10);
                     String msg = gson.toJson(jsonObject);
-                    MQTTService.publish("86518/JYCFGC/6-2-3401/Room" + basicInfoDB.getRoomId(), msg, 1, false);
+                    MQTTService.myPublishToDevice(basicInfoDB.getRoomId(), msg, 1, false);
 
                 } else {
                     Toast.makeText(v.getContext(), "房间编号必须填写", Toast.LENGTH_SHORT).show();
