@@ -74,7 +74,7 @@ public class IndoorFragment extends Fragment {
                 binding.textViewFloorValve.setText(R.string.floorvalveshut);
             }
             //显示当前温度
-            binding.tempTemperaturextview.setText(String.valueOf(indoorViewModel.currentlyIndoorDB.getCurrentTemperature() / 10));//假浮点需要除以10
+            binding.tempTemperaturextview.setText(String.valueOf(indoorViewModel.currentlyIndoorDB.getCurrentTemperature() / 10)+"℃");//假浮点需要除以10
             //显示设置温度
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 binding.temperatureSeekBar.setProgress(indoorViewModel.currentlyIndoorDB.getSettingTemperature() / 10, true);//假浮点需要除以10
@@ -158,7 +158,7 @@ public class IndoorFragment extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {//touch结束之后再执行逻辑。
                 indoorViewModel.temperatureToRoomDevice(roomId, temp_P);
-                Toast.makeText(getContext(), roomName + "设置温度为" + temp_P / 10 + "摄氏度", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), roomName + "设置温度为" + temp_P / 10 + "℃", Toast.LENGTH_SHORT).show();
             }
         });
         //湿度设置进度条，收取数据。
