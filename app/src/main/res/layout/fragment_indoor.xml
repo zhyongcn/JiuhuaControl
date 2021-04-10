@@ -15,462 +15,378 @@
         android:layout_height="match_parent"
         tools:context=".ui.indoor.IndoorFragment">
 
-<!--        <ScrollView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent">-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <TextView
+                android:id="@+id/textViewRoomName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:text="@{data.getCurrentlyRoomName}"
+                android:textSize="24sp"
+                tools:text="房间名称" />
+
+            <TextView
+                android:id="@+id/temp_temperaturextview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="60sp"
+                tools:text="当前温度℃" />
 
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/roomnameline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_percent="0.05" />
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/currentTemperatureline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_percent="0.15" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/fanspeedline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_percent="0.65" />
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/ACtempsetline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_percent="0.4" />
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/ACmodelline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_percent="0.48" />
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/floormodelline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_percent="0.95" />
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/floortempsetline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_percent="0.84" />
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/rightline"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.95" />
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/leftline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.05" />
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/verticalcenterline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.50" />
-
-                <TextView
-                    android:id="@+id/textViewRoomName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{data.getCurrentlyRoomName}"
-                    android:textSize="24sp"
-                    app:layout_constraintBottom_toTopOf="@+id/roomnameline"
-                    app:layout_constraintEnd_toStartOf="@+id/rightline"
-                    app:layout_constraintStart_toStartOf="@+id/leftline"
-                    app:layout_constraintTop_toTopOf="@+id/roomnameline"
-                    tools:text="房间名称" />
-
-                <TextView
-                    android:id="@+id/temp_temperaturextview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="72sp"
-                    app:layout_constraintBottom_toTopOf="@+id/currentTemperatureline"
-                    app:layout_constraintEnd_toStartOf="@+id/rightline"
-                    app:layout_constraintHorizontal_bias="0.497"
-                    app:layout_constraintStart_toStartOf="@+id/leftline"
-                    app:layout_constraintTop_toTopOf="@+id/currentTemperatureline"
-                    tools:text="当前温度℃" />
-
-                <TextView
-                    android:id="@+id/textView8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="32dp"
-                    android:text="风机状态       高速风"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toTopOf="@+id/textView10"
-                    app:layout_constraintEnd_toStartOf="@+id/verticalcenterline"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/leftline" />
-
-                <TextView
-                    android:id="@+id/textView6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:text="设定温度      xxx ℃"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toTopOf="@+id/textView8"
-                    app:layout_constraintEnd_toStartOf="@+id/verticalcenterline"
-                    app:layout_constraintTop_toBottomOf="@+id/textView9"
-                    app:layout_constraintVertical_bias="0.128" />
-
-                <TextView
-                    android:id="@+id/textView10"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="空调操作"
-                    android:textSize="20sp"
-                    tools:layout_editor_absoluteX="30dp"
-                    tools:layout_editor_absoluteY="241dp" />
-
-                <TextView
-                    android:id="@+id/textView7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="运行模式        手动"
-                    android:textSize="20sp"
-                    tools:layout_editor_absoluteX="220dp"
-                    tools:layout_editor_absoluteY="178dp" />
-
-                <TextView
-                    android:id="@+id/textView9"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="#A46490C5"
-                    android:text="空调运行状态"
-                    android:textSize="20sp"
-                    app:layout_constraintEnd_toStartOf="@+id/rightline"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/leftline"
-                    tools:layout_editor_absoluteY="147dp" />
-
-                <RadioGroup
-                    android:id="@+id/airconditionrunModel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toTopOf="@+id/ACmodelline"
-                    app:layout_constraintEnd_toEndOf="@+id/rightline"
-                    app:layout_constraintStart_toStartOf="@+id/leftline"
-                    app:layout_constraintTop_toTopOf="@+id/ACmodelline">
-
-                    <RadioButton
-                        android:id="@+id/radioButtonoff"
+                    <TextView
+                        android:id="@+id/textView9"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="停止" />
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="#B21C23BC"
+                        android:text="空调运行状态"
+                        android:textSize="20sp" />
 
-                    <RadioButton
-                        android:id="@+id/radioButtonManual"
+                    <TextView
+                        android:id="@+id/textView6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:text="空调设定温度      xxx ℃"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/textView7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:text="运行模式        手动模式"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/textView8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:text="风机状态       高速风"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/textViewCoilValve"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:textSize="20sp"
+                        tools:text="运行状态      运行中" />
+
+                    <TextView
+                        android:id="@+id/textView10"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="手动" />
+                        android:background="#7807078A"
+                        android:text="空调操作"
+                        android:textSize="20sp" />
 
-                    <RadioButton
-                        android:id="@+id/radioButtonAutomatic"
+                    <LinearLayout
+                        android:id="@+id/ACtempset"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="自动" />
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:orientation="horizontal">
 
-                    <RadioButton
-                        android:id="@+id/radioButtonOutside"
+                        <TextView
+                            android:id="@+id/textView11"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="70sp"
+                            android:text="空调温度设置"
+                            android:textSize="20sp" />
+
+                        <ImageView
+                            android:id="@+id/imageView2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/downbutton" />
+
+                        <EditText
+                            android:id="@+id/editTextNumber"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="2"
+                            android:gravity="center_horizontal"
+                            android:inputType="number"
+                            android:text="25" />
+
+                        <ImageView
+                            android:id="@+id/imageView3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/upbutton" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/ACmodelset"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="50sp"
+                        android:text="空调模式设置"
+                        android:textSize="20sp" />
+
+                    <RadioGroup
+                        android:id="@+id/airconditionrunModel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radioButtonoff"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="停止" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonManual"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="手动" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonAutomatic"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="自动" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonOutside"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="外出" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonSleep"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="睡眠" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonHumidity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="除湿" />
+
+                    </RadioGroup>
+
+                    <TextView
+                        android:id="@+id/ACfanspeedset"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="50sp"
+                        android:text="空调风速设置"
+                        android:textSize="20sp" />
+
+                    <RadioGroup
+                        android:id="@+id/fanspeed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radioButtonlowfan"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="低速风" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonmiddlefan"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="中速风" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonhighfan"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="高速风" />
+
+                        <RadioButton
+                            android:id="@+id/radioButtonautofan"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="自动风" />
+                    </RadioGroup>
+
+                    <TextView
+                        android:id="@+id/textView12"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="外出" />
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="#BC5E5E"
+                        android:text="地暖运行状态"
+                        android:textSize="20sp" />
 
-                    <RadioButton
-                        android:id="@+id/radioButtonSleep"
+                    <TextView
+                        android:id="@+id/textView14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:text="地暖设定温度     XXX ℃"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/textView13"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:text="地暖运行模式      宴会模式"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/textViewFloorValve"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:textSize="20sp"
+                        tools:text="地暖状态       运行中" />
+
+                    <TextView
+                        android:id="@+id/textViewFloorValve2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="睡眠" />
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="#DA9090"
+                        android:textSize="20sp"
+                        tools:text="地暖操作" />
 
-                    <RadioButton
-                        android:id="@+id/radioButtonHumidity"
+                    <LinearLayout
+                        android:id="@+id/floortempset"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="除湿" />
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:orientation="horizontal">
 
-                </RadioGroup>
+                        <TextView
+                            android:id="@+id/textView15"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="70sp"
+                            android:text="地暖温度设置"
+                            android:textSize="20sp" />
 
-                <TextView
-                    android:id="@+id/textViewFloorValve2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="#DA9090"
-                    android:textSize="20sp"
-                    app:layout_constraintEnd_toStartOf="@+id/rightline"
-                    app:layout_constraintStart_toStartOf="@+id/leftline"
-                    tools:layout_editor_absoluteY="608dp"
-                    tools:text="地暖操作" />
+                        <ImageView
+                            android:id="@+id/imageView4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/downbutton" />
 
-                <TextView
-                    android:id="@+id/textViewFloorValve3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    tools:layout_editor_absoluteX="37dp"
-                    tools:layout_editor_absoluteY="703dp"
-                    tools:text="地暖运行模式" />
+                        <EditText
+                            android:id="@+id/editTextNumber2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="2"
+                            android:gravity="center_horizontal"
+                            android:inputType="number"
+                            android:text="25" />
 
-                <TextView
-                    android:id="@+id/textView12"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="#BC5E5E"
-                    android:text="地暖运行状态"
-                    android:textSize="20sp"
-                    app:layout_constraintEnd_toStartOf="@+id/rightline"
-                    app:layout_constraintStart_toStartOf="@+id/leftline"
-                    tools:layout_editor_absoluteY="480dp" />
+                        <ImageView
+                            android:id="@+id/imageView5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/upbutton" />
+                    </LinearLayout>
 
-                <TextView
-                    android:id="@+id/textView13"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="地暖运行模式"
-                    android:textSize="20sp"
-                    tools:layout_editor_absoluteX="234dp"
-                    tools:layout_editor_absoluteY="522dp" />
-
-                <TextView
-                    android:id="@+id/textView14"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="地暖设定温度"
-                    android:textSize="20sp"
-                    tools:layout_editor_absoluteX="21dp"
-                    tools:layout_editor_absoluteY="522dp" />
-
-                <TextView
-                    android:id="@+id/textViewCoilValve"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    app:layout_constraintEnd_toStartOf="@+id/rightline"
-                    app:layout_constraintHorizontal_bias="0.974"
-                    app:layout_constraintStart_toStartOf="@+id/leftline"
-                    tools:layout_editor_absoluteY="207dp"
-                    tools:text="运行状态      运行中" />
-
-                <TextView
-                    android:id="@+id/textViewFloorValve"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    tools:layout_editor_absoluteX="21dp"
-                    tools:layout_editor_absoluteY="567dp"
-                    tools:text="地暖状态       运行中" />
-
-                <RadioGroup
-                    android:id="@+id/floorHeatRunModel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toTopOf="@+id/floormodelline"
-                    app:layout_constraintEnd_toEndOf="@+id/rightline"
-                    app:layout_constraintStart_toStartOf="@+id/leftline"
-                    app:layout_constraintTop_toTopOf="@+id/floormodelline">
-
-                    <RadioButton
-                        android:id="@+id/radioButtonheatoff"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/textViewFloorValve3"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="停止" />
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:textSize="20sp"
+                        tools:text="地暖运行模式设置" />
 
-                    <RadioButton
-                        android:id="@+id/radioButtonheatManual"
-                        android:layout_width="match_parent"
+                    <RadioGroup
+                        android:id="@+id/floorHeatRunModel"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="手动" />
+                        android:layout_gravity="center"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:orientation="horizontal">
 
-                    <RadioButton
-                        android:id="@+id/radioButtonheatrAutomatic"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="自动" />
+                        <RadioButton
+                            android:id="@+id/radioButtonheatoff"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="停止" />
 
-                    <RadioButton
-                        android:id="@+id/radioButtonheatOutside"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="外出" />
+                        <RadioButton
+                            android:id="@+id/radioButtonheatManual"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="手动" />
 
-                    <RadioButton
-                        android:id="@+id/radioButtonheatSleep"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="睡眠" />
+                        <RadioButton
+                            android:id="@+id/radioButtonheatrAutomatic"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="自动" />
 
-                    <RadioButton
-                        android:id="@+id/radioButtonFeast"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="宴会" />
+                        <RadioButton
+                            android:id="@+id/radioButtonheatOutside"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="外出" />
 
-                </RadioGroup>
+                        <RadioButton
+                            android:id="@+id/radioButtonheatSleep"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="睡眠" />
 
-                <!--            <RadioGroup-->
-                <!--                android:id="@+id/runModel2"-->
-                <!--                android:layout_width="wrap_content"-->
-                <!--                android:layout_height="wrap_content"-->
-                <!--                android:orientation="horizontal"-->
-                <!--                app:layout_constraintBottom_toTopOf="@+id/guideline12"-->
-                <!--                app:layout_constraintEnd_toStartOf="@+id/guideline10"-->
-                <!--                app:layout_constraintStart_toStartOf="@+id/guideline9"-->
-                <!--                app:layout_constraintTop_toBottomOf="@+id/runModel1">-->
+                        <RadioButton
+                            android:id="@+id/radioButtonFeast"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="宴会" />
 
-                <!--            </RadioGroup>-->
+                    </RadioGroup>
+                </LinearLayout>
 
-                <RadioGroup
-                    android:id="@+id/fanspeed"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toTopOf="@+id/fanspeedline"
-                    app:layout_constraintEnd_toEndOf="@+id/rightline"
-                    app:layout_constraintStart_toStartOf="@+id/leftline"
-                    app:layout_constraintTop_toTopOf="@+id/fanspeedline">
+            </ScrollView>
 
-                    <RadioButton
-                        android:id="@+id/radioButtonlowfan"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="低速风" />
 
-                    <RadioButton
-                        android:id="@+id/radioButtonmiddlefan"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="中速风" />
-
-                    <RadioButton
-                        android:id="@+id/radioButtonhighfan"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="高速风" />
-
-                    <RadioButton
-                        android:id="@+id/radioButtonautofan"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="自动风" />
-                </RadioGroup>
-
-                <TextView
-                    android:id="@+id/textView15"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="地暖温度设置"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toTopOf="@+id/floortempsetline"
-                    app:layout_constraintTop_toTopOf="@+id/floortempsetline"
-                    app:layout_constraintVertical_bias="0.555"
-                    tools:layout_editor_absoluteX="44dp" />
-
-                <TextView
-                    android:id="@+id/textView11"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="空调温度设置"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toTopOf="@+id/ACtempsetline"
-                    app:layout_constraintTop_toTopOf="@+id/ACtempsetline"
-                    tools:layout_editor_absoluteX="37dp" />
-
-                <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toTopOf="@+id/floortempsetline"
-                    app:layout_constraintTop_toTopOf="@+id/floortempsetline"
-                    app:srcCompat="@drawable/downbutton"
-                    tools:layout_editor_absoluteX="243dp" />
-
-                <ImageView
-                    android:id="@+id/imageView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toTopOf="@+id/ACtempsetline"
-                    app:layout_constraintTop_toTopOf="@+id/ACtempsetline"
-                    app:srcCompat="@drawable/downbutton"
-                    tools:layout_editor_absoluteX="243dp" />
-
-                <EditText
-                    android:id="@+id/editTextNumber"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="2"
-                    android:gravity="center_horizontal"
-                    android:inputType="number"
-                    android:text="25"
-                    app:layout_constraintBottom_toTopOf="@+id/floortempsetline"
-                    app:layout_constraintTop_toTopOf="@+id/floortempsetline"
-                    tools:layout_editor_absoluteX="273dp" />
-
-                <EditText
-                    android:id="@+id/editTextNumber2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="2"
-                    android:gravity="center_horizontal"
-                    android:inputType="number"
-                    android:text="25"
-                    app:layout_constraintBottom_toTopOf="@+id/ACtempsetline"
-                    app:layout_constraintTop_toTopOf="@+id/ACtempsetline"
-                    tools:layout_editor_absoluteX="273dp" />
-
-                <ImageView
-                    android:id="@+id/imageView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toTopOf="@+id/floortempsetline"
-                    app:layout_constraintTop_toTopOf="@+id/floortempsetline"
-                    app:srcCompat="@drawable/upbutton"
-                    tools:layout_editor_absoluteX="326dp" />
-
-                <ImageView
-                    android:id="@+id/imageView5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toTopOf="@+id/ACtempsetline"
-                    app:layout_constraintTop_toTopOf="@+id/ACtempsetline"
-                    app:srcCompat="@drawable/upbutton"
-                    tools:layout_editor_absoluteX="330dp" />
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guideline40"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-<!--        </ScrollView>-->
+        </LinearLayout>
     </FrameLayout>
 </layout>
