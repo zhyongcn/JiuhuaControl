@@ -118,7 +118,7 @@ public class MyView extends View {
                     canvas.drawText(dayPeriod.getDayPeriodName(), square * (dayPeriod.getWeekday() + 1) + 90,
                             dayPeriod.getStartMinuteStamp() * square / 60 + 50, textPaintCross);
                     //写 设置的温度
-                    canvas.drawText(String.format("%d C", dayPeriod.getTempreature()), square * (dayPeriod.getWeekday() + 1) + 80,
+                    canvas.drawText(String.format("%d ℃", dayPeriod.getTempreature()), square * (dayPeriod.getWeekday() + 1) + 80,
                             dayPeriod.getStartMinuteStamp() * square / 60 + 90, textPaintCross);
                 }
             }
@@ -139,7 +139,7 @@ public class MyView extends View {
                 canvas.drawText(checkedDayPeriod.getDayPeriodName(), square * (checkedDayPeriod.getWeekday() + 1) + 90,
                         checkedDayPeriod.getStartMinuteStamp() * square / 60 + 50, textPaintCross);
                 //写 设置的温度
-                canvas.drawText(String.format("%d C", checkedDayPeriod.getTempreature()), square * (checkedDayPeriod.getWeekday() + 1) + 80,
+                canvas.drawText(String.format("%d ℃", checkedDayPeriod.getTempreature()), square * (checkedDayPeriod.getWeekday() + 1) + 80,
                         checkedDayPeriod.getStartMinuteStamp() * square / 60 + 90, textPaintCross);
             }
         }
