@@ -32,7 +32,7 @@
                 tools:text="房间名称" />
 
             <TextView
-                android:id="@+id/temp_temperaturextview"
+                android:id="@+id/current_temperature_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -50,7 +50,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/textView9"
+                        android:id="@+id/aircondition_state_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -60,7 +60,7 @@
                         android:textSize="20sp" />
 
                     <TextView
-                        android:id="@+id/textView6"
+                        android:id="@+id/show_aircondition_setting_temperature"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -69,7 +69,7 @@
                         android:textSize="20sp" />
 
                     <TextView
-                        android:id="@+id/textView7"
+                        android:id="@+id/show_aircondition_running_model"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -78,7 +78,7 @@
                         android:textSize="20sp" />
 
                     <TextView
-                        android:id="@+id/textView8"
+                        android:id="@+id/show_aircondition_running_fanspeed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -87,7 +87,7 @@
                         android:textSize="20sp" />
 
                     <TextView
-                        android:id="@+id/textViewCoilValve"
+                        android:id="@+id/show_aircondition_running_state_coilvalve"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -96,7 +96,7 @@
                         tools:text="运行状态      运行中" />
 
                     <TextView
-                        android:id="@+id/textView10"
+                        android:id="@+id/aircondition_opreate_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#7807078A"
@@ -104,7 +104,7 @@
                         android:textSize="20sp" />
 
                     <LinearLayout
-                        android:id="@+id/ACtempset"
+                        android:id="@+id/aircondition_temperature_set"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -112,7 +112,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/textView11"
+                            android:id="@+id/textview_aircondition_temperature_set"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="70sp"
@@ -120,14 +120,14 @@
                             android:textSize="20sp" />
 
                         <ImageView
-                            android:id="@+id/imageView2"
+                            android:id="@+id/aircondition_down_temperature"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             app:srcCompat="@drawable/downbutton" />
 
                         <EditText
-                            android:id="@+id/editTextNumber"
+                            android:id="@+id/aircondition_set_temperature_number"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ems="2"
@@ -136,7 +136,7 @@
                             android:text="25" />
 
                         <ImageView
-                            android:id="@+id/imageView3"
+                            android:id="@+id/aircondition_up_temperature"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -144,15 +144,15 @@
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/ACmodelset"
+                        android:id="@+id/textview_aircondition_model_set"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="50sp"
-                        android:text="空调模式设置"
+                        android:text="空调运行模式设置"
                         android:textSize="20sp" />
 
                     <RadioGroup
-                        android:id="@+id/airconditionrunModel"
+                        android:id="@+id/radoGroup_aircondition_set_Model"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -161,37 +161,37 @@
                         android:orientation="horizontal">
 
                         <RadioButton
-                            android:id="@+id/radioButtonoff"
+                            android:id="@+id/radioButton_aircondition_model_Off"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="停止" />
 
                         <RadioButton
-                            android:id="@+id/radioButtonManual"
+                            android:id="@+id/radioButton_aircondition_mode_Manual"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="手动" />
 
                         <RadioButton
-                            android:id="@+id/radioButtonAutomatic"
+                            android:id="@+id/radioButton_aircondition_mode_Automatic"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="自动" />
 
                         <RadioButton
-                            android:id="@+id/radioButtonOutside"
+                            android:id="@+id/radioButton_aircondition_mode_Outside"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="外出" />
 
                         <RadioButton
-                            android:id="@+id/radioButtonSleep"
+                            android:id="@+id/radioButton_aircondition_mode_Sleep"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="睡眠" />
 
                         <RadioButton
-                            android:id="@+id/radioButtonHumidity"
+                            android:id="@+id/radioButton_aircondition_mode_Humidity"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="除湿" />
@@ -199,7 +199,7 @@
                     </RadioGroup>
 
                     <TextView
-                        android:id="@+id/ACfanspeedset"
+                        android:id="@+id/aircondition_fanspeedset"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="50sp"
@@ -241,7 +241,7 @@
                     </RadioGroup>
 
                     <TextView
-                        android:id="@+id/textView12"
+                        android:id="@+id/floorheat_state_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -251,7 +251,7 @@
                         android:textSize="20sp" />
 
                     <TextView
-                        android:id="@+id/textView14"
+                        android:id="@+id/show_floorheat_settingTemperature"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -260,7 +260,7 @@
                         android:textSize="20sp" />
 
                     <TextView
-                        android:id="@+id/textView13"
+                        android:id="@+id/show_floorheat_running_Model"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -269,7 +269,7 @@
                         android:textSize="20sp" />
 
                     <TextView
-                        android:id="@+id/textViewFloorValve"
+                        android:id="@+id/show_floorheat_running_states"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -278,7 +278,7 @@
                         tools:text="地暖状态       运行中" />
 
                     <TextView
-                        android:id="@+id/textViewFloorValve2"
+                        android:id="@+id/floorheat_operate_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -288,7 +288,7 @@
                         tools:text="地暖操作" />
 
                     <LinearLayout
-                        android:id="@+id/floortempset"
+                        android:id="@+id/floorheat_temperature_set"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -296,7 +296,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/textView15"
+                            android:id="@+id/textview_floorheat_temperature_set"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="70sp"
@@ -304,14 +304,14 @@
                             android:textSize="20sp" />
 
                         <ImageView
-                            android:id="@+id/imageView4"
+                            android:id="@+id/floorheat_temperature_down"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             app:srcCompat="@drawable/downbutton" />
 
                         <EditText
-                            android:id="@+id/editTextNumber2"
+                            android:id="@+id/floorheat_temperature_set_number"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ems="2"
@@ -320,7 +320,7 @@
                             android:text="25" />
 
                         <ImageView
-                            android:id="@+id/imageView5"
+                            android:id="@+id/floorheat_temperature_up"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -328,7 +328,7 @@
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/textViewFloorValve3"
+                        android:id="@+id/textview_floorheat_model_set"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
@@ -337,7 +337,7 @@
                         tools:text="地暖运行模式设置" />
 
                     <RadioGroup
-                        android:id="@+id/floorHeatRunModel"
+                        android:id="@+id/radioGroup_floorHeat_set_model"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -346,37 +346,37 @@
                         android:orientation="horizontal">
 
                         <RadioButton
-                            android:id="@+id/radioButtonheatoff"
+                            android:id="@+id/radioButton_floorheat_model_Off"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="停止" />
 
                         <RadioButton
-                            android:id="@+id/radioButtonheatManual"
+                            android:id="@+id/radioButton_floorheat_model_Manual"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="手动" />
 
                         <RadioButton
-                            android:id="@+id/radioButtonheatrAutomatic"
+                            android:id="@+id/radioButton_floorheat_model_Automatic"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="自动" />
 
                         <RadioButton
-                            android:id="@+id/radioButtonheatOutside"
+                            android:id="@+id/radioButton_floorheat_model_Outside"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="外出" />
 
                         <RadioButton
-                            android:id="@+id/radioButtonheatSleep"
+                            android:id="@+id/radioButton_floorheat_model_Sleep"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="睡眠" />
 
                         <RadioButton
-                            android:id="@+id/radioButtonFeast"
+                            android:id="@+id/radioButton_floorheat_model_Feast"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="宴会" />

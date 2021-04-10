@@ -63,9 +63,9 @@ public class IndoorFragment extends Fragment {
             //****数据驱动界面改变,所以代码要放在fragment或者Activity里面。只处理界面****
             //显示两通阀的开关
             if (indoorViewModel.currentlyIndoorDB.isCoilValveOpen()) {
-                binding.textViewCoilValve.setText(R.string.coilvalveopen);
+                binding.aircondition_running_state_coilvalve.setText(R.string.coilvalveopen);
             } else {
-                binding.textViewCoilValve.setText(R.string.coilvalveshut);
+                binding.aircondition_running_state_coilvalve.setText(R.string.coilvalveshut);
             }
             //显示地暖的开关
             if (indoorViewModel.currentlyIndoorDB.isFloorValveOpen()) {
