@@ -7,6 +7,8 @@ public interface Constants {
     int roomState_AUTO = 2;
     int roomState_DEHUMIDITY = 3;
     int roomState_FEAST = 4;
+    int roomState_SLEEP = 5;
+    int roomState_OUTSIDE =6;
 
     int fanSpeed_STOP = 0;
     int fanSpeed_LOW = 1;

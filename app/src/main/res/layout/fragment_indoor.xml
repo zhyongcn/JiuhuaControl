@@ -22,9 +22,8 @@
 
             <TextView
                 android:id="@+id/textViewRoomName"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:layout_marginTop="2dp"
                 android:layout_marginBottom="2dp"
                 android:text="@{data.getCurrentlyRoomName}"
@@ -61,7 +60,7 @@
 
                     <TextView
                         android:id="@+id/show_aircondition_setting_temperature"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:layout_marginBottom="2dp"
@@ -70,7 +69,7 @@
 
                     <TextView
                         android:id="@+id/show_aircondition_running_model"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:layout_marginBottom="2dp"
@@ -79,7 +78,7 @@
 
                     <TextView
                         android:id="@+id/show_aircondition_running_fanspeed"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:layout_marginBottom="2dp"
@@ -88,7 +87,7 @@
 
                     <TextView
                         android:id="@+id/show_aircondition_running_state_coilvalve"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:layout_marginBottom="2dp"
@@ -135,6 +134,13 @@
                             android:inputType="number"
                             android:text="25" />
 
+                        <TextView
+                            android:id="@+id/textview_Celsius_symbol_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="℃"
+                            android:textSize="20sp" />
+
                         <ImageView
                             android:id="@+id/aircondition_up_temperature"
                             android:layout_width="wrap_content"
@@ -145,14 +151,14 @@
 
                     <TextView
                         android:id="@+id/textview_aircondition_model_set"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="50sp"
                         android:text="空调运行模式设置"
                         android:textSize="20sp" />
 
                     <RadioGroup
-                        android:id="@+id/radoGroup_aircondition_set_Model"
+                        android:id="@+id/radio_group_aircondition_set_model"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -200,7 +206,7 @@
 
                     <TextView
                         android:id="@+id/aircondition_fanspeedset"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="50sp"
                         android:text="空调风速设置"
@@ -252,7 +258,7 @@
 
                     <TextView
                         android:id="@+id/show_floorheat_settingTemperature"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:layout_marginBottom="2dp"
@@ -261,7 +267,7 @@
 
                     <TextView
                         android:id="@+id/show_floorheat_running_Model"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:layout_marginBottom="2dp"
@@ -270,7 +276,7 @@
 
                     <TextView
                         android:id="@+id/show_floorheat_running_states"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:layout_marginBottom="2dp"
@@ -319,6 +325,13 @@
                             android:inputType="number"
                             android:text="25" />
 
+                        <TextView
+                            android:id="@+id/textview_Celsius_symbol_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="℃"
+                            android:textSize="20sp" />
+
                         <ImageView
                             android:id="@+id/floorheat_temperature_up"
                             android:layout_width="wrap_content"
@@ -329,12 +342,12 @@
 
                     <TextView
                         android:id="@+id/textview_floorheat_model_set"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:layout_marginBottom="2dp"
                         android:textSize="20sp"
-                        tools:text="地暖运行模式设置" />
+                        android:text="地暖运行模式设置" />
 
                     <RadioGroup
                         android:id="@+id/radioGroup_floorHeat_set_model"
@@ -382,11 +395,13 @@
                             android:text="宴会" />
 
                     </RadioGroup>
+
                 </LinearLayout>
 
             </ScrollView>
 
 
         </LinearLayout>
+
     </FrameLayout>
 </layout>

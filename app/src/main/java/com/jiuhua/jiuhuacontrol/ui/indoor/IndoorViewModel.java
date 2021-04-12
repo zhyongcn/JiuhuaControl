@@ -54,7 +54,7 @@ public class IndoorViewModel extends AndroidViewModel {
                     this.currentlyIndoorDB = indoorDB;
 
                     commandESP.setRoomId(currentlyIndoorDB.getRoomId());
-                    commandESP.setDeviceType(currentlyIndoorDB.getDeviceType());
+//                    commandESP.setDeviceType(currentlyIndoorDB.getDeviceType());//TODO 需要调整
                     commandESP.setRoomState(currentlyIndoorDB.getRoomStatus());
                     commandESP.setSetting_temp(currentlyIndoorDB.getSettingTemperature());
                     commandESP.setSetting_humidity(currentlyIndoorDB.getSettingHumidity());
