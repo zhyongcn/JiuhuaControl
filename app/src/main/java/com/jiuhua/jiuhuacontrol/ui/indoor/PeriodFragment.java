@@ -83,7 +83,7 @@ public class PeriodFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putInt("roomId", roomId);
                 bundle.putString("roomName", roomName);
-                bundle.putString("roomName", roomName);
+//                bundle.putString("roomName", roomName);
                 bundle.putInt("clickedweekday", clickedweekday);
                 bundle.putInt("clickedhour", clickedhour);
                 Navigation.findNavController(getView()).navigate(R.id.peroidSettingFragment, bundle);

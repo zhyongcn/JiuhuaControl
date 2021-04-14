@@ -62,7 +62,7 @@ public class MyRepository implements IGetMessageCallBack {
         mqttService = serviceConnection.getMqttService();  //这句可有可无，有就用小写的，没有就用大写的MQTTService
 //        mqttService.myPublishToDevice(roomID, jsonCommandESP, 1, true);
         MQTTService.myPublishToDevice(roomID, jsonCommandESP, 1, true);
-        Log.d("jsonToDevice", jsonCommandESP);
+        Log.d("jsonCommandToDevice", jsonCommandESP);
     }
 
     //period to device  send currentlyPeriodDB. 发送 currentlyPeriodDB 。
