@@ -24,6 +24,8 @@ public interface Constants {
     int deviceType_DHTsensor = 5;
     int deviceType_NTCsensor = 6;
     int deviceType_phone = 7;
+    int deviceType_sendperiod = 8;
+    int deviceType_mqttconfig = 9;
 
     int Monday = 0;
     int Tuesday = 1;
@@ -32,8 +34,5 @@ public interface Constants {
     int Friday = 4;
     int Saturday = 5;
     int Sunday = 6;
-
-    //字符串常量 接受的topic 发送的Topic等等 ^=^
-//    String MQTT_publish_topic_prefix = "86518/YXHY/12-1-101/Room";
 
 }

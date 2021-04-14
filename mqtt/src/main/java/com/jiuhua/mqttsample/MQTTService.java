@@ -31,7 +31,8 @@ public class MQTTService extends Service {
     private static MqttAndroidClient client;//在init（）里面新建
     private MqttConnectOptions conOpt;//在init（）里面新建
 
-    private static String mqtt_host = "tcp://180.102.131.255:1883";//ctyun
+//    private static String mqtt_host = "tcp://180.102.131.255:1883";//电信云
+    private static String mqtt_host = "tcp://175.24.33.56:1883";//腾讯云
     private static String mqtt_client_name = "admin";
     private static String mqtt_client_passWord = "password";
     private static String mqtt_sub_familyTopic = "86518/YXHY/12-1-101/phone";      //要订阅的主题  TODO 原始定义采用什么？
@@ -50,14 +51,24 @@ public class MQTTService extends Service {
     public void onCreate() {
         //从存储器中读取数据
         //这个放在开始的部分，利用线程，不耽误其他线程
-        //todo  挂几个老化运行的设备，创建一个demo数据，缺省加载。 //TODO 最初始的时候获取的是空null，不是缺省的。
-        SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
-        mqtt_host = sharedPreferences.getString("mqtt_host", "tcp://180.102.131.255:1883");
-        mqtt_client_name = sharedPreferences.getString("mqtt_client_name", "admin");
-        mqtt_client_passWord = sharedPreferences.getString("mqtt_client_passwd", "password");
-        mqtt_sub_familyTopic = sharedPreferences.getString("mqtt_family_topic", "86518/YXHY/12-1-101/phone");
-        mqtt_publish_topic_prefix = sharedPreferences.getString("mqtt_publish_topic_prefix", "86518/YXHY/12-1-101/Room");
-        mqtt_client_id = sharedPreferences.getString("mqtt_client_id", "androidId--YXHY12-1-101");
+        //todo  挂几个老化实验的设备，创建一个demo数据，缺省加载。 //最初始的时候获取的是空null，不是缺省的。
+        //TODO: for debug 先注释掉。
+//        SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
+//        mqtt_host = sharedPreferences.getString("mqtt_host", "tcp://180.102.131.255:1883");
+//        mqtt_client_name = sharedPreferences.getString("mqtt_client_name", "admin");
+//        mqtt_client_passWord = sharedPreferences.getString("mqtt_client_passwd", "password");
+//        mqtt_sub_familyTopic = sharedPreferences.getString("mqtt_family_topic", "86518/YXHY/12-1-101/phone");
+//        mqtt_publish_topic_prefix = sharedPreferences.getString("mqtt_publish_topic_prefix", "86518/YXHY/12-1-101/Room");
+//        mqtt_client_id = sharedPreferences.getString("mqtt_client_id", "androidId--YXHY12-1-101");
+        //判断逻辑
+//        if (mqtt_host.equals(null) && mqtt_sub_familyTopic.equals(null) && mqtt_publish_topic_prefix.equals(null)) {
+//            mqtt_host = "tcp://180.102.131.255:1883";//ctyun
+//            mqtt_client_name = "admin";
+//            mqtt_client_passWord = "password";
+//            mqtt_sub_familyTopic = "86518/YXHY/12-1-101/phone";
+//            mqtt_publish_topic_prefix = "86518/YXHY/12-1-101/Room";
+//            mqtt_client_id = "androidId--YXHY12-1-101";//不同的用户需要不同的客户端标识
+//        }
         Log.d(TAG, "onCreate: host is  " + mqtt_host);
         Log.d(TAG, "onCreate: familytopic is  " + mqtt_sub_familyTopic);
 
