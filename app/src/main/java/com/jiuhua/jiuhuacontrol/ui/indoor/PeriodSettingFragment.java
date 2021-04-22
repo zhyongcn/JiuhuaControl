@@ -133,7 +133,7 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
         textViewTitle.setText(roomName + "运行时段设置");
         textViewStartTime.setText("开始时间：                 " + clickedHour + ":" + "00");
         textViewEndTime.setText("结束时间：                 " + valueOf(clickedHour + 1) + ":" + "00");
-        textViewSettingTemperature.setText("设置温度：                 " + temperature + " C");
+        textViewSettingTemperature.setText("设置温度：                 " + temperature + " ℃");
 
         //业务逻辑
         MonCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -285,7 +285,7 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
                 builder3.setPositiveButton("设置", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        textViewSettingTemperature.setText("设置温度               " + valueOf(temp) + "  C");
+                        textViewSettingTemperature.setText("设置温度               " + valueOf(temp) + "  ℃");
                         //这里必须要valueof（temp）否则会崩溃
                         temperature = temp;
                         dayPeriod.setTempreature(temp);

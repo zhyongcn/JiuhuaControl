@@ -5,7 +5,7 @@ public class DayPeriod {
     String dayPeriodName = "     ";
     int startMinuteStamp;  //the minutes after 0:00
     int endMinuteStamp;
-    int tempreature; //default 24 C .
+    int tempreature; //default 240 ℃。
     int weekday;//0 -- Monday
 
 
@@ -33,7 +33,7 @@ public class DayPeriod {
     }
 
     public void setTempreature(int tempreature) {
-        this.tempreature = tempreature;
+        this.tempreature = tempreature*10;//在这里转换为假浮点。
     }
 
     public int getWeekday() {

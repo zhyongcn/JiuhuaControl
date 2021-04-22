@@ -184,17 +184,17 @@
                             android:layout_height="wrap_content"
                             android:text="自动" />
 
-                        <RadioButton
-                            android:id="@+id/radioButton_aircondition_mode_Outside"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="外出" />
+<!--                        <RadioButton-->
+<!--                            android:id="@+id/radioButton_aircondition_mode_Outside"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="外出" />-->
 
-                        <RadioButton
-                            android:id="@+id/radioButton_aircondition_mode_Sleep"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="睡眠" />
+<!--                        <RadioButton-->
+<!--                            android:id="@+id/radioButton_aircondition_mode_Sleep"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="睡眠" />-->
 
                         <RadioButton
                             android:id="@+id/radioButton_aircondition_mode_Humidity"
@@ -376,17 +376,17 @@
                             android:layout_height="wrap_content"
                             android:text="自动" />
 
-                        <RadioButton
-                            android:id="@+id/radioButton_floorheat_model_Outside"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="外出" />
+<!--                        <RadioButton-->
+<!--                            android:id="@+id/radioButton_floorheat_model_Outside"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="外出" />-->
 
-                        <RadioButton
-                            android:id="@+id/radioButton_floorheat_model_Sleep"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="睡眠" />
+<!--                        <RadioButton-->
+<!--                            android:id="@+id/radioButton_floorheat_model_Sleep"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="睡眠" />-->
 
                         <RadioButton
                             android:id="@+id/radioButton_floorheat_model_Feast"

@@ -1,6 +1,7 @@
 package com.jiuhua.jiuhuacontrol.ui.indoor;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.jiuhua.jiuhuacontrol.Constants;
 import com.jiuhua.jiuhuacontrol.R;
 import com.jiuhua.jiuhuacontrol.databinding.FragmentIndoorBinding;
+import com.jiuhua.mqttsample.MQTTService;
 
 public class IndoorFragment extends Fragment {
 
@@ -77,19 +79,25 @@ public class IndoorFragment extends Fragment {
             //依据房间的状态改变显示的文字(停止，手动，自动)
             switch (indoorViewModel.currentlyIndoorDB.getRoomStatus()) {
                 case Constants.roomState_OFF: //stop 0, manual 1, auto 2
-                    binding.showAirconditionRunningModel.setText("运行模式      停止模式");
+                    binding.showAirconditionRunningModel.setText("运行模式          停止模式");
                     break;
                 case Constants.roomState_MANUAL:
-                    binding.showAirconditionRunningModel.setText("运行模式      手动模式");
+                    binding.showAirconditionRunningModel.setText("运行模式          手动模式");
                     break;
                 case Constants.roomState_AUTO:
-                    binding.showAirconditionRunningModel.setText("运行模式      自动模式");
+                    binding.showAirconditionRunningModel.setText("运行模式          自动模式");
+                    break;
+                case Constants.roomState_OUTSIDE:
+                    binding.showAirconditionRunningModel.setText("运行模式          外出模式");
+                    break;
+                case Constants.roomState_SLEEP:
+                    binding.showAirconditionRunningModel.setText("运行模式          睡眠模式");
                     break;
                 case Constants.roomState_DEHUMIDITY:
-                    binding.showAirconditionRunningModel.setText("运行模式      除湿模式");
+                    binding.showAirconditionRunningModel.setText("运行模式          除湿模式");
                     break;
                 case Constants.roomState_FEAST:
-                    binding.showAirconditionRunningModel.setText("运行模式      宴会模式");
+                    binding.showAirconditionRunningModel.setText("运行模式          宴会模式");
                     break;
                 default:
                     break;
@@ -123,24 +131,30 @@ public class IndoorFragment extends Fragment {
 
             //以下地暖参数显示
             //显示地暖设置温度（现在只有一个设置温度）
-            binding.showFloorheatSettingTemperature.setText("地暖设置温度  " + tempTemperature + "℃");//假浮点需要除以10
+            binding.showFloorheatSettingTemperature.setText("地暖设置温度  " + tempTemperature + "℃");//TODO 假浮点需要除以10
 
             //依据房间的状态改变显示的文字(停止，手动，自动)
             switch (indoorViewModel.currentlyIndoorDB.getRoomStatus()) {
                 case Constants.roomState_OFF: //stop 0, manual 1, auto 2
-                    binding.showFloorheatRunningModel.setText("运行模式      停止模式");
+                    binding.showFloorheatRunningModel.setText("运行模式          停止模式");
                     break;
                 case Constants.roomState_MANUAL:
-                    binding.showFloorheatRunningModel.setText("运行模式      手动模式");
+                    binding.showFloorheatRunningModel.setText("运行模式          手动模式");
                     break;
                 case Constants.roomState_AUTO:
-                    binding.showFloorheatRunningModel.setText("运行模式      自动模式");
+                    binding.showFloorheatRunningModel.setText("运行模式          自动模式");
+                    break;
+                case Constants.roomState_OUTSIDE:
+                    binding.showFloorheatRunningModel.setText("运行模式          外出模式");
+                    break;
+                case Constants.roomState_SLEEP:
+                    binding.showFloorheatRunningModel.setText("运行模式          睡眠模式");
                     break;
                 case Constants.roomState_DEHUMIDITY:
-                    binding.showFloorheatRunningModel.setText("运行模式      除湿模式");
+                    binding.showFloorheatRunningModel.setText("运行模式          除湿模式");
                     break;
                 case Constants.roomState_FEAST:
-                    binding.showFloorheatRunningModel.setText("运行模式      宴会模式");
+                    binding.showFloorheatRunningModel.setText("运行模式          宴会模式");
                     break;
                 default:
                     break;
@@ -195,14 +209,23 @@ public class IndoorFragment extends Fragment {
                     indoorViewModel.roomstateToDevice(roomId, Constants.roomState_AUTO);
 //                        Toast.makeText(getContext(), roomName + "空调自动模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                     break;
-                case R.id.radioButton_aircondition_mode_Outside:
-                    indoorViewModel.roomstateToDevice(roomId, Constants.roomState_OUTSIDE);
-//                        Toast.makeText(getContext(), roomName + "空调外出模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
-                    break;
-                case R.id.radioButton_aircondition_mode_Sleep:
-                    indoorViewModel.roomstateToDevice(roomId, Constants.roomState_SLEEP);
-//                        Toast.makeText(getContext(), roomName + "空调睡眠模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
-                    break;
+                //TODO:
+                /**本版不实现。壁挂炉版，两联供高级版再实现
+                 * 外出模式的核心：维持一定温度（假目标），防冻，提前升温。
+                 *      应该覆盖手动、自动模式，结束时恢复原来的模式。
+                 *      是否需要输入时间参数。手机app上还需要美化。
+                 * 睡眠模式的核心： 温度降1--2℃
+                 *      覆盖手动模式，自动模式吗？
+                 *      需要输入时间参数，预升温吗？
+                 */
+//                case R.id.radioButton_aircondition_mode_Outside:
+//                    indoorViewModel.roomstateToDevice(roomId, Constants.roomState_OUTSIDE);
+////                        Toast.makeText(getContext(), roomName + "空调外出模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
+//                    break;
+//                case R.id.radioButton_aircondition_mode_Sleep:
+//                    indoorViewModel.roomstateToDevice(roomId, Constants.roomState_SLEEP);
+////                        Toast.makeText(getContext(), roomName + "空调睡眠模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
+//                    break;
                 case R.id.radioButton_aircondition_mode_Humidity:
                     indoorViewModel.roomstateToDevice(roomId, Constants.roomState_DEHUMIDITY);
 //                        Toast.makeText(getContext(), roomName + "空调除湿模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
@@ -276,14 +299,23 @@ public class IndoorFragment extends Fragment {
                     indoorViewModel.roomstateToDevice(roomId, Constants.roomState_AUTO);
 //                        Toast.makeText(getContext(), roomName + "地暖自动模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                     break;
-                case R.id.radioButton_floorheat_model_Outside:
-                    indoorViewModel.roomstateToDevice(roomId, Constants.roomState_OUTSIDE);
-//                        Toast.makeText(getContext(), roomName + "地暖外出模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
-                    break;
-                case R.id.radioButton_floorheat_model_Sleep:
-                    indoorViewModel.roomstateToDevice(roomId, Constants.roomState_SLEEP);
-//                        Toast.makeText(getContext(), roomName + "地暖睡眠模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
-                    break;
+                //TODO:
+                /**本版不实现。壁挂炉版，两联供高级版再实现
+                 * 外出模式的核心：维持一定温度（假目标），防冻，提前升温。
+                 *      应该覆盖手动、自动模式，结束时恢复原来的模式。
+                 *      是否需要输入时间参数。手机app上还需要美化。
+                 * 睡眠模式的核心： 温度降1--2℃
+                 *      覆盖手动模式，自动模式吗？
+                 *      需要输入时间参数，预升温吗？
+                 */
+//                case R.id.radioButton_floorheat_model_Outside:
+//                    indoorViewModel.roomstateToDevice(roomId, Constants.roomState_OUTSIDE);
+////                        Toast.makeText(getContext(), roomName + "地暖外出模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
+//                    break;
+//                case R.id.radioButton_floorheat_model_Sleep:
+//                    indoorViewModel.roomstateToDevice(roomId, Constants.roomState_SLEEP);
+////                        Toast.makeText(getContext(), roomName + "地暖睡眠模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
+//                    break;
                 case R.id.radioButton_floorheat_model_Feast:
                     indoorViewModel.roomstateToDevice(roomId, Constants.roomState_FEAST);
 //                        Toast.makeText(getContext(), roomName + "地暖宴会模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
@@ -297,12 +329,42 @@ public class IndoorFragment extends Fragment {
             //还是使用从数据库中提取的返回数据来驱动界面，不要多此一举在这里修改了。
 
         });
+
+        //start service
+        Intent intent = new Intent(getActivity(), MQTTService.class);
+        getActivity().startService(intent);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        indoorViewModel.temperatureToDevice(roomId, tempTemperature * 10);//fixme 假浮点？？
+//        indoorViewModel.temperatureToDevice(roomId, tempTemperature * 10);//fixme 假浮点？？
+
     }
+
+//    @Override
+//    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+//        super.onViewStateRestored(savedInstanceState);
+//        //start service
+//        Intent intent = new Intent(getContext(), MQTTService.class);
+//        getContext().startService(intent);
+//    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //start service
+        Intent intent = new Intent(getActivity(), MQTTService.class);
+        getActivity().startService(intent);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //start service
+        Intent intent = new Intent(getActivity(), MQTTService.class);
+        getActivity().startService(intent);
+    }
+
 
 }
