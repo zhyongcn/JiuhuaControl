@@ -30,6 +30,8 @@ public class MyRepository implements IGetMessageCallBack {
     private IndoorDao indoorDao;
     Gson gson = new Gson();
 
+    Context mcontext;
+
     // MQTT 需要的参数
     private MyServiceConnection serviceConnection;//连接实例
     private MQTTService mqttService;//服务实例
@@ -38,7 +40,7 @@ public class MyRepository implements IGetMessageCallBack {
 //            4, 4,30, TimeUnit.SECONDS, quene);
 
     public MyRepository(Context context) {
-
+        mcontext = context;
         //获取数据库实例
         MyIndoorsDatabase myIndoorsDatabase = MyIndoorsDatabase.getDatabase(context.getApplicationContext());
         //获取操作数据库的办法实例
@@ -54,19 +56,29 @@ public class MyRepository implements IGetMessageCallBack {
         context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);//绑定服务MQTTservice
     }
 
-    //发送指令 command to device
+    //发送指令 command to device TODO:发送命令之前重启mqtt服务！！
     public void commandToDevice(CommandESP commandESP) {
+        Intent intent = new Intent(mcontext, MQTTService.class);//启动的钩子，启动服务的方法
+        //start service
+        mcontext.startService(intent);
+//        mcontext.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);//这是一种隐式启动的方法吗？
+
         int roomID = commandESP.getRoomId();
         String jsonCommandESP = gson.toJson(commandESP);
 
         mqttService = serviceConnection.getMqttService();  //这句可有可无，有就用小写的，没有就用大写的MQTTService
 //        mqttService.myPublishToDevice(roomID, jsonCommandESP, 1, true);
-        MQTTService.myPublishToDevice(roomID, jsonCommandESP, 1, true);
+        MQTTService.myPublishToDevice(roomID, jsonCommandESP, 1, false);//这里的retained指令如果为true，会不断发送，摧毁模块。（浪费一天时间）
         Log.d("jsonCommandToDevice", jsonCommandESP);
     }
 
     //period to device  send currentlyPeriodDB. 发送 currentlyPeriodDB 。
     public void periodToDevice(PeriodDB periodDB) {
+        Intent intent = new Intent(mcontext.getApplicationContext(), MQTTService.class);//启动的钩子，启动服务的方法
+        //start service
+        mcontext.startService(intent);
+//        mcontext.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);//这是一种隐式启动的方法吗？
+
         int roomid = periodDB.getRoomId();
 
         for (int wd = 0; wd < 7; wd++) {
@@ -85,8 +97,9 @@ public class MyRepository implements IGetMessageCallBack {
             }
             commandPeriod.setPeriod(temperatureArray);
             String s = gson.toJson(commandPeriod);
-            MQTTService.myPublishToDevice(roomid, s, 1, true);
+            MQTTService.myPublishToDevice(roomid, s, 1, false);//这里的retained指令如果为true，会不断发送，摧毁模块。（一天）
             Log.d("periodToDevice", s);
+
         }
 
     }
@@ -141,7 +154,7 @@ public class MyRepository implements IGetMessageCallBack {
     }
 
     //获取普通房间的全部信息
-    public LiveData<List<IndoorDB>> getAllLatestIndoorDBsLive( int devicetypeId) {
+    public LiveData<List<IndoorDB>> getAllLatestIndoorDBsLive(int devicetypeId) {
         //获取房间的最新信息指定了参数设备类型，继续包装下去，让调用者决定设备的类型。
         allLatestIndoorDBsLive = indoorDao.loadLatestIndoorDBsLive(devicetypeId);
         //一般查询系统会自动安排在非主线程，不需要自己写。其他的需要自己写非主线程。？？right？？
@@ -295,20 +308,22 @@ public class MyRepository implements IGetMessageCallBack {
         //use mqtt message here.
         //回传手机的信息都在 86518/JYCFGC/6-2-3401/phone
 
+        mqttService.toCreateNotification(message); //服务的发布消息的方法
+
         new Thread(new Runnable() {
             IndoorDB indoorDB;
 
             @Override
             public void run() {
-                //TODO 接受执行模块的json字符串 转换为indoorDB的实例，写入数据库。！！
+                //接受执行模块的json字符串 转换为indoorDB的实例，写入数据库。！！
                 //先判断一下是不是json数据
                 if (message.startsWith("{") && message.endsWith("}")) {
                     Log.d("recivedMQTT", message);
                     indoorDB = gson.fromJson(message, IndoorDB.class);
                     if (indoorDB != null) {
-                        indoorDB.setTimeStamp(new Date().getTime()/1000);
+                        indoorDB.setTimeStamp(new Date().getTime() / 1000);
                         insertIndoorDB(indoorDB);
-                        Log.d("HomeViewModel", gson.toJson(indoorDB));
+                        Log.d("insert in sqlite", gson.toJson(indoorDB));
                     }
                 } else {
                     Log.d("the message is not json", message);

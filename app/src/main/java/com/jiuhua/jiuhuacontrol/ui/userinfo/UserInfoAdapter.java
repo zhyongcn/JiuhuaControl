@@ -1,5 +1,7 @@
 package com.jiuhua.jiuhuacontrol.ui.userinfo;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -131,10 +133,11 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.MyView
                     Gson gson = new Gson();
                     JsonObject jsonObject = new JsonObject(); //temp object for send temperatureSensorCalibration information.
                     jsonObject.addProperty("roomId", basicInfoDB.getRoomId());
-                    jsonObject.addProperty("deviceType", Constants.deviceType_phone);//好像手机来的命令才接受。
+                    jsonObject.addProperty("deviceType", Constants.deviceType_phone);//手机来的命令才接受。DHT，NTC模块接收不在mqttconfig里面？
                     //假浮点，在手机上转换，减轻模块压力。
                     jsonObject.addProperty("adjustingTemperature", basicInfoDB.getTemperatureSensorCalibration() * 10);
                     String msg = gson.toJson(jsonObject);
+                    //TODO： FIXME： 需要走myRepository里的commandtodevice命令。 重启服务
                     MQTTService.myPublishToDevice(basicInfoDB.getRoomId(), msg, 1, false);
 
                 } else {

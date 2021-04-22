@@ -1,6 +1,7 @@
 package com.jiuhua.jiuhuacontrol.ui.indoor;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import com.google.gson.GsonBuilder;
 import com.jiuhua.jiuhuacontrol.R;
 import com.jiuhua.jiuhuacontrol.database.DayPeriod;
 import com.jiuhua.jiuhuacontrol.database.PeriodDB;
+import com.jiuhua.mqttsample.MQTTService;
 
 
 /**
@@ -91,5 +93,29 @@ public class PeriodFragment extends Fragment {
             }
         });
 
+    }
+
+//    @Override
+//    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+//        super.onViewStateRestored(savedInstanceState);
+//        //start service
+//        Intent intent = new Intent(getContext(), MQTTService.class);
+//        getContext().startService(intent);
+//    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //start service
+        Intent intent = new Intent(getActivity(), MQTTService.class);
+        getActivity().startService(intent);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //start service
+        Intent intent = new Intent(getActivity(), MQTTService.class);
+        getActivity().startService(intent);
     }
 }

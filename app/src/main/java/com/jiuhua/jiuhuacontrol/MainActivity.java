@@ -1,8 +1,12 @@
 package com.jiuhua.jiuhuacontrol;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.solver.state.State;
@@ -19,10 +23,12 @@ import com.jiuhua.mqttsample.MQTTService;
 //FIXME: Dev分支目标是基础的架构，软件架构，数据形式，存储方法，基本逻辑等等，不可见的，共性的。
 //TODO: 在云端使用数据库存储用户的数据，是否可以使用workmanager管理一个任务，定时去获取数据？？
 // 另外：app彻底终止和重启系统，非原生系统有可能终止workmanager的任务。时间不是很精确。
+//TODO: 功能添加：维护&运行的记录。更换配件（下拉列表？），保养（下拉列表？）
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;//首页需要appbar的一个实例，先新建一个句柄。
 
+    @RequiresApi( api = Build.VERSION_CODES.O )
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         //start service
         Intent intent = new Intent(this, MQTTService.class);
         startService(intent);
+
     }
 
     @Override
@@ -60,5 +67,21 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //start service
+        Intent intent = new Intent(this, MQTTService.class);
+        startService(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //start service
+        Intent intent = new Intent(this, MQTTService.class);
+        startService(intent);
     }
 }

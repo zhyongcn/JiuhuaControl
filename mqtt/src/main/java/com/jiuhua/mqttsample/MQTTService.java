@@ -1,5 +1,6 @@
 package com.jiuhua.mqttsample;
 
+import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -44,6 +45,25 @@ public class MQTTService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+        //需要重写为使用前台服务的方式
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "mqttMessage1");
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1,
+                new Intent(this, MQTTService.class), PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Notification notification = builder
+                .setTicker("MQTT标题")
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("mqtt消息")
+                .setContentText("message")
+                .setContentInfo("酷酷酷酷酷酷")
+                .setContentIntent(pendingIntent)//点击后才触发的意图，“挂起的”意图
+                .setAutoCancel(true)        //设置点击之后notification消失
+                .build();
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.notify(0, notification);
+        startForeground(0, notification);
+
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -75,6 +95,25 @@ public class MQTTService extends Service {
         super.onCreate();
         Log.e(getClass().getName(), "onCreate");
         init();//放在onCreate里面，这个service启动的时候调用了。
+
+        //重写为使用前台服务的方式
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "mqttMessage");
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1,
+                new Intent(this, MQTTService.class), PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Notification notification = builder
+                .setTicker("MQTT标题")
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("mqtt消息")
+                .setContentText("message")
+                .setContentInfo("酷酷酷酷酷酷")
+                .setContentIntent(pendingIntent)//点击后才触发的意图，“挂起的”意图
+                .setAutoCancel(true)        //设置点击之后notification消失
+                .build();
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.notify(0, notification);
+        startForeground(0, notification);
+
     }
 
     public static void publish(String topic, String msg, int qos, boolean retained) {
@@ -135,8 +174,8 @@ public class MQTTService extends Service {
         if ((!message.equals("")) || (!topic.equals(""))) {
             // 最后的遗嘱
             // MQTT本身就是为信号不稳定的网络设计的，所以难免一些客户端会无故的和Broker断开连接。
-            //当客户端连接到Broker时，可以指定LWT，Broker会定期检测客户端是否有异常。
-            //当客户端异常掉线时，Broker就往连接时指定的topic里推送当时指定的LWT消息。
+            // 当客户端连接到Broker时，可以指定LWT，Broker会定期检测客户端是否有异常。
+            // 当客户端异常掉线时，Broker就往连接时指定的topic里推送当时指定的LWT消息。
 
             try {
                 conOpt.setWill(topic, message.getBytes(), qos, retained);//还是没有消息内容？？为什么？？
@@ -156,7 +195,8 @@ public class MQTTService extends Service {
 
     @Override
     public void onDestroy() {
-        stopSelf();//停止服务
+//        stopSelf();//停止服务
+        stopForeground(true);//停止前台服务。
         try {
             client.disconnect();//关闭客户端的连接
         } catch (MqttException e) {
@@ -192,13 +232,6 @@ public class MQTTService extends Service {
                 //可以订阅多个主题，消息混在一起，需要注意处理
                 //发送信道的topic 没有必要订阅了吧。
 //                client.subscribe("86518/JYCFGC/6-2-3401/Room1", 1);
-//                client.subscribe("86518/JYCFGC/6-2-3401/Room2", 1);
-//                client.subscribe("86518/JYCFGC/6-2-3401/Room3", 1);
-//                client.subscribe("86518/JYCFGC/6-2-3401/Room4", 1);
-//                client.subscribe("86518/JYCFGC/6-2-3401/Room5", 1);
-//                client.subscribe("86518/JYCFGC/6-2-3401/Room6", 1);
-//                client.subscribe("86518/JYCFGC/6-2-3401/Room7", 1);
-//                client.subscribe("86518/JYCFGC/6-2-3401/Room8", 1);
             } catch (MqttException e) {
                 e.printStackTrace();
             }
@@ -272,22 +305,22 @@ public class MQTTService extends Service {
         }
     }
 
-    public void toCreateNotification(String message) {//发布消息的方法？？
+    public void toCreateNotification(String message) {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 1,
                 new Intent(this, MQTTService.class), PendingIntent.FLAG_UPDATE_CURRENT);
-        //Pending 未决定的 Intent目的意图 PendingIntent送达服务/单件模式/发送服务
+        //Pending 未决定的Intent目的意图 PendingIntent送达服务/单件模式/发送服务
         //再启动一个服务，是本服务的升级方式？？
         //参照底层代码，特别难以理解。
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "chancel1");//新的是不是使用了通道？？
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "mqttMessage0");
         //3、创建一个通知，属性太多，使用构造器模式
 
         Notification notification = builder//构造器  不是绑定
-                .setTicker("测试标题")
+                .setTicker("MQTT标题")
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("")
+                .setContentTitle("mqtt消息")
                 .setContentText(message)
-                .setContentInfo("")
+                .setContentInfo("酷酷酷酷酷酷")
                 .setContentIntent(pendingIntent)//点击后才触发的意图，“挂起的”意图
                 .setAutoCancel(true)        //设置点击之后notification消失
                 .build();

@@ -55,10 +55,11 @@ public class IndoorViewModel extends AndroidViewModel {
 
                     commandESP.setRoomId(currentlyIndoorDB.getRoomId());
                     commandESP.setDeviceType(Constants.deviceType_phone);//已经是来自手机了。
-                    commandESP.setRoomState(currentlyIndoorDB.getRoomStatus());
-                    commandESP.setSettingTemperature(currentlyIndoorDB.getSettingTemperature());
-                    commandESP.setSettingHumidity(currentlyIndoorDB.getSettingHumidity());
-                    commandESP.setSettingFanSpeed(currentlyIndoorDB.getSettingFanStatus());
+                    //TODO: 待验证！！ 如果这些缺省为 0 时，模块不写入，是否不要设置了，
+//                    commandESP.setRoomState(currentlyIndoorDB.getRoomStatus());
+//                    commandESP.setSettingTemperature(currentlyIndoorDB.getSettingTemperature());
+//                    commandESP.setSettingHumidity(currentlyIndoorDB.getSettingHumidity());
+//                    commandESP.setSettingFanSpeed(currentlyIndoorDB.getSettingFanStatus());
                 }
             }
         }
