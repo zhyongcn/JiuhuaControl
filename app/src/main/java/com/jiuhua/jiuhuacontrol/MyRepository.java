@@ -29,7 +29,6 @@ public class MyRepository implements IGetMessageCallBack {
     LiveData<List<PeriodDB>> allLatestPeriodDBsLive;
     private IndoorDao indoorDao;
     Gson gson = new Gson();
-    Context mcontext;
 
     // MQTT 需要的参数
     private MyServiceConnection serviceConnection;//连接实例
@@ -39,7 +38,6 @@ public class MyRepository implements IGetMessageCallBack {
 //            4, 4,30, TimeUnit.SECONDS, quene);
 
     public MyRepository(Context context) {
-        mcontext = context;
 
         //获取数据库实例
         MyIndoorsDatabase myIndoorsDatabase = MyIndoorsDatabase.getDatabase(context.getApplicationContext());
@@ -58,10 +56,6 @@ public class MyRepository implements IGetMessageCallBack {
 
     //发送指令 command to device TODO:发送命令之前重启mqtt服务！！
     public void commandToDevice(CommandESP commandESP) {
-        //start service
-        Intent intent = new Intent(mcontext, MQTTService.class);//启动的钩子，启动服务的方法
-        mcontext.startService(intent);
-
         int roomID = commandESP.getRoomId();
         String jsonCommandESP = gson.toJson(commandESP);
 
@@ -73,10 +67,6 @@ public class MyRepository implements IGetMessageCallBack {
 
     //period to device  send currentlyPeriodDB. 发送 currentlyPeriodDB 。
     public void periodToDevice(PeriodDB periodDB) {
-        //start service
-        Intent intent = new Intent(mcontext.getApplicationContext(), MQTTService.class);//启动的钩子，启动服务的方法
-        mcontext.startService(intent);
-
         int roomid = periodDB.getRoomId();
 
         for (int wd = 0; wd < 7; wd++) {
@@ -305,8 +295,6 @@ public class MyRepository implements IGetMessageCallBack {
         //解析json和写入数据库，不能在UI线程，是否应该开辟一个线程池来处理??。
         //use mqtt message here.
         //回传手机的信息都在 86518/JYCFGC/6-2-3401/phone
-
-        mqttService.toCreateNotification(message); //服务的发布消息的方法
 
         new Thread(new Runnable() {
             IndoorDB indoorDB;
