@@ -27,7 +27,9 @@ public class IndoorFragment extends Fragment {
 
     int roomId;
     String roomName;
-    int tempTemperature;
+    int currentTemperature;
+    int displaySetTemperature;
+    int accessSetTemperature = 22;
 
     public IndoorFragment(int roomId, String roomName) {
         this.roomId = roomId;//这里传入的ID有问题，房间2传来的是 1。
@@ -60,12 +62,15 @@ public class IndoorFragment extends Fragment {
             indoorViewModel.setAllLatestIndoorDBs(indoorDBS);
             //****数据驱动界面改变,所以代码要放在fragment或者Activity里面。只处理界面****
             //显示当前温度
-            tempTemperature = indoorViewModel.currentlyIndoorDB.getCurrentTemperature() / 10;
-            binding.currentTemperatureView.setText(tempTemperature + "℃");//假浮点需要除以10
+            currentTemperature = indoorViewModel.currentlyIndoorDB.getCurrentTemperature() / 10;
+            binding.currentTemperatureView.setText(currentTemperature + "℃");//假浮点需要除以10
 
             //以下空调相关显示
-            //显示空调设置温度（现在只有一个设置温度）
-            binding.showAirconditionSettingTemperature.setText("空调设置温度  " + (indoorViewModel.currentlyIndoorDB.getSettingTemperature() / 10) + "℃");//假浮点需要除以10
+            //显示空调设置温度（现在只有一个设置温度）//假浮点需要除以10
+            displaySetTemperature = indoorViewModel.currentlyIndoorDB.getSettingTemperature() / 10;
+            binding.showAirconditionSettingTemperature.setText("空调设置温度             " + displaySetTemperature + "℃");
+            binding.airconditionSetTemperatureNumber.setText(String.valueOf(accessSetTemperature));
+            binding.floorheatTemperatureSetNumber.setText(String.valueOf(accessSetTemperature));
 
             //TODO 湿度暂时不搞！！
             //显示当前湿度
@@ -106,19 +111,19 @@ public class IndoorFragment extends Fragment {
             //风机状态数据驱动显示的文字变化（高中低及自动风）
             switch (indoorViewModel.currentlyIndoorDB.getCurrentFanStatus()) {
                 case Constants.fanSpeed_STOP:
-                    binding.showAirconditionRunningFanspeed.setText("风机状态    停止");
+                    binding.showAirconditionRunningFanspeed.setText("风机状态         停止");
                     break;
                 case Constants.fanSpeed_LOW:
-                    binding.showAirconditionRunningFanspeed.setText("风机状态    低速风");
+                    binding.showAirconditionRunningFanspeed.setText("风机状态        低速风");
                     break;
                 case Constants.fanSpeed_MEDIUM:
-                    binding.showAirconditionRunningFanspeed.setText("风机状态    中速风");
+                    binding.showAirconditionRunningFanspeed.setText("风机状态        中速风");
                     break;
                 case Constants.fanSpeed_HIGH:
-                    binding.showAirconditionRunningFanspeed.setText("风机状态    高速风");
+                    binding.showAirconditionRunningFanspeed.setText("风机状态        高速风");
                     break;
                 case Constants.fanSpeed_AUTO:
-                    binding.showAirconditionRunningFanspeed.setText("风机状态    自动风");
+                    binding.showAirconditionRunningFanspeed.setText("风机状态        自动风");
                     break;
             }
 
@@ -131,7 +136,7 @@ public class IndoorFragment extends Fragment {
 
             //以下地暖参数显示
             //显示地暖设置温度（现在只有一个设置温度）
-            binding.showFloorheatSettingTemperature.setText("地暖设置温度  " + tempTemperature + "℃");//TODO 假浮点需要除以10
+            binding.showFloorheatSettingTemperature.setText("地暖设置温度  " + displaySetTemperature + "℃");//TODO 假浮点需要除以10
 
             //依据房间的状态改变显示的文字(停止，手动，自动)
             switch (indoorViewModel.currentlyIndoorDB.getRoomStatus()) {
@@ -172,26 +177,25 @@ public class IndoorFragment extends Fragment {
         return binding.getRoot(); // getRoot() solved databinding problem.
     }
 
-    @SuppressLint( "NonConstantResourceId" )
+    //这里有操作界面相关的
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-//        tempTemperature = indoorViewModel.currentlyIndoorDB.getSettingTemperature() / 10;
-
-        binding.airconditionSetTemperatureNumber.setText(String.valueOf(tempTemperature));
+//        setTemperature = indoorViewModel.currentlyIndoorDB.getSettingTemperature() / 10;
+//        binding.airconditionSetTemperatureNumber.setText(String.valueOf(setTemperature));
 
         binding.airconditionDownTemperature.setOnClickListener(v -> {
-            tempTemperature--;
-            indoorViewModel.temperatureToDevice(roomId, tempTemperature * 10);//fixme 假浮点？？
-            binding.airconditionSetTemperatureNumber.setText(String.valueOf(tempTemperature));
-            Toast.makeText(getContext(), roomName + "设置温度为" + tempTemperature + "℃", Toast.LENGTH_SHORT).show();
+            accessSetTemperature--;
+            indoorViewModel.temperatureToDevice(roomId, accessSetTemperature * 10);//fixme 假浮点？？
+            binding.airconditionSetTemperatureNumber.setText(String.valueOf(accessSetTemperature));
+            Toast.makeText(getContext(), roomName + "设置温度为" + accessSetTemperature + "℃", Toast.LENGTH_SHORT).show();
         });
         binding.airconditionUpTemperature.setOnClickListener(v -> {
-            tempTemperature++;
-            indoorViewModel.temperatureToDevice(roomId, tempTemperature * 10);//fixme 假浮点？？
-            binding.airconditionSetTemperatureNumber.setText(String.valueOf(tempTemperature));
-            Toast.makeText(getContext(), roomName + "设置温度为" + tempTemperature + "℃", Toast.LENGTH_SHORT).show();
+            accessSetTemperature++;
+            indoorViewModel.temperatureToDevice(roomId, accessSetTemperature * 10);//fixme 假浮点？？
+            binding.airconditionSetTemperatureNumber.setText(String.valueOf(accessSetTemperature));
+            Toast.makeText(getContext(), roomName + "设置温度为" + accessSetTemperature + "℃", Toast.LENGTH_SHORT).show();
         });
 
         //空调运行模式：
@@ -269,19 +273,19 @@ public class IndoorFragment extends Fragment {
 
 
         //以下地暖的操作
-        binding.floorheatTemperatureSetNumber.setText(String.valueOf(tempTemperature));
+//        binding.floorheatTemperatureSetNumber.setText(String.valueOf(setTemperature));
 
         binding.floorheatTemperatureDown.setOnClickListener(v -> {
-            tempTemperature--;
-            indoorViewModel.temperatureToDevice(roomId, tempTemperature * 10);//fixme 假浮点？？
-            binding.floorheatTemperatureSetNumber.setText(String.valueOf(tempTemperature));
-            Toast.makeText(getContext(), roomName + "设置温度为" + tempTemperature + "℃", Toast.LENGTH_SHORT).show();
+            accessSetTemperature--;
+            indoorViewModel.temperatureToDevice(roomId, accessSetTemperature * 10);//fixme 假浮点？？
+            binding.floorheatTemperatureSetNumber.setText(String.valueOf(accessSetTemperature));
+            Toast.makeText(getContext(), roomName + "设置温度为       " + accessSetTemperature + "℃", Toast.LENGTH_SHORT).show();
         });
         binding.floorheatTemperatureUp.setOnClickListener(v -> {
-            tempTemperature++;
-            indoorViewModel.temperatureToDevice(roomId, tempTemperature * 10);//fixme 假浮点？？
-            binding.floorheatTemperatureSetNumber.setText(String.valueOf(tempTemperature));
-            Toast.makeText(getContext(), roomName + "设置温度为" + tempTemperature + "℃", Toast.LENGTH_SHORT).show();
+            accessSetTemperature++;
+            indoorViewModel.temperatureToDevice(roomId, accessSetTemperature * 10);//fixme 假浮点？？
+            binding.floorheatTemperatureSetNumber.setText(String.valueOf(accessSetTemperature));
+            Toast.makeText(getContext(), roomName + "设置温度为       " + accessSetTemperature + "℃", Toast.LENGTH_SHORT).show();
         });
 
         //地暖运行模式：

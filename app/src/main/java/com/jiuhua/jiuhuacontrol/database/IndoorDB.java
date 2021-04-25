@@ -29,7 +29,7 @@ public class IndoorDB {
     private int deviceType; //FANCOIL 0, FLOORWATERSHED 1, RADIATOR 2, BOILER 3, HEATPUMP 4, DHTSENSOR 5, NTCSENSOR 6, PHONE 7
     //
     @ColumnInfo(name = "setting_temperature")
-    @SerializedName("settingTemp")
+    @SerializedName("settingTemperature")
     private int settingTemperature;//10X 之后的假浮点。
     @ColumnInfo(name = "current_temperature")
     @SerializedName("currentlyTemperature")
