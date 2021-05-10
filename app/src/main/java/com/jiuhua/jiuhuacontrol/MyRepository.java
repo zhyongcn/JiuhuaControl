@@ -67,28 +67,39 @@ public class MyRepository implements IGetMessageCallBack {
 
     //period to device  send currentlyPeriodDB. 发送 currentlyPeriodDB 。
     public void periodToDevice(PeriodDB periodDB) {
-        int roomid = periodDB.getRoomId();
+        new Thread(new Runnable() {//FIXME: 线程方法不成功！！
+            @Override
+            public void run() {
+                int roomid = periodDB.getRoomId();
 
-        for (int wd = 0; wd < 7; wd++) {
-            CommandPeriod commandPeriod = new CommandPeriod();
-            commandPeriod.setRoomId(roomid);
-            int[][] temperatureArray = new int[15][3];
-            int k = 0;
-            commandPeriod.setWeekday(wd);
-            for (int i = 0; i < periodDB.getOneRoomWeeklyPeriod().size(); i++) {
-                if (wd == periodDB.getOneRoomWeeklyPeriod().get(i).getWeekday()) {
-                    temperatureArray[k][0] = periodDB.getOneRoomWeeklyPeriod().get(i).getStartMinuteStamp();
-                    temperatureArray[k][1] = periodDB.getOneRoomWeeklyPeriod().get(i).getEndMinuteStamp();
-                    temperatureArray[k][2] = periodDB.getOneRoomWeeklyPeriod().get(i).getTempreature();
-                    k++;
+                for (int wd = 0; wd < 7; wd++) {
+                    CommandPeriod commandPeriod = new CommandPeriod();
+                    commandPeriod.setRoomId(roomid);
+                    int[][] temperatureArray = new int[15][3];
+                    int k = 0;
+                    commandPeriod.setWeekday(wd);
+                    for (int i = 0; i < periodDB.getOneRoomWeeklyPeriod().size(); i++) {
+                        if (wd == periodDB.getOneRoomWeeklyPeriod().get(i).getWeekday()) {
+                            temperatureArray[k][0] = periodDB.getOneRoomWeeklyPeriod().get(i).getStartMinuteStamp();
+                            temperatureArray[k][1] = periodDB.getOneRoomWeeklyPeriod().get(i).getEndMinuteStamp();
+                            temperatureArray[k][2] = periodDB.getOneRoomWeeklyPeriod().get(i).getTempreature();
+                            k++;
+                        }
+                    }
+                    commandPeriod.setPeriod(temperatureArray);
+                    String s = gson.toJson(commandPeriod);
+                    MQTTService.myPublishToDevice(roomid, s, 1, false);//这里的retained指令如果为true，会不断发送，摧毁模块。（一天）
+                    Log.d("periodToDevice", s);
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
                 }
             }
-            commandPeriod.setPeriod(temperatureArray);
-            String s = gson.toJson(commandPeriod);
-            MQTTService.myPublishToDevice(roomid, s, 1, false);//这里的retained指令如果为true，会不断发送，摧毁模块。（一天）
-            Log.d("periodToDevice", s);
+        });
 
-        }
 
     }
 
