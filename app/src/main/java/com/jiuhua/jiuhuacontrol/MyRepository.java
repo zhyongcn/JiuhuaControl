@@ -88,17 +88,18 @@ public class MyRepository implements IGetMessageCallBack {
                     }
                     commandPeriod.setPeriod(temperatureArray);
                     String s = gson.toJson(commandPeriod);
+//                    mqttService = serviceConnection.getMqttService();
                     MQTTService.myPublishToDevice(roomid, s, 1, false);//这里的retained指令如果为true，会不断发送，摧毁模块。（一天）
                     Log.d("periodToDevice", s);
                     try {
-                        Thread.sleep(500);
+                        Thread.sleep(500);//延迟发送，太快模块接受不了。
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
 
                 }
             }
-        });
+        }).start();//FIXME：***少写了“.start()”，基本概念不清害死人啊！！***
 
 
     }
