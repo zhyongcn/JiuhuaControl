@@ -58,7 +58,7 @@ public class IndoorFragment extends Fragment {
         indoorViewModel.setCurrentlyRoomId(roomId);
         indoorViewModel.setCurrentlyRoomName(roomName);
 
-        indoorViewModel.getAllLatestIndoorDBsLive(Constants.deviceType_floorwatershed).observe(getViewLifecycleOwner(), indoorDBS -> {
+        indoorViewModel.getAllLatestIndoorDBsLive(Constants.deviceType_fancoil).observe(getViewLifecycleOwner(), indoorDBS -> {
             indoorViewModel.setAllLatestIndoorDBs(indoorDBS);
             //****数据驱动界面改变,所以代码要放在fragment或者Activity里面。只处理界面****
             //显示当前温度

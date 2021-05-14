@@ -54,18 +54,24 @@ public class MyRepository implements IGetMessageCallBack {
         context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);//绑定服务MQTTservice
     }
 
-    //发送指令 command to device TODO:发送命令之前重启mqtt服务！！
-    public void commandToDevice(CommandESP commandESP) {
-        int roomID = commandESP.getRoomId();
-        String jsonCommandESP = gson.toJson(commandESP);
+//    //发送指令 command to device TODO:发送命令之前重启mqtt服务！！
+//    public void commandToDevice(CommandESP commandESP) {
+//        int roomID = commandESP.getRoomId();
+//        String jsonCommandESP = gson.toJson(commandESP);
+//
+//        mqttService = serviceConnection.getMqttService();  //这句可有可无，有就用小写的，没有就用大写的MQTTService
+////        mqttService.myPublishToDevice(roomID, jsonCommandESP, 1, true);
+//        MQTTService.myPublishToDevice(roomID, jsonCommandESP, 1, false);//这里的retained指令如果为true，会不断发送，摧毁模块。（浪费一天时间）
+//        Log.d("jsonCommandToDevice", jsonCommandESP);
+//    }
 
-        mqttService = serviceConnection.getMqttService();  //这句可有可无，有就用小写的，没有就用大写的MQTTService
-//        mqttService.myPublishToDevice(roomID, jsonCommandESP, 1, true);
-        MQTTService.myPublishToDevice(roomID, jsonCommandESP, 1, false);//这里的retained指令如果为true，会不断发送，摧毁模块。（浪费一天时间）
-        Log.d("jsonCommandToDevice", jsonCommandESP);
+    //发送指令 command to device TODO:发送命令之前重启mqtt服务！！
+    public void commandToDevice(int roomid, String msg) {
+        MQTTService.myPublishToDevice(roomid, msg, 1, false);//这里的retained指令如果为true，会不断发送，摧毁模块。（浪费一天时间）
+        Log.d("jsonCommandToDevice", msg);
     }
 
-    //period to device  send currentlyPeriodDB. 发送 currentlyPeriodDB 。
+        //period to device  send currentlyPeriodDB. 发送 currentlyPeriodDB 。
     public void periodToDevice(PeriodDB periodDB) {
         new Thread(new Runnable() {//FIXME: 线程方法不成功！！
             @Override

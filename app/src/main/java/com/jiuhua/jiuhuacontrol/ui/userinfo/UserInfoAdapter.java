@@ -137,7 +137,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.MyView
                     //假浮点，在手机上转换，减轻模块压力。
                     jsonObject.addProperty("adjustingTemperature", basicInfoDB.getTemperatureSensorCalibration() * 10);
                     String msg = gson.toJson(jsonObject);
-                    //TODO： FIXME： 需要走myRepository里的commandtodevice命令。 重启服务
+                    //TODO：需要走myRepository里的commandtodevice命令。?? 重启服务, 好像不是必要。
                     MQTTService.myPublishToDevice(basicInfoDB.getRoomId(), msg, 1, false);
 
                 } else {

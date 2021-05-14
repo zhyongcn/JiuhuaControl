@@ -60,7 +60,7 @@ dependencies {
     //使用卡片布局
     implementation 'androidx.cardview:cardview:1.0.0'
     //使用导航
-    implementation 'androidx.navigation:navigation-fragment:2.2.2'
+    implementation 'androidx.navigation:navigation-fragment:2.3.0'
     implementation 'androidx.navigation:navigation-ui:2.2.2'//使用View Model 必须添加，可以半自动添加
     apply plugin: "androidx.navigation.safeargs"  //使用Safe Args 传递安全的数据
 
