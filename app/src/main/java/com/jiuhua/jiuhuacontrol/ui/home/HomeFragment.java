@@ -66,7 +66,7 @@ public class HomeFragment extends Fragment {
 //            }
 //        });
 
-        homeViewModel.getAllLatestIndoorDBsLive(Constants.deviceType_fancoil).observe(getViewLifecycleOwner(),
+        homeViewModel.getAllLatestIndoorDBsLive(Constants.deviceType_DHTsensor).observe(getViewLifecycleOwner(),
                 new Observer<List<IndoorDB>>() {
                     @Override
                     public void onChanged(List<IndoorDB> indoorDBS) {
