@@ -50,6 +50,10 @@ dependencies {
     // Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
 
+    //使用okHttp3网络通信库（框架）
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.0.2'
+
     //使用卡片布局
     implementation 'androidx.cardview:cardview:1.0.0'
     //使用导航
