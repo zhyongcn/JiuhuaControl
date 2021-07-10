@@ -1,5 +1,6 @@
 package com.jiuhua.jiuhuacontrol;
 
+//TODO： 接收数据还可以正常的数据不需要大的修改。
 public class TDReception {
     String status;
     String[] head;
