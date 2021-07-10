@@ -1,7 +1,6 @@
 package com.jiuhua.jiuhuacontrol;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -34,9 +33,6 @@ public class MyRepository implements IGetMessageCallBack {
     private MyServiceConnection serviceConnection;//连接实例
     private MQTTService mqttService;//服务实例
 
-//    private static final ThreadPoolExecutor poolexecutor = new ThreadPoolExecutor(
-//            4, 4,30, TimeUnit.SECONDS, quene);
-
     public MyRepository(Context context) {
 
         //获取数据库实例
@@ -48,10 +44,6 @@ public class MyRepository implements IGetMessageCallBack {
         allBasicInfoLive = indoorDao.loadAllBasicInfoLive();
         allLatestPeriodDBsLive = indoorDao.loadLatestPeriodDBsLive();
 
-        serviceConnection = new MyServiceConnection();//新建连接服务的实例
-        serviceConnection.setIGetMessageCallBack(MyRepository.this);//把本活动传入
-        Intent intent = new Intent(context, MQTTService.class); //bing Service 是需要Intent的。
-        context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);//绑定服务MQTTservice
     }
 
 //    //发送指令 command to device TODO:发送命令之前重启mqtt服务！！
@@ -305,9 +297,7 @@ public class MyRepository implements IGetMessageCallBack {
     }
 
 
-    /**
-     * 接收 MQTT 数据后，依照数据实现相关方法。（直接去显示 还是只写入数据库）
-     */
+    /** FIXME: 此方法废弃，修改为请求网络数据库数据写入本地数据库！！ */
     @Override
     public void setMessage(final String message) {
         //解析json和写入数据库，不能在UI线程，是否应该开辟一个线程池来处理??。

@@ -56,10 +56,14 @@ dependencies {
     // Kotlin + coroutines
     implementation "androidx.work:work-runtime-ktx:$work_version"
 
-    //使用okHttp3网络通信库（框架）
+    //使用okHttp3 retrofit网络通信库（框架）
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.squareup.retrofit2:retrofit:2.1.0'
-    implementation 'cpm.squareup.retrofit2:converter-gson:2.1.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
+
+    //http logging interceptor
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.5.0'
 
 
     //使用卡片布局
