@@ -5,7 +5,7 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.jiuhua.jiuhuacontrol.MyRepository;
+import com.jiuhua.jiuhuacontrol.repository.MyRepository;
 import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
 import com.jiuhua.jiuhuacontrol.database.IndoorDB;
 

@@ -42,7 +42,7 @@ public interface IndoorDao {
      * IndoorDB的相关方法
      */
     @Insert
-    void insertIndoorDB(IndoorDB... indoorDBS);
+    void insertIndoorDB(IndoorDB... indoorDBS); // ... 任意个该类型的参数，可以数组？？
 
     @Query( "DELETE FROM IndoorDB" )
     void deleteAllIndoorDB();

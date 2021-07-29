@@ -2,30 +2,18 @@ package com.jiuhua.jiuhuacontrol;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.solver.state.State;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.jiuhua.jiuhuacontrol.repository.MyRepository;
 import com.jiuhua.mqttsample.MQTTService;
-
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 //FIXME: Dev分支目标是基础的架构，软件架构，数据形式，存储方法，基本逻辑等等，不可见的，共性的。
 //TODO: 在云端使用数据库存储用户的数据，是否可以使用workmanager管理一个任务，定时去获取数据？？
@@ -34,6 +22,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;//首页需要appbar的一个实例，先新建一个句柄。
+//    MyRepository myRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,46 +55,12 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MQTTService.class);
         startService(intent);
 
-        request();
+        MyRepository myRepository = new MyRepository(this.getApplicationContext());
+        myRepository.requestTDengineData();
 
     }
 
-    public void request() {
-        String credentials = "zz" + ":" + "700802";
-        final String basic = "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
 
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://175.24.33.56:6041/")
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        TDinterface request = retrofit.create(TDinterface.class);
-
-        String sql = "select  * from homedevice.fancoils where location like '%518%' limit 5";
-        RequestBody body = RequestBody.create(MediaType.parse("text/plain"), sql);
-
-        Call<TDReception> call = request.getCall(basic, body);
-
-        call.enqueue(new Callback<TDReception>() {
-            @Override
-            public void onResponse(Call<TDReception> call, Response<TDReception> response) {
-                try {//回来的数据不稳定，保护一下。
-                    Log.d("TAG", "onResponse: "+ response.body().toString());
-                    response.body().show();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TDReception> call, Throwable t) {
-                System.out.println("连接失败！");
-
-            }
-        });
-    }
 
     @Override
     public boolean onSupportNavigateUp() {

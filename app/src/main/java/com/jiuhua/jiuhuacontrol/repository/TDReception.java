@@ -1,4 +1,4 @@
-package com.jiuhua.jiuhuacontrol;
+package com.jiuhua.jiuhuacontrol.repository;
 
 //TODO： 接收数据还可以正常的数据不需要大的修改。
 public class TDReception {
@@ -6,12 +6,17 @@ public class TDReception {
     String[] head;
     String[][] column_meta;
     String[][] data;
+    int rows;
 
-    public TDReception(String status, String[] head, String[][] column_meta, String[][] data) {
+    public TDReception() {
+    }
+
+    public TDReception(String status, String[] head, String[][] column_meta, String[][] data, int rows) {
         this.status = status;
         this.head = head;
         this.column_meta = column_meta;
         this.data = data;
+        this.rows = rows;
     }
 
     public String getStatus() {
@@ -44,6 +49,10 @@ public class TDReception {
 
     public void setData(String[][] data) {
         this.data = data;
+    }
+
+    public int getRows() {
+        return rows;
     }
 
     public void show() {//经过测试完全正确接收了数据

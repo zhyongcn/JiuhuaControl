@@ -9,7 +9,7 @@ import androidx.lifecycle.LiveData;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.jiuhua.jiuhuacontrol.Constants;
-import com.jiuhua.jiuhuacontrol.MyRepository;
+import com.jiuhua.jiuhuacontrol.repository.MyRepository;
 import com.jiuhua.jiuhuacontrol.database.DayPeriod;
 import com.jiuhua.jiuhuacontrol.database.IndoorDB;
 import com.jiuhua.jiuhuacontrol.database.PeriodDB;

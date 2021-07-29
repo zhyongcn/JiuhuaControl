@@ -1,12 +1,15 @@
-package com.jiuhua.jiuhuacontrol;
+package com.jiuhua.jiuhuacontrol.repository;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Base64;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
 import com.google.gson.Gson;
+import com.jiuhua.jiuhuacontrol.CommandFromPhone;
+import com.jiuhua.jiuhuacontrol.CommandPeriod;
 import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
 import com.jiuhua.jiuhuacontrol.database.IndoorDB;
 import com.jiuhua.jiuhuacontrol.database.IndoorDao;
@@ -14,12 +17,20 @@ import com.jiuhua.jiuhuacontrol.database.MyIndoorsDatabase;
 import com.jiuhua.jiuhuacontrol.database.PeriodDB;
 import com.jiuhua.mqttsample.IGetMessageCallBack;
 import com.jiuhua.mqttsample.MQTTService;
-import com.jiuhua.mqttsample.MyServiceConnection;
 
-import java.util.Date;
 import java.util.List;
 
-public class MyRepository implements IGetMessageCallBack {
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
+
+//TODO: *** 是不是单例，应该采用单例模式！！***
+public class MyRepository {
     private final String TAG = getClass().getName();
 
     long TimeStamp;
@@ -29,9 +40,9 @@ public class MyRepository implements IGetMessageCallBack {
     private IndoorDao indoorDao;
     Gson gson = new Gson();
 
-    // MQTT 需要的参数
-    private MyServiceConnection serviceConnection;//连接实例
-    private MQTTService mqttService;//服务实例
+    private Retrofit retrofit;
+    private CloudServer cloudServer;
+
 
     public MyRepository(Context context) {
 
@@ -44,13 +55,93 @@ public class MyRepository implements IGetMessageCallBack {
         allBasicInfoLive = indoorDao.loadAllBasicInfoLive();
         allLatestPeriodDBsLive = indoorDao.loadLatestPeriodDBsLive();
 
+        retrofit = new Retrofit.Builder()
+                .baseUrl("http://175.24.33.56:6041/")
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        cloudServer = retrofit.create(CloudServer.class);
+
+        requestTDengineData();
+
     }
 
-//    //发送指令 command to device TODO:发送命令之前重启mqtt服务！！
+    public void requestTDengineData() {
+        String credentials = "zz" + ":" + "700802";
+        final String basic = "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
+
+        String sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room10' and ts > now - 1h";
+//        String sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room1' and ts > now - 1h";
+//        String sql2 = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room2' and ts > now - 1h";
+//        String sql3 = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room3' and ts > now - 1h";
+//        String sql4 = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room4' and ts > now - 1h";
+//        String sql5 = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room5' and ts > now - 1h";
+//        String sql6 = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room6' and ts > now - 1h";
+//        String sql7 = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room7' and ts > now - 1h";
+//        String sql8 = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room8' and ts > now - 1h";
+//        String sql9 = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room9' and ts > now - 1h";
+//        String sql10 = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room10' and ts > now - 1h";
+//        String sql11 = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room11' and ts > now - 1h";
+        RequestBody body = RequestBody.create(MediaType.parse("text/plain"), sql);
+
+        Call<TDReception> call = cloudServer.respoFormTDengine(basic, body);
+
+        call.enqueue(new Callback<TDReception>() {
+            @Override
+            public void onResponse(Call<TDReception> call, Response<TDReception> response) {
+                try {//回来的数据不稳定，保护一下。
+                    Log.d("TAG", "onResponse: " + response.body().toString());
+
+                    saveMessageToSQlite(response.body());
+
+                    response.body().show();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TDReception> call, Throwable t) {
+                System.out.println("连接失败！");
+
+            }
+        });
+    }
+
+    public void commandToModule() {
+        //接口需要的参数。
+        CommandFromPhone commandFromPhone = new CommandFromPhone();
+        commandFromPhone.setTopic("TopicTestTest2");
+        commandFromPhone.setQos(1);
+        commandFromPhone.setMessage("I am real from phone!2");
+        commandFromPhone.setRetained(false);
+
+        //定义去联网的call 使用实例的哪一个方法&传入需要的参数。
+        Call<String> call = cloudServer.reposForCommand("http://175.24.33.56:8080/command", commandFromPhone);
+
+        //异步执行该call，如果是同步会使用excute方法，enqueue排队的意思。
+        call.enqueue(new Callback<String>() {
+            //** retrofit的封装，下面两个override都回到了主线程 UI线程来执行。**
+            @Override
+            public void onResponse(retrofit2.Call<String> call, retrofit2.Response<String> response) {
+                System.out.println("success :) ok!\n" + response.body());
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<String> call, Throwable t) {
+                Log.d(this.getClass().getSimpleName(), "onFailure: " + t.toString());
+            }
+
+        });
+    }
+
+//    //发送指令 command to device
 //    public void commandToDevice(CommandESP commandESP) {
 //        int roomID = commandESP.getRoomId();
 //        String jsonCommandESP = gson.toJson(commandESP);
-//
+
 //        mqttService = serviceConnection.getMqttService();  //这句可有可无，有就用小写的，没有就用大写的MQTTService
 ////        mqttService.myPublishToDevice(roomID, jsonCommandESP, 1, true);
 //        MQTTService.myPublishToDevice(roomID, jsonCommandESP, 1, false);//这里的retained指令如果为true，会不断发送，摧毁模块。（浪费一天时间）
@@ -63,7 +154,7 @@ public class MyRepository implements IGetMessageCallBack {
         Log.d("jsonCommandToDevice", msg);
     }
 
-        //period to device  send currentlyPeriodDB. 发送 currentlyPeriodDB 。
+    //period to device  send currentlyPeriodDB. 发送 currentlyPeriodDB 。
     public void periodToDevice(PeriodDB periodDB) {
         new Thread(new Runnable() {//FIXME: 线程方法不成功！！
             @Override
@@ -297,37 +388,33 @@ public class MyRepository implements IGetMessageCallBack {
     }
 
 
-    /** FIXME: 此方法废弃，修改为请求网络数据库数据写入本地数据库！！ */
-    @Override
-    public void setMessage(final String message) {
-        //解析json和写入数据库，不能在UI线程，是否应该开辟一个线程池来处理??。
-        //use mqtt message here.
-        //回传手机的信息都在 86518/JYCFGC/6-2-3401/phone
+    /**
+     * 请求来的网络数据库数据写入本地数据库！！
+     */
+    public void saveMessageToSQlite(TDReception tdReception) {
+        //转化Retrofit的接收体为IndoorDB的类型和写入数据库，不能在UI线程，是否应该开辟一个线程池来处理??。
 
         new Thread(new Runnable() {
+
             IndoorDB indoorDB;
 
             @Override
             public void run() {
-                //接受执行模块的json字符串 转换为indoorDB的实例，写入数据库。！！
-                //先判断一下是不是json数据
-                if (message.startsWith("{") && message.endsWith("}")) {
-                    Log.d("recivedMQTT", message);
-                    indoorDB = gson.fromJson(message, IndoorDB.class);
-                    if (indoorDB != null) {
-                        indoorDB.setTimeStamp(new Date().getTime() / 1000);
-                        insertIndoorDB(indoorDB);
-                        Log.d("insert in sqlite", gson.toJson(indoorDB));
-                    }
-                } else {
-                    Log.d("the message is not json", message);
+                indoorDB = new IndoorDB();
+                Log.d("转化TDReception", tdReception.toString());
+                //TODO 获取时间戳，并转换为unix时间
+                indoorDB.setRoomId(Integer.valueOf(tdReception.getData()[0][6]));//roomid 本机指令 不来自网络
+                indoorDB.setDeviceType(Integer.valueOf(tdReception.getData()[0][7]));
+                indoorDB.setTimeStamp(Long.parseLong(tdReception.getData()[0][0])/1000);
+                indoorDB.setCurrentTemperature(Integer.valueOf(tdReception.getData()[0][1]));
+                indoorDB.setCurrentHumidity(Integer.valueOf(tdReception.getData()[0][2]));
+                if (indoorDB != null) {
+                    insertIndoorDB(indoorDB);//TODO 这里会不会效率太低，应该组装成list再插入？？
+                    Log.d("insert in sqlite", gson.toJson(indoorDB));
                 }
 
             }
         }).start();
-
-        mqttService = serviceConnection.getMqttService(); //服务连接实例 的 获得服务的方法
-//        mqttService.toCreateNotification(message); //服务的发布消息的方法
 
     }
 
