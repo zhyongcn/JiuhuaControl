@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jiuhua.jiuhuacontrol.R;
-import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
+import com.jiuhua.jiuhuacontrol.database.BasicInfoSheet;
 import com.jiuhua.jiuhuacontrol.databinding.FragmentUserinfoBinding;
 
 import java.util.List;
@@ -122,10 +122,10 @@ public class UserInfoFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(userInfoAdapter);
 
-        userInfoViewModel.getAllBasicInfoLive().observe(getViewLifecycleOwner(), new Observer<List<BasicInfoDB>>() {
+        userInfoViewModel.getAllBasicInfoLive().observe(getViewLifecycleOwner(), new Observer<List<BasicInfoSheet>>() {
             @Override
-            public void onChanged(List<BasicInfoDB> basicInfoDBS) {
-                userInfoAdapter.setAllBasicInfo(basicInfoDBS);
+            public void onChanged(List<BasicInfoSheet> basicInfoSheets) {
+                userInfoAdapter.setAllBasicInfo(basicInfoSheets);
                 userInfoAdapter.notifyDataSetChanged();
             }
         });

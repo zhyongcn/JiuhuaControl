@@ -1,9 +1,7 @@
 package com.jiuhua.jiuhuacontrol.ui.indoor;
 
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.jiuhua.jiuhuacontrol.R;
 import com.jiuhua.jiuhuacontrol.database.DayPeriod;
-import com.jiuhua.jiuhuacontrol.database.PeriodDB;
-import com.jiuhua.mqttsample.MQTTService;
 
 
 /**
@@ -59,7 +53,7 @@ public class PeriodFragment extends Fragment {
 
         indoorViewModel.getAllLatestPeriodDBsLive().observe(getViewLifecycleOwner(), periodDBS -> {
             indoorViewModel.setAllLatestPeriodDBs(periodDBS); //viewmodel是单例，这个保存是有价值的。
-            myView.getWeeklyPeriod(indoorViewModel.currentlyPeriodDB.getOneRoomWeeklyPeriod());
+            myView.getWeeklyPeriod(indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod());
         });
 
         myView.setClickCrossListener((weekday, hour, dayPeriod) -> {
@@ -93,9 +87,6 @@ public class PeriodFragment extends Fragment {
             }
         });
 
-        //start service
-        Intent intent = new Intent(getActivity(), MQTTService.class);
-        getActivity().startService(intent);
 
     }
 
@@ -111,16 +102,16 @@ public class PeriodFragment extends Fragment {
     public void onStart() {
         super.onStart();
         //start service
-        Intent intent = new Intent(getActivity(), MQTTService.class);
-        getActivity().startService(intent);
+//        Intent intent = new Intent(getActivity(), MQTTService.class);
+//        getActivity().startService(intent);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         //start service
-        Intent intent = new Intent(getActivity(), MQTTService.class);
-        getActivity().startService(intent);
+//        Intent intent = new Intent(getActivity(), MQTTService.class);
+//        getActivity().startService(intent);
     }
 
 }

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class PeriodDB {
+public class PeriodSheet {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -34,11 +34,11 @@ public class PeriodDB {
     @TypeConverters({Converters.class})
     private List<DayPeriod> oneRoomWeeklyPeriod;
 
-    public PeriodDB() {
+    public PeriodSheet() {
     }
 
     @Ignore
-    public PeriodDB(int roomId, List<DayPeriod> oneRoomWeeklyPeriod) {
+    public PeriodSheet(int roomId, List<DayPeriod> oneRoomWeeklyPeriod) {
         this.roomId = roomId;
         this.oneRoomWeeklyPeriod = oneRoomWeeklyPeriod;
     }

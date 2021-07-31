@@ -13,7 +13,6 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 import com.jiuhua.jiuhuacontrol.repository.MyRepository;
-import com.jiuhua.mqttsample.MQTTService;
 
 //FIXME: Dev分支目标是基础的架构，软件架构，数据形式，存储方法，基本逻辑等等，不可见的，共性的。
 //TODO: 在云端使用数据库存储用户的数据，是否可以使用workmanager管理一个任务，定时去获取数据？？
@@ -51,11 +50,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        //start service
-        Intent intent = new Intent(this, MQTTService.class);
-        startService(intent);
-
-        MyRepository myRepository = new MyRepository(this.getApplicationContext());
+        MyRepository myRepository = MyRepository.getInstance(this.getApplicationContext());
         myRepository.requestTDengineData();
 
     }

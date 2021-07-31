@@ -1,3 +1,3 @@
 include ':esptouch-v2'
 include ':esptouch'
-include ':app', ':mqtt'
+include ':app'

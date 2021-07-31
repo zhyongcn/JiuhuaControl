@@ -1,24 +1,24 @@
 package com.jiuhua.jiuhuacontrol.database;
 
-/*这张表的数据一分钟一次，存储上限为三个月*/
+/*这张表把engineDB表的数据一小时一次加平均，*/
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class EngineDB {
+public class EngineLongTimeSheet {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
     @ColumnInfo(name = " timestamp")
     private long timeStamp;   //直接使用UNIX时间
-    @ColumnInfo
-    private boolean isengineRuning;
+    @ColumnInfo(name = "engine_minute")
+    private int engineMinute;  //主机运行时间 0--60分钟
 
-    public EngineDB(long timeStamp, boolean isengineRuning) {
+    public EngineLongTimeSheet(long timeStamp, int engineMinute) {
         this.timeStamp = timeStamp;
-        this.isengineRuning = isengineRuning;
+        this.engineMinute = engineMinute;
     }
 
     public long getId() {
@@ -37,12 +37,12 @@ public class EngineDB {
         this.timeStamp = timeStamp;
     }
 
-    public boolean isIsengineRuning() {
-        return isengineRuning;
+    public int getEngineMinute() {
+        return engineMinute;
     }
 
-    public void setIsengineRuning(boolean isengineRuning) {
-        this.isengineRuning = isengineRuning;
+    public void setEngineMinute(int engineMinute) {
+        this.engineMinute = engineMinute;
     }
 
 }

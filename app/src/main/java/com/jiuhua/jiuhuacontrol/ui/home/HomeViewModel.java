@@ -5,9 +5,9 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.jiuhua.jiuhuacontrol.database.BasicInfoSheet;
+import com.jiuhua.jiuhuacontrol.database.SensorSheet;
 import com.jiuhua.jiuhuacontrol.repository.MyRepository;
-import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
-import com.jiuhua.jiuhuacontrol.database.IndoorDB;
 
 import java.util.List;
 
@@ -17,24 +17,24 @@ public class HomeViewModel extends AndroidViewModel {
 
     public HomeViewModel(Application application) {
         super(application);
-        myRepository = new MyRepository(application);
+        myRepository = MyRepository.getInstance(application);
     }
 
 
     //包装 Repository 里面的 Dao 方法
-    public void insertRoomName(BasicInfoDB... basicInfoDBS) {
-        myRepository.insertBasicInfo(basicInfoDBS);
+    public void insertRoomName(BasicInfoSheet... basicInfoSheets) {
+        myRepository.insertBasicInfo(basicInfoSheets);
     }
     public void deleteAllRoomsName(){
         myRepository.deleteAllBasicInfo();
     }
 
-    public LiveData<List<BasicInfoDB>> getAllBasicInfoLive(){
+    public LiveData<List<BasicInfoSheet>> getAllBasicInfoLive(){
         return myRepository.getAllBasicInfoLive();
     }
 
-    public LiveData<List<IndoorDB>> getAllLatestIndoorDBsLive(int devicetypeId) {
-        return myRepository.getAllLatestIndoorDBsLive(devicetypeId);
+    public LiveData<List<SensorSheet>> getAllLatestIndoorDBsLive(int devicetypeId) {
+        return myRepository.getAllLatestIndoorSheetsLive(devicetypeId);
     }
 
     //获取普通房间的名字

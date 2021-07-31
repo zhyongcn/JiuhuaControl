@@ -318,7 +318,7 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
                     //写入数据库
                     indoorViewModel.insertPeriodDB(roomId);
                     //send MQTT message  TODO: 统一在传出环节使用假浮点？？
-                    indoorViewModel.periodToDevice(roomId, indoorViewModel.currentlyPeriodDB.getOneRoomWeeklyPeriod());
+                    indoorViewModel.periodToDevice(roomId, indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod());
                     getActivity().onBackPressed();
                 }
                 break;
@@ -353,9 +353,9 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
             Toast.makeText(getContext(), "设置时间不对", LENGTH_SHORT).show();
             return -1;
         }
-        if (indoorViewModel.currentlyPeriodDB.getOneRoomWeeklyPeriod().size() > 0) {
+        if (indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod().size() > 0) {
             //循环判断所有周期段
-            for (DayPeriod d : indoorViewModel.currentlyPeriodDB.getOneRoomWeeklyPeriod()) {
+            for (DayPeriod d : indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod()) {
                 //同一天的才判断（星期几相同）
                 if (d.getWeekday() == weekday) {
                     int Tstart = d.getStartMinuteStamp();//距离零点的分钟数
@@ -380,17 +380,17 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
         }
 
         //通过之后就是合理的数据，先写入list，再排序，再删除超过6个的。
-        indoorViewModel.currentlyPeriodDB.getOneRoomWeeklyPeriod().add(dayPeriodFromJson);
+        indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod().add(dayPeriodFromJson);
 
         //排序
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                indoorViewModel.currentlyPeriodDB.getOneRoomWeeklyPeriod()[wday].sort(comparingInt(DayPeriod::getStartMinuteStamp));
+//                indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod()[wday].sort(comparingInt(DayPeriod::getStartMinuteStamp));
 //            }
         //删除多于六个的
-//            if (indoorViewModel.currentlyPeriodDB.getOneRoomWeeklyPeriod()[wday].size() > 6) {  //限制一天六个时段。Limited to six periods a day.
-//                indoorViewModel.currentlyPeriodDB.getOneRoomWeeklyPeriod()[wday]
-//                        = indoorViewModel.currentlyPeriodDB.getOneRoomWeeklyPeriod()[wday].subList(0,
-//                        indoorViewModel.currentlyPeriodDB.getOneRoomWeeklyPeriod()[wday].size() - 1);
+//            if (indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod()[wday].size() > 6) {  //限制一天六个时段。Limited to six periods a day.
+//                indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod()[wday]
+//                        = indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod()[wday].subList(0,
+//                        indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod()[wday].size() - 1);
 //            }
 
 
@@ -405,7 +405,7 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
         dayPeriodFromJson.setWeekday(weekday);
 
         //这个方法不熟练，没有做好，不熟悉 iterator。
-//        Iterator<DayPeriod> iterator = indoorViewModel.currentlyPeriodDB.getOneRoomWeeklyPeriod().iterator();
+//        Iterator<DayPeriod> iterator = indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod().iterator();
 //        while (iterator.hasNext()) {
 //            if (dayPeriodFromJson.getStartMinuteStamp() == iterator.next().getStartMinuteStamp()
 //                    && dayPeriodFromJson.getEndMinuteStamp() == iterator.next().getEndMinuteStamp()
@@ -414,15 +414,15 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
 //            }
 //        }
 
-        for (int i = 0; i < indoorViewModel.currentlyPeriodDB.getOneRoomWeeklyPeriod().size(); i++) {
-            if (dayPeriodFromJson.getStartMinuteStamp() == indoorViewModel.currentlyPeriodDB.getOneRoomWeeklyPeriod().get(i).getStartMinuteStamp()
-                    && dayPeriodFromJson.getEndMinuteStamp() == indoorViewModel.currentlyPeriodDB.getOneRoomWeeklyPeriod().get(i).getEndMinuteStamp()
-                    && dayPeriodFromJson.getWeekday() == indoorViewModel.currentlyPeriodDB.getOneRoomWeeklyPeriod().get(i).getWeekday()) {
-                indoorViewModel.currentlyPeriodDB.getOneRoomWeeklyPeriod().remove(i);
+        for (int i = 0; i < indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod().size(); i++) {
+            if (dayPeriodFromJson.getStartMinuteStamp() == indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod().get(i).getStartMinuteStamp()
+                    && dayPeriodFromJson.getEndMinuteStamp() == indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod().get(i).getEndMinuteStamp()
+                    && dayPeriodFromJson.getWeekday() == indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod().get(i).getWeekday()) {
+                indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod().remove(i);
                 i--;
             }
         }
-        Log.d("remove", gson.toJson(indoorViewModel.currentlyPeriodDB));
+        Log.d("remove", gson.toJson(indoorViewModel.currentlyPeriodSheet));
 
     }
 

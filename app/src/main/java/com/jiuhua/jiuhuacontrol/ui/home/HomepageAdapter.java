@@ -11,8 +11,8 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jiuhua.jiuhuacontrol.R;
-import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
-import com.jiuhua.jiuhuacontrol.database.IndoorDB;
+import com.jiuhua.jiuhuacontrol.database.BasicInfoSheet;
+import com.jiuhua.jiuhuacontrol.database.SensorSheet;
 import com.jiuhua.jiuhuacontrol.Constants;
 
 import java.util.ArrayList;
@@ -21,20 +21,20 @@ import java.util.List;
 
 public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyViewHolder> {//多态使用的内部类
 
-    private List<BasicInfoDB> allBasicInfo = new ArrayList<>();
-    private List<IndoorDB> allLatestIndoorDBs = new ArrayList<>();
+    private List<BasicInfoSheet> allBasicInfo = new ArrayList<>();
+    private List<SensorSheet> allLatestSensorSheets = new ArrayList<>();
     private HomeViewModel homeViewModel;
 
     public HomepageAdapter(HomeViewModel homeViewModel) {//构造函数
         this.homeViewModel = homeViewModel;
     }
 
-    public void setAllBasicInfo(List<BasicInfoDB> allBasicInfo) { // homeFragment 观察到变化就调用此方法设置 basicinfo。
+    public void setAllBasicInfo(List<BasicInfoSheet> allBasicInfo) { // homeFragment 观察到变化就调用此方法设置 basicinfo。
         this.allBasicInfo = allBasicInfo;
     }
 
-    public void setAllLatestIndoorDBs(List<IndoorDB> allLatestIndoorDBs) {
-        this.allLatestIndoorDBs = allLatestIndoorDBs;
+    public void setAllLatestIndoorDBs(List<SensorSheet> allLatestSensorSheets) {
+        this.allLatestSensorSheets = allLatestSensorSheets;
     }
 
     @NonNull
@@ -59,13 +59,13 @@ public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {//绑定时，position位置参数指定了使用哪个具体数据。
         //具体视图元素赋值。
-        BasicInfoDB basicInfoDB = allBasicInfo.get(position);
-        holder.textViewRoomName.setText(basicInfoDB.getRoomName());
-        if (position < allLatestIndoorDBs.size()) {
-            IndoorDB indoorDB = allLatestIndoorDBs.get(position);//在这个给 position+1 会导致闪退的。
-            holder.textViewRoomTemperature.setText("当前温度：" + indoorDB.getCurrentTemperature() / 10 + " C");
-            holder.textViewRoomHumidity.setText("当前湿度：" + indoorDB.getCurrentHumidity() / 10 + "%RH");
-            switch (indoorDB.getRoomStatus()) {
+        BasicInfoSheet basicInfoSheet = allBasicInfo.get(position);
+        holder.textViewRoomName.setText(basicInfoSheet.getRoomName());
+        if (position < allLatestSensorSheets.size()) {
+            SensorSheet sensorSheet = allLatestSensorSheets.get(position);//在这个给 position+1 会导致闪退的。
+            holder.textViewRoomTemperature.setText("当前温度：" + sensorSheet.getCurrentTemperature() / 10 + " C");
+            holder.textViewRoomHumidity.setText("当前湿度：" + sensorSheet.getCurrentHumidity() / 10 + "%RH");
+            switch (sensorSheet.getRoomStatus()) {
                 case Constants.roomState_OFF:
                     holder.textViewRoomStatus.setText("当前状态：停止运行");
                     break;

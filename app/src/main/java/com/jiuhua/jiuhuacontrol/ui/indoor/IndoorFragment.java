@@ -1,12 +1,9 @@
 package com.jiuhua.jiuhuacontrol.ui.indoor;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,7 +15,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.jiuhua.jiuhuacontrol.Constants;
 import com.jiuhua.jiuhuacontrol.R;
 import com.jiuhua.jiuhuacontrol.databinding.FragmentIndoorBinding;
-import com.jiuhua.mqttsample.MQTTService;
 
 public class IndoorFragment extends Fragment {
 
@@ -62,27 +58,27 @@ public class IndoorFragment extends Fragment {
             indoorViewModel.setAllLatestIndoorDBs(indoorDBS);
             //****数据驱动界面改变,所以代码要放在fragment或者Activity里面。只处理界面****
             //显示当前温度
-            currentTemperature = indoorViewModel.currentlyIndoorDB.getCurrentTemperature() / 10;
+            currentTemperature = indoorViewModel.currentlySensorSheet.getCurrentTemperature() / 10;
             binding.currentTemperatureView.setText(currentTemperature + "℃");//假浮点需要除以10
 
             //以下空调相关显示
             //显示空调设置温度（现在只有一个设置温度）//假浮点需要除以10
-            displaySetTemperature = indoorViewModel.currentlyIndoorDB.getSettingTemperature() / 10;
+            displaySetTemperature = indoorViewModel.currentlySensorSheet.getSettingTemperature() / 10;
             binding.showAirconditionSettingTemperature.setText("空调设置温度             " + displaySetTemperature + "℃");
             binding.airconditionSetTemperatureNumber.setText(String.valueOf(accessSetTemperature));
             binding.floorheatTemperatureSetNumber.setText(String.valueOf(accessSetTemperature));
 
             //TODO 湿度暂时不搞！！
             //显示当前湿度
-//            binding.tempHumidityTextView.setText(String.valueOf(indoorViewModel.currentlyIndoorDB.getCurrentHumidity() / 10));//假浮点需要除以10
+//            binding.tempHumidityTextView.setText(String.valueOf(indoorViewModel.currentlySensorSheet.getCurrentHumidity() / 10));//假浮点需要除以10
 
             //显示设置湿度
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                binding.humiditySeekBar.setProgress(indoorViewModel.currentlyIndoorDB.getSettingHumidity() / 10, true);//假浮点需要除以10
+//                binding.humiditySeekBar.setProgress(indoorViewModel.currentlySensorSheet.getSettingHumidity() / 10, true);//假浮点需要除以10
 //            }
 
             //依据房间的状态改变显示的文字(停止，手动，自动)
-            switch (indoorViewModel.currentlyIndoorDB.getRoomStatus()) {
+            switch (indoorViewModel.currentlySensorSheet.getRoomStatus()) {
                 case Constants.roomState_OFF: //stop 0, manual 1, auto 2
                     binding.showAirconditionRunningModel.setText("运行模式                停止模式");
                     break;
@@ -109,7 +105,7 @@ public class IndoorFragment extends Fragment {
             }
 
             //风机状态数据驱动显示的文字变化（高中低及自动风）
-            switch (indoorViewModel.currentlyIndoorDB.getCurrentFanStatus()) {
+            switch (indoorViewModel.currentlySensorSheet.getCurrentFanStatus()) {
                 case Constants.fanSpeed_STOP:
                     binding.showAirconditionRunningFanspeed.setText("风机状态                   停止");
                     break;
@@ -128,7 +124,7 @@ public class IndoorFragment extends Fragment {
             }
 
             //显示空调的运行状态即 两通阀的开关状态
-            if (indoorViewModel.currentlyIndoorDB.isCoilValveOpen()) {
+            if (indoorViewModel.currentlySensorSheet.isCoilValveOpen()) {
                 binding.showAirconditionRunningStateCoilvalve.setText(R.string.coilvalveopen);
             } else {
                 binding.showAirconditionRunningStateCoilvalve.setText(R.string.coilvalveshut);
@@ -139,7 +135,7 @@ public class IndoorFragment extends Fragment {
             binding.showFloorheatSettingTemperature.setText("地暖设置温度  " + displaySetTemperature + "℃");//TODO 假浮点需要除以10
 
             //依据房间的状态改变显示的文字(停止，手动，自动)
-            switch (indoorViewModel.currentlyIndoorDB.getRoomStatus()) {
+            switch (indoorViewModel.currentlySensorSheet.getRoomStatus()) {
                 case Constants.roomState_OFF: //stop 0, manual 1, auto 2
                     binding.showFloorheatRunningModel.setText("运行模式                 停止模式");
                     break;
@@ -167,7 +163,7 @@ public class IndoorFragment extends Fragment {
             }
 
             //显示地暖的运行状态
-            if (indoorViewModel.currentlyIndoorDB.isFloorValveOpen()) {
+            if (indoorViewModel.currentlySensorSheet.isFloorValveOpen()) {
                 binding.showFloorheatRunningStates.setText(R.string.floorvalveopen);
             } else {
                 binding.showFloorheatRunningStates.setText(R.string.floorvalveshut);
@@ -183,7 +179,7 @@ public class IndoorFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-//        setTemperature = indoorViewModel.currentlyIndoorDB.getSettingTemperature() / 10;
+//        setTemperature = indoorViewModel.currentlySensorSheet.getSettingTemperature() / 10;
 //        binding.airconditionSetTemperatureNumber.setText(String.valueOf(setTemperature));
 
         binding.airconditionDownTemperature.setOnClickListener(v -> {
@@ -335,9 +331,6 @@ public class IndoorFragment extends Fragment {
 
         });
 
-        //start service
-        Intent intent = new Intent(getActivity(), MQTTService.class);
-        getActivity().startService(intent);
     }
 
     @Override
@@ -350,25 +343,16 @@ public class IndoorFragment extends Fragment {
 //    @Override
 //    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
 //        super.onViewStateRestored(savedInstanceState);
-//        //start service
-//        Intent intent = new Intent(getContext(), MQTTService.class);
-//        getContext().startService(intent);
 //    }
 
     @Override
     public void onStart() {
         super.onStart();
-        //start service
-        Intent intent = new Intent(getActivity(), MQTTService.class);
-        getActivity().startService(intent);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        //start service
-        Intent intent = new Intent(getActivity(), MQTTService.class);
-        getActivity().startService(intent);
     }
 
 

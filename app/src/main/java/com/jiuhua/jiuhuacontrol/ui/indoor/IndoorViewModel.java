@@ -9,10 +9,10 @@ import androidx.lifecycle.LiveData;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.jiuhua.jiuhuacontrol.Constants;
+import com.jiuhua.jiuhuacontrol.database.SensorSheet;
+import com.jiuhua.jiuhuacontrol.database.PeriodSheet;
 import com.jiuhua.jiuhuacontrol.repository.MyRepository;
 import com.jiuhua.jiuhuacontrol.database.DayPeriod;
-import com.jiuhua.jiuhuacontrol.database.IndoorDB;
-import com.jiuhua.jiuhuacontrol.database.PeriodDB;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,10 +21,10 @@ import java.util.List;
 public class IndoorViewModel extends AndroidViewModel {
 
     MyRepository myRepository;
-    List<IndoorDB> allLatestIndoorDBs = new ArrayList<>();   //room1,room2...`s settingtempreature etc.
-    List<PeriodDB> allLatestPeriodDBs = new ArrayList<>();   //room1,room2...`s period.
-    IndoorDB currentlyIndoorDB = new IndoorDB();
-    PeriodDB currentlyPeriodDB;  //currently room`s one weekly period.
+    List<SensorSheet> allLatestSensorSheets = new ArrayList<>();   //room1,room2...`s settingtempreature etc.
+    List<PeriodSheet> allLatestPeriodSheets = new ArrayList<>();   //room1,room2...`s period.
+    SensorSheet currentlySensorSheet = new SensorSheet();
+    PeriodSheet currentlyPeriodSheet;  //currently room`s one weekly period.
 
 
     private int currentlyRoomId;
@@ -43,53 +43,53 @@ public class IndoorViewModel extends AndroidViewModel {
         this.currentlyRoomName = currentlyRoomName;
     }
 
-    public void setAllLatestIndoorDBs(List<IndoorDB> allLatestIndoorDBsLive) {
-        this.allLatestIndoorDBs = allLatestIndoorDBsLive;
-        if (allLatestIndoorDBs.size() > 0) {
-            for (IndoorDB indoorDB : allLatestIndoorDBs) {
-                if (indoorDB.getRoomId() == currentlyRoomId) {
-                    this.currentlyIndoorDB = indoorDB;
+    public void setAllLatestIndoorDBs(List<SensorSheet> allLatestIndoorDBsLive) {
+        this.allLatestSensorSheets = allLatestIndoorDBsLive;
+        if (allLatestSensorSheets.size() > 0) {
+            for (SensorSheet sensorSheet : allLatestSensorSheets) {
+                if (sensorSheet.getRoomId() == currentlyRoomId) {
+                    this.currentlySensorSheet = sensorSheet;
 
-//                    commandESP.setRoomId(currentlyIndoorDB.getRoomId());
+//                    commandESP.setRoomId(currentlySensorSheet.getRoomId());
 //                    commandESP.setDeviceType(Constants.deviceType_phone);//已经是来自手机了。
                     //TODO: 待验证！！ 如果这些缺省为 0 时，模块不写入，是否不要设置了，
-//                    commandESP.setRoomState(currentlyIndoorDB.getRoomStatus());
-//                    commandESP.setSettingTemperature(currentlyIndoorDB.getSettingTemperature());
-//                    commandESP.setSettingHumidity(currentlyIndoorDB.getSettingHumidity());
-//                    commandESP.setSettingFanSpeed(currentlyIndoorDB.getSettingFanStatus());
+//                    commandESP.setRoomState(currentlySensorSheet.getRoomStatus());
+//                    commandESP.setSettingTemperature(currentlySensorSheet.getSettingTemperature());
+//                    commandESP.setSettingHumidity(currentlySensorSheet.getSettingHumidity());
+//                    commandESP.setSettingFanSpeed(currentlySensorSheet.getSettingFanStatus());
                 }
             }
         }
-        if (currentlyIndoorDB.getRoomId() == 0) {
-            currentlyIndoorDB.setRoomId(currentlyRoomId);
+        if (currentlySensorSheet.getRoomId() == 0) {
+            currentlySensorSheet.setRoomId(currentlyRoomId);
 //            commandESP.setRoomId(currentlyRoomId);
         }
     }
 
-    public void setAllLatestPeriodDBs(List<PeriodDB> allLatestPeriodDBsLive) {
-        this.allLatestPeriodDBs = allLatestPeriodDBsLive;
-        if (allLatestPeriodDBs.size() > 0) {
-            for (PeriodDB periodDB : allLatestPeriodDBs) {
-                if (periodDB.getRoomId() == currentlyRoomId) {
-                    this.currentlyPeriodDB = periodDB;
+    public void setAllLatestPeriodDBs(List<PeriodSheet> allLatestPeriodDBsLive) {
+        this.allLatestPeriodSheets = allLatestPeriodDBsLive;
+        if (allLatestPeriodSheets.size() > 0) {
+            for (PeriodSheet periodSheet : allLatestPeriodSheets) {
+                if (periodSheet.getRoomId() == currentlyRoomId) {
+                    this.currentlyPeriodSheet = periodSheet;
                 }
             }
-            if (currentlyPeriodDB == null){ //如果迭代完成还没有被赋值，说明没有这个房间的数据，新建一个房间的基础数据
-                currentlyPeriodDB = new PeriodDB();
-                currentlyPeriodDB.setRoomId(currentlyRoomId);
-                currentlyPeriodDB.setOneRoomWeeklyPeriod(new ArrayList<>());
+            if (currentlyPeriodSheet == null){ //如果迭代完成还没有被赋值，说明没有这个房间的数据，新建一个房间的基础数据
+                currentlyPeriodSheet = new PeriodSheet();
+                currentlyPeriodSheet.setRoomId(currentlyRoomId);
+                currentlyPeriodSheet.setOneRoomWeeklyPeriod(new ArrayList<>());
             }
         }else {//说明在开始的状态没有任何数据，新建一个房间的基础数据
-            currentlyPeriodDB = new PeriodDB();
-            currentlyPeriodDB.setRoomId(currentlyRoomId);
-            currentlyPeriodDB.setOneRoomWeeklyPeriod(new ArrayList<>());
+            currentlyPeriodSheet = new PeriodSheet();
+            currentlyPeriodSheet.setRoomId(currentlyRoomId);
+            currentlyPeriodSheet.setOneRoomWeeklyPeriod(new ArrayList<>());
         }
     }
 
     //构造方法
     public IndoorViewModel(@NonNull Application application) {
         super(application);
-        this.myRepository = new MyRepository(application);
+        this.myRepository = MyRepository.getInstance(application);
     }
 
     /**
@@ -160,28 +160,28 @@ public class IndoorViewModel extends AndroidViewModel {
     /**
      * 包装 myRepository 里的方法：
      */
-    public LiveData<List<IndoorDB>> getAllLatestIndoorDBsLive(int devicetypeId) {
-        return myRepository.getAllLatestIndoorDBsLive(devicetypeId);
+    public LiveData<List<SensorSheet>> getAllLatestIndoorDBsLive(int devicetypeId) {
+        return myRepository.getAllLatestIndoorSheetsLive(devicetypeId);
     }
 
-    public LiveData<List<PeriodDB>> getAllLatestPeriodDBsLive() {
-        return myRepository.getAllLatestPeriodDBsLive();
+    public LiveData<List<PeriodSheet>> getAllLatestPeriodDBsLive() {
+        return myRepository.getAllLatestPeriodSheetsLive();
     }
 
     public void insertPeriodDB(int roomId) {
-        currentlyPeriodDB.setId(currentlyPeriodDB.getId()+allLatestPeriodDBs.size());
+        currentlyPeriodSheet.setId(currentlyPeriodSheet.getId()+ allLatestPeriodSheets.size());
                     //id是从数据库里取出的，加上有几个房间，不会冲掉数据。id不同，数据库认为不是一个数据
-        currentlyPeriodDB.setRoomId(roomId);
-        currentlyPeriodDB.setTimeStamp(new Date().getTime() / 1000);  //这个方法得到的是毫秒，this method return ms。
-        myRepository.insertPeriodDB(currentlyPeriodDB);
+        currentlyPeriodSheet.setRoomId(roomId);
+        currentlyPeriodSheet.setTimeStamp(new Date().getTime() / 1000);  //这个方法得到的是毫秒，this method return ms。
+        myRepository.insertPeriodSheet(currentlyPeriodSheet);
     }
 
     //把周期传递给模块 period[15][3]
     public void periodToDevice(int roomid, List<DayPeriod> dayPeriods){
-        currentlyPeriodDB.setRoomId(roomid);
-        currentlyPeriodDB.setTimeStamp(new Date().getTime()/1000);//没有必要
-        currentlyPeriodDB.setOneRoomWeeklyPeriod(dayPeriods);
-        myRepository.periodToDevice(currentlyPeriodDB);
+        currentlyPeriodSheet.setRoomId(roomid);
+        currentlyPeriodSheet.setTimeStamp(new Date().getTime()/1000);//没有必要
+        currentlyPeriodSheet.setOneRoomWeeklyPeriod(dayPeriods);
+        myRepository.periodToDevice(currentlyPeriodSheet);
     }
 
 }

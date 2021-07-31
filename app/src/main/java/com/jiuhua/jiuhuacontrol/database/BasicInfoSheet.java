@@ -6,7 +6,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class BasicInfoDB {
+public class BasicInfoSheet {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
@@ -39,21 +39,21 @@ public class BasicInfoDB {
     private boolean isRadiatorAuto;
 
 
-    public BasicInfoDB() {}
+    public BasicInfoSheet() {}
 
     @Ignore
-    public BasicInfoDB(String roomName) {this.roomName = roomName; }
+    public BasicInfoSheet(String roomName) {this.roomName = roomName; }
 
     @Ignore
-    public BasicInfoDB(int id, String roomName) {
+    public BasicInfoSheet(int id, String roomName) {
         this.Id = id;
         this.roomName = roomName;
     }
 
     @Ignore
-    public BasicInfoDB(int roomId, String roomName, int temperatureSensorCalibration, String fancoilTrademark, String fanCoilType,
-                       boolean hasCoilValve, boolean isFloorHeat, boolean isFloorAuto,
-                       String radiatorTrademark, String radiatorType, boolean isRadiatorAuto) {
+    public BasicInfoSheet(int roomId, String roomName, int temperatureSensorCalibration, String fancoilTrademark, String fanCoilType,
+                          boolean hasCoilValve, boolean isFloorHeat, boolean isFloorAuto,
+                          String radiatorTrademark, String radiatorType, boolean isRadiatorAuto) {
         this.roomId = roomId;
         this.roomName = roomName;
         this.temperatureSensorCalibration = temperatureSensorCalibration;

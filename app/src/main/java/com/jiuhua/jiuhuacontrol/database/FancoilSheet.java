@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
 //fixme 添加关联外键，失败了吧！（是不是在线程的问题上，不能在主线程UI线程）
 
 @Entity
-public class IndoorDB {
+public class FancoilSheet {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
@@ -27,6 +27,10 @@ public class IndoorDB {
     @ColumnInfo(name = "device_type")
     @SerializedName("deviceType")
     private int deviceType; //FANCOIL 0, FLOORWATERSHED 1, RADIATOR 2, BOILER 3, HEATPUMP 4, DHTSENSOR 5, NTCSENSOR 6, PHONE 7
+
+    @ColumnInfo(name = "device_id")
+    @SerializedName("deviceId")
+    private String deviceId; //模块的MAC，
     //
     @ColumnInfo(name = "setting_temperature")
     @SerializedName("settingTemperature")
@@ -34,7 +38,7 @@ public class IndoorDB {
     @ColumnInfo(name = "current_temperature")
     @SerializedName("currentlyTemperature")
     private int currentTemperature;//模块 10X 之后的假浮点。
-
+    //
     @ColumnInfo(name = "setting_humidity")
     @SerializedName("settingHumidity")
     private int settingHumidity;
@@ -49,9 +53,6 @@ public class IndoorDB {
     @SerializedName("settingFanSpeed")
     private int settingFanStatus;
     //
-    @ColumnInfo(name = "floor_valve")
-    @SerializedName("floorvalve")
-    private boolean floorValveOpen;
     @ColumnInfo(name = "coil_valve")
     @SerializedName("coilvalve")
     private boolean coilValveOpen;
@@ -60,24 +61,24 @@ public class IndoorDB {
     @SerializedName("roomState")
     private int roomStatus; //Constants.roomState_XXXX
 
-    public IndoorDB() {
+    public FancoilSheet() {
         //empty public constructor for IndoorViewModel
     }
 
     @Ignore
-    public IndoorDB(long timeStamp, int roomId, int deviceType, int currentTemperature, int settingTemperature,
-                    int currentHumidity, int settingHumidity, int settingFanStatus, int currentFanStatus, boolean floorValveOpen,
-                    boolean coilValveOpen, int roomStatus) {
+    public FancoilSheet(long timeStamp, int roomId, int deviceType, String deviceId, int settingTemperature,
+                        int currentTemperature, int settingHumidity, int currentHumidity, int currentFanStatus,
+                        int settingFanStatus,  boolean coilValveOpen, int roomStatus) {
         this.timeStamp = timeStamp;
         this.roomId = roomId;
         this.deviceType = deviceType;
-        this.currentTemperature = currentTemperature;
+        this.deviceId = deviceId;
         this.settingTemperature = settingTemperature;
-        this.currentHumidity = currentHumidity;
+        this.currentTemperature = currentTemperature;
         this.settingHumidity = settingHumidity;
-        this.settingFanStatus = settingFanStatus;
+        this.currentHumidity = currentHumidity;
         this.currentFanStatus = currentFanStatus;
-        this.floorValveOpen = floorValveOpen;
+        this.settingFanStatus = settingFanStatus;
         this.coilValveOpen = coilValveOpen;
         this.roomStatus = roomStatus;
     }
@@ -112,6 +113,14 @@ public class IndoorDB {
 
     public void setDeviceType(int deviceType) {
         this.deviceType = deviceType;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 
     public int getCurrentTemperature() {
@@ -160,14 +169,6 @@ public class IndoorDB {
 
     public void setSettingFanStatus(int settingFanStatus) {
         this.settingFanStatus = settingFanStatus;
-    }
-
-    public boolean isFloorValveOpen() {
-        return floorValveOpen;
-    }
-
-    public void setFloorValveOpen(boolean floorValveOpen) {
-        this.floorValveOpen = floorValveOpen;
     }
 
     public boolean isCoilValveOpen() {

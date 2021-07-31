@@ -7,7 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.jiuhua.jiuhuacontrol.repository.MyRepository;
-import com.jiuhua.jiuhuacontrol.database.BasicInfoDB;
+import com.jiuhua.jiuhuacontrol.database.BasicInfoSheet;
 
 import java.util.List;
 
@@ -19,27 +19,27 @@ public class UserInfoViewModel extends AndroidViewModel {
 
     public UserInfoViewModel(@NonNull Application application) {
         super(application);
-        myRepository = new MyRepository(application);
+        myRepository = MyRepository.getInstance(application);
     }
 
     //包装 Repository 里面的 Dao 方法
-    public void insertBasicInfo(BasicInfoDB... basicInfoDBS) {
-        myRepository.insertBasicInfo(basicInfoDBS);
+    public void insertBasicInfo(BasicInfoSheet... basicInfoSheets) {
+        myRepository.insertBasicInfo(basicInfoSheets);
     }
 
-    public void updateBasicInfo(BasicInfoDB... basicInfoDBS) {
-        myRepository.updateBasicInfo(basicInfoDBS);
+    public void updateBasicInfo(BasicInfoSheet... basicInfoSheets) {
+        myRepository.updateBasicInfo(basicInfoSheets);
     }
 
-    public void deleteBasicInfo(BasicInfoDB... basicInfoDBS) {
-        myRepository.deleteBasicInfo(basicInfoDBS);
+    public void deleteBasicInfo(BasicInfoSheet... basicInfoSheets) {
+        myRepository.deleteBasicInfo(basicInfoSheets);
     }
 
-//    public List<BasicInfoDB> getAllBasicInfo(){
+//    public List<BasicInfoSheet> getAllBasicInfo(){
 //        return myRepository.getAllBasicInfo();
 //    }
 
-    public LiveData<List<BasicInfoDB>> getAllBasicInfoLive(){
+    public LiveData<List<BasicInfoSheet>> getAllBasicInfoLive(){
         return myRepository.getAllBasicInfoLive();
     }
 }
