@@ -76,7 +76,7 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        indoorViewModel.getAllLatestPeriodDBsLive().observe(getViewLifecycleOwner(), periodDBS -> {
+        indoorViewModel.getAllLatestPeriodSheetsLive().observe(getViewLifecycleOwner(), periodDBS -> {
             indoorViewModel.setAllLatestPeriodDBs(periodDBS); //viewmodel是单例，这个保存是有价值的。
         });
 
@@ -316,7 +316,7 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
                 if (check_daily_fragment_add_to_Weekly_list(clickedWeekday) == 1) {
                     dayPeriod.setDayPeriodName(editTextDayperiodName.getText().toString());
                     //写入数据库
-                    indoorViewModel.insertPeriodDB(roomId);
+                    indoorViewModel.insertPeriodSheet(roomId);
                     //send MQTT message  TODO: 统一在传出环节使用假浮点？？
                     indoorViewModel.periodToDevice(roomId, indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod());
                     getActivity().onBackPressed();

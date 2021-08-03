@@ -51,7 +51,7 @@ public class PeriodFragment extends Fragment {
 
         myView = view.findViewById(R.id.myview);//从传入的view中获取
 
-        indoorViewModel.getAllLatestPeriodDBsLive().observe(getViewLifecycleOwner(), periodDBS -> {
+        indoorViewModel.getAllLatestPeriodSheetsLive().observe(getViewLifecycleOwner(), periodDBS -> {
             indoorViewModel.setAllLatestPeriodDBs(periodDBS); //viewmodel是单例，这个保存是有价值的。
             myView.getWeeklyPeriod(indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod());
         });

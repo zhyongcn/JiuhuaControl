@@ -50,15 +50,15 @@ public class SensorSheet {
         //empty public constructor for IndoorViewModel
     }
 
-    @Ignore
-    public SensorSheet(long timeStamp, int roomId, int deviceType, int currentTemperature,
-                       int currentHumidity) {
-        this.timeStamp = timeStamp;
-        this.roomId = roomId;
-        this.deviceType = deviceType;
-        this.currentTemperature = currentTemperature;
-        this.currentHumidity = currentHumidity;
-    }
+//    @Ignore
+//    public SensorSheet(long timeStamp, int roomId, int deviceType, int currentTemperature,
+//                       int currentHumidity) {
+//        this.timeStamp = timeStamp;
+//        this.roomId = roomId;
+//        this.deviceType = deviceType;
+//        this.currentTemperature = currentTemperature;
+//        this.currentHumidity = currentHumidity;
+//    }
 
     public long getId() {
         return id;

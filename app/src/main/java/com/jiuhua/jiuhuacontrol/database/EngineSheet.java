@@ -29,12 +29,28 @@ public class EngineSheet {
     @SerializedName("deviceId")
     private String deviceId; //模块的MAC，
 
+    //
+    @ColumnInfo(name = "setting_temperature")
+    @SerializedName("settingTemperature")
+    private int settingTemperature;//10X 之后的假浮点。
+    @ColumnInfo(name = "current_temperature")
+    @SerializedName("currentlyTemperature")
+    private int currentTemperature;//模块 10X 之后的假浮点。
+    //
+    @ColumnInfo(name = "setting_humidity")
+    @SerializedName("settingHumidity")
+    private int settingHumidity;
+    @ColumnInfo(name = "current_humidity")
+    @SerializedName("currentlyHumidity")
+    private int currentHumidity;
+
     @ColumnInfo
     private boolean isengineRuning;
 
-    public EngineSheet(long timeStamp, boolean isengineRuning) {
-        this.timeStamp = timeStamp;
-        this.isengineRuning = isengineRuning;
+    @ColumnInfo
+    private int roomState;
+
+    public EngineSheet() {
     }
 
     public long getId() {
@@ -75,6 +91,46 @@ public class EngineSheet {
 
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
+    }
+
+    public int getRoomState() {
+        return roomState;
+    }
+
+    public int getSettingTemperature() {
+        return settingTemperature;
+    }
+
+    public void setSettingTemperature(int settingTemperature) {
+        this.settingTemperature = settingTemperature;
+    }
+
+    public int getCurrentTemperature() {
+        return currentTemperature;
+    }
+
+    public void setCurrentTemperature(int currentTemperature) {
+        this.currentTemperature = currentTemperature;
+    }
+
+    public int getSettingHumidity() {
+        return settingHumidity;
+    }
+
+    public void setSettingHumidity(int settingHumidity) {
+        this.settingHumidity = settingHumidity;
+    }
+
+    public int getCurrentHumidity() {
+        return currentHumidity;
+    }
+
+    public void setCurrentHumidity(int currentHumidity) {
+        this.currentHumidity = currentHumidity;
+    }
+
+    public void setRoomState(int roomState) {
+        this.roomState = roomState;
     }
 
     public boolean isIsengineRuning() {

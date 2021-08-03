@@ -1,7 +1,6 @@
 package com.jiuhua.jiuhuacontrol.repository;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
 
@@ -11,10 +10,13 @@ import com.google.gson.Gson;
 import com.jiuhua.jiuhuacontrol.CommandFromPhone;
 import com.jiuhua.jiuhuacontrol.CommandPeriod;
 import com.jiuhua.jiuhuacontrol.database.BasicInfoSheet;
+import com.jiuhua.jiuhuacontrol.database.EngineSheet;
+import com.jiuhua.jiuhuacontrol.database.FancoilSheet;
 import com.jiuhua.jiuhuacontrol.database.MyDao;
 import com.jiuhua.jiuhuacontrol.database.MyDatabase;
 import com.jiuhua.jiuhuacontrol.database.SensorSheet;
 import com.jiuhua.jiuhuacontrol.database.PeriodSheet;
+import com.jiuhua.jiuhuacontrol.database.WatershedSheet;
 
 import java.util.List;
 
@@ -34,7 +36,10 @@ public class MyRepository {
 
     long TimeStamp;
     LiveData<List<BasicInfoSheet>> allBasicInfoLive;
-    LiveData<List<SensorSheet>> allLatestIndoorSheetsLive;
+    LiveData<List<SensorSheet>> allLatestSensorSheetsLive;
+    LiveData<List<FancoilSheet>> allLatestFancoilSheetsLive;
+    LiveData<List<WatershedSheet>> allLatestWatershedSheetsLive;
+    LiveData<List<EngineSheet>> allLatestEngineSheetsLive;
     LiveData<List<PeriodSheet>> allLatestPeriodSheetsLive;
     private MyDao myDao;
     Gson gson = new Gson();
@@ -70,12 +75,12 @@ public class MyRepository {
         return INSTANCE;
     }
 
-    //TODO 添加 sql 参数！！
-    public void requestTDengineData() {
+    //请求云端数据库并写入本机数据库
+    public void requestTDengineData(String sql) {
         String credentials = "zz" + ":" + "700802";
         final String basic = "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
 
-        String sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room2' and ts > now - 1h";
+
 //        String sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room1' and ts > now - 1h";
 //        String sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room2' and ts > now - 1h";
 //        String sql3 = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room3' and ts > now - 1h";
@@ -87,6 +92,8 @@ public class MyRepository {
 //        String sql9 = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room9' and ts > now - 1h";
 //        String sql10 = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room10' and ts > now - 1h";
 //        String sql11 = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room11' and ts > now - 1h";
+
+
         RequestBody body = RequestBody.create(MediaType.parse("text/plain"), sql);
 
         Call<TDReception> call = cloudServer.respoFormTDengine(basic, body);
@@ -95,8 +102,62 @@ public class MyRepository {
             @Override
             public void onResponse(Call<TDReception> call, Response<TDReception> response) {
                 try {//回来的数据不稳定，保护一下。
-                    saveMessageToSQlite(response.body());
-                    Log.d(TAG+"Recived TDReception`s status is ", response.body().getStatus());
+                    if (sql.contains("homedevice.sensors")) {
+                        SensorSheet[] sensorSheetArray = TDReceptionConverter.toSensorSheet(response.body());
+                        if (sensorSheetArray != null) {
+                            new Thread(() -> {
+                                try {
+                                    insertSensorSheet(sensorSheetArray);//这里接收的是数组！！
+                                    Log.d("insert in sqlite", gson.toJson(sensorSheetArray));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }).start();
+                        }
+                    }
+
+                    if (sql.contains("homedevice.fancoils")) {//fixme
+                        FancoilSheet[] fancoilSheets = TDReceptionConverter.toFancoilSheet(response.body());
+                        if (fancoilSheets != null) {
+                            new Thread(() -> {
+                                try {
+                                    insertFancoilSheet(fancoilSheets);//这里接收的是数组！！
+                                    Log.d("insert in sqlite", gson.toJson(fancoilSheets));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }).start();
+                        }
+                    }
+
+                    if (sql.contains("homedevice.boilers")) {//fixme
+                        EngineSheet[] engineSheets = TDReceptionConverter.toEngineSheet(response.body());
+                        if (engineSheets != null) {
+                            new Thread(() -> {
+                                try {
+                                    insertEngineSheet(engineSheets);//这里接收的是数组！！
+                                    Log.d("insert in sqlite", gson.toJson(engineSheets));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }).start();
+                        }
+                    }
+
+                    if (sql.contains("homedevice.watersheds")) {//fixme
+                        WatershedSheet[] watershedSheets = TDReceptionConverter.toWatershedSheet(response.body());
+                        if (watershedSheets != null) {
+                            new Thread(() -> {
+                                try {
+                                    insertWatershedSheet(watershedSheets);//这里接收的是数组！！
+                                    Log.d("insert in sqlite", gson.toJson(watershedSheets));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }).start();
+                        }
+                    }
+
 //                    response.body().show();//检查调试的功能
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -196,28 +257,28 @@ public class MyRepository {
 
     }
 
-    /**  ******实现 Dao 的所有方法*********************************   */
+    /**  ******实现 Dao 的所有方法******   */
     /**
      * basic room information
      */
     //插入基本房间信息
     public void insertBasicInfo(BasicInfoSheet... basicInfoSheets) {
-        new InsertBasicInfoAsyncTask(myDao).execute(basicInfoSheets);
+        new AnsyMyDaoTask.InsertBasicInfoAsyncTask(myDao).execute(basicInfoSheets);
     }
 
     //修改基本房间信息
     public void updateBasicInfo(BasicInfoSheet... basicInfoSheets) {
-        new UpdateBasicInfoAsyncTask(myDao).execute(basicInfoSheets);
+        new AnsyMyDaoTask.UpdateBasicInfoAsyncTask(myDao).execute(basicInfoSheets);
     }
 
     //删除基本房间信息，依靠主键就可以
     public void deleteBasicInfo(BasicInfoSheet... basicInfoSheets) {
-        new DeleteBasicInfoAsyncTask(myDao).execute(basicInfoSheets);
+        new AnsyMyDaoTask.DeleteBasicInfoAsyncTask(myDao).execute(basicInfoSheets);
     }
 
     //删除所有的基本房间信息
     public void deleteAllBasicInfo() {
-        new DeleteAllBasicInfoAsyncTask(myDao).execute();
+        new AnsyMyDaoTask.DeleteAllBasicInfoAsyncTask(myDao).execute();
     }
 
     //获取所有的基本房间信息，LiveData形式。
@@ -230,35 +291,55 @@ public class MyRepository {
         return myDao.loadRoomName(roomid);
     }
 
-    /**
-     * room information not include period
-     */
-    //插入普通房间的状态信息
-    public void insertIndoorSheet(SensorSheet... sensorSheets) {  // 这个 ... 接收的是数组！！
-        new InsertIndoorSheetAsyncTask(myDao).execute(sensorSheets);
+    /** room information not include period */
+    //SENSOR 插入房间传感器的状态信息
+    public void insertSensorSheet(SensorSheet... sensorSheets) {  // 这个 ... 接收的是数组！！
+        new AnsyMyDaoTask.InsertSensorSheetAsyncTask(myDao).execute(sensorSheets);
     }
-
-    //delete one indoorDB is not necessary
-
-    //删除所有普通房间的信息
-    public void deleteAllIndoorSheet() {
-        new DeleteAllIndoorSheetAsyncTask(myDao).execute();
-    }
-
-    //获取普通房间的全部信息
-    public LiveData<List<SensorSheet>> getAllLatestIndoorSheetsLive(int devicetypeId) {
+    //获取房间传感器的全部信息
+    public LiveData<List<SensorSheet>> getAllLatestSensorSheetsLive(int devicetypeId) {
         //获取房间的最新信息指定了参数设备类型，继续包装下去，让调用者决定设备的类型。
-        allLatestIndoorSheetsLive = myDao.loadLatestSensorSheetsLive(devicetypeId);
+        allLatestSensorSheetsLive = myDao.loadLatestSensorSheetsLive(devicetypeId);
         //一般查询系统会自动安排在非主线程，不需要自己写。其他的需要自己写非主线程。？？right？？
-        return allLatestIndoorSheetsLive;
+        return allLatestSensorSheetsLive;
     }
+    //删除所有房间传感器的信息
+    public void deleteAllSensorSheet() {
+        new AnsyMyDaoTask.DeleteAllSensorSheetAsyncTask(myDao).execute();
+    }
+
+    //FANCOIL 插入房间风机的状态信息
+    public void insertFancoilSheet(FancoilSheet... fancoilSheets) {  // 这个 ... 接收的是数组！！
+        new AnsyMyDaoTask.InsertFancoilSheetAsyncTask(myDao).execute(fancoilSheets);
+    }
+    //获取房间风机的全部信息
+    public LiveData<List<FancoilSheet>> getAllLatestFancoilSheetsLive() {
+        //获取房间的最新信息指定了参数设备类型，继续包装下去，让调用者决定设备的类型。
+        allLatestFancoilSheetsLive = myDao.loadLatestFancoilSheetsLive();
+        //一般查询系统会自动安排在非主线程，不需要自己写。其他的需要自己写非主线程。？？right？？
+        return allLatestFancoilSheetsLive;
+    }
+
+    //ENGINE 插入锅炉热泵等的状态信息
+    public void insertEngineSheet(EngineSheet... engineSheets) {  // 这个 ... 接收的是数组！！
+        new AnsyMyDaoTask.InsertEngineSheetAsyncTask(myDao).execute(engineSheets);
+    }
+
+    //WATERSHED 插入房间风机的状态信息
+    public void insertWatershedSheet(WatershedSheet... watershedSheets) {  // 这个 ... 接收的是数组！！
+        new AnsyMyDaoTask.InsertWatershedSheetAsyncTask(myDao).execute(watershedSheets);
+    }
+
+    //TODO 存储的数据优化降维的时候，还是需要删除数据的。
+
+
 
     /**
      * the period information of room
      */
     //插入某个房间一周运行的周期
     public void insertPeriodSheet(PeriodSheet... periodSheets) {//这里的参数需要使用数组，或者单个，多个
-        new InsertPeriodSheetAsyncTask(myDao).execute(periodSheets);
+        new AnsyMyDaoTask.InsertPeriodSheetAsyncTask(myDao).execute(periodSheets);
         //FIXME: 这里没有写入参数periodDBs ，导致数据库没有写入，耽误了两三天时间。没有报错误。
         //FIXME： 再放弃的时候，才发现。应该是基本的概念不清楚，只知道照抄代码，抄的不仔细。
         //FIXME： 如果概念清楚，会发现灰色的 periodDBs 没有被使用，肯定不能写入数据库。
@@ -273,198 +354,5 @@ public class MyRepository {
         return allLatestPeriodSheetsLive;
     }
 
-
-    /**
-     * 内部类，辅助线程上执行 Dao 的方法。    还有一种线程池的方法（Google文档上的）
-     * 读取消耗时间少，没有专门开线程。read data from SQLite has no new thread.
-     */
-    static class InsertBasicInfoAsyncTask extends AsyncTask<BasicInfoSheet, Void, Void> {
-        private MyDao myDao;   //独立的线程需要独立的 Dao
-
-        InsertBasicInfoAsyncTask(MyDao myDao) {
-            this.myDao = myDao;
-        }
-
-        @Override
-        protected Void doInBackground(BasicInfoSheet... basicInfoSheets) {
-            myDao.insertBasicInfoSheet(basicInfoSheets);
-            return null;
-        }
-    }
-
-    static class UpdateBasicInfoAsyncTask extends AsyncTask<BasicInfoSheet, Void, Void> {
-        private MyDao myDao;
-
-        UpdateBasicInfoAsyncTask(MyDao myDao) {
-            this.myDao = myDao;
-        }
-
-        @Override
-        protected Void doInBackground(BasicInfoSheet... basicInfoSheets) {
-            myDao.updateBasicInfoSheet(basicInfoSheets);
-            return null;
-        }
-    }
-
-    static class DeleteBasicInfoAsyncTask extends AsyncTask<BasicInfoSheet, Void, Void> {
-        private MyDao myDao;
-
-        DeleteBasicInfoAsyncTask(MyDao myDao) {
-            this.myDao = myDao;
-        }
-
-        @Override
-        protected Void doInBackground(BasicInfoSheet... basicInfoSheets) {
-            myDao.deleteBasicInfoSheet(basicInfoSheets);
-            return null;
-        }
-    }
-
-    static class DeleteAllBasicInfoAsyncTask extends AsyncTask<Void, Void, Void> {
-        private MyDao myDao;
-
-        DeleteAllBasicInfoAsyncTask(MyDao myDao) {
-            this.myDao = myDao;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            myDao.deleteAllBasicInfo();
-            return null;
-        }
-    }
-
-    static class InsertIndoorSheetAsyncTask extends AsyncTask<SensorSheet, Void, Void> {
-        private MyDao myDao;   //独立的线程需要独立的 Dao
-
-        InsertIndoorSheetAsyncTask(MyDao myDao) {
-            this.myDao = myDao;
-        }
-
-        @Override
-        protected Void doInBackground(SensorSheet... sensorSheets) {
-            myDao.insertSensorSheet(sensorSheets);
-            return null;
-        }
-    }
-
-    static class DeleteAllIndoorSheetAsyncTask extends AsyncTask<Void, Void, Void> {
-        private MyDao myDao;
-
-        DeleteAllIndoorSheetAsyncTask(MyDao myDao) {
-            this.myDao = myDao;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            myDao.deleteAllSensorSheet();
-            return null;
-        }
-    }
-
-    static class InsertPeriodSheetAsyncTask extends AsyncTask<PeriodSheet, Void, Void> {
-        private MyDao myDao;
-
-        InsertPeriodSheetAsyncTask(MyDao myDao) {
-            this.myDao = myDao;
-        }
-
-        @Override
-        protected Void doInBackground(PeriodSheet... periodSheets) {
-            myDao.insertPeriodSheet(periodSheets);
-            return null;
-        }
-    }
-
-    static class DeletePeriodSheetAsyncTask extends AsyncTask<PeriodSheet, Void, Void> {
-        private MyDao myDao;
-
-        DeletePeriodSheetAsyncTask(MyDao myDao) {
-            this.myDao = myDao;
-        }
-
-        @Override
-        protected Void doInBackground(PeriodSheet... periodSheets) {
-            myDao.deletePeriodSheet(periodSheets);
-            return null;
-        }
-    }
-
-
-    /**
-     * 请求来的网络数据库数据写入本地数据库！！
-     */
-    public void saveMessageToSQlite(TDReception tdReception) {
-            Log.d("Recived TDReception`s status is ", tdReception.getStatus());
-        //转化Retrofit的接收体为IndoorDB的类型和写入数据库，不能在UI线程，是否应该开辟一个线程池来处理??。
-        if (tdReception.getStatus().equals("succ")) {
-            int rows = Integer.valueOf(tdReception.getRows());
-
-            //ToDO switch devicetype: sensor5/6 , fancoil, boiler/heatpump, watershed.
-
-            SensorSheet[] sensorSheetArray = new SensorSheet[rows];
-
-            for (int i = 0; i < rows; i++) {
-                SensorSheet sensorSheet = new SensorSheet();
-                for (int j = 0; j < tdReception.getColumn_meta().length; j++) {
-                    switch (tdReception.getColumn_meta()[j][0]) {
-                        case "ts":
-                            sensorSheet.setTimeStamp(Long.parseLong(tdReception.getData()[i][j]) / 1000);
-                            break;
-                        case "currenttemperature":
-                            sensorSheet.setCurrentTemperature(Integer.valueOf(tdReception.getData()[i][j]));
-                            break;
-                        case "currenthumidity":
-                            sensorSheet.setCurrentHumidity(Integer.valueOf(tdReception.getData()[i][j]));
-                            break;
-                        case "roomid":
-                            sensorSheet.setRoomId(Integer.valueOf(tdReception.getData()[i][j]));
-                            break;
-                        case "devicetype":
-                            sensorSheet.setDeviceType(Integer.valueOf(tdReception.getData()[i][j]));
-                            break;
-//                        case "settingtemperature":
-//                            sensorSheet.setSettingTemperature(Integer.valueOf(tdReception.getData()[i][j]));
-//                            break;
-//                        case "settinghumidity":
-//                            sensorSheet.setSettingHumidity(Integer.valueOf(tdReception.getData()[i][j]));
-//                            break;
-                        case "adjustingtemperature":
-                            sensorSheet.setAdjustingTemperature(Integer.valueOf(tdReception.getData()[i][j]));
-                            break;
-                        case "adjustinghumidity":
-                            sensorSheet.setAdjustingHumidity(Integer.valueOf(tdReception.getData()[i][j]));
-                            break;
-                        case "deviceid":
-                            sensorSheet.setDeviceId(tdReception.getData()[i][j]);
-                            break;
-//                        case "coilvalve"://TODO 枚举量，注意如何转换的，传来的字符串是什么？？
-//                            sensorSheet.setCoilValveOpen(Integer.valueOf(tdReception.getData()[i][j]));
-//                            break;
-//                        case "floorvalve"://TODO  暂时云端没有，也是枚举
-//                            sensorSheet.setFloorValveOpen(Integer.valueOf(tdReception.getData()[i][j]));
-//                            break;
-                        //TODO 增加 boiler state， deviceID（使用原生REFUS？？的 MAC地址？？）？？
-                        //TODO location 如何使用？现在是topic，如何利用数据库在topic上。
-
-                        default:
-                            break;
-                    }
-                }
-                sensorSheetArray[i] = sensorSheet;
-            }
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    if (sensorSheetArray != null) {
-                        insertIndoorSheet(sensorSheetArray);//这里接收的是数组！！
-                        Log.d("insert in sqlite", gson.toJson(sensorSheetArray));
-                    }
-                }
-            }).start();
-
-        }
-    }
 
 }

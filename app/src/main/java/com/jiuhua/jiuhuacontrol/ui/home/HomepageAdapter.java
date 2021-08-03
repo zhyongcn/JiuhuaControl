@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jiuhua.jiuhuacontrol.R;
 import com.jiuhua.jiuhuacontrol.database.BasicInfoSheet;
+import com.jiuhua.jiuhuacontrol.database.FancoilSheet;
 import com.jiuhua.jiuhuacontrol.database.SensorSheet;
 import com.jiuhua.jiuhuacontrol.Constants;
 
@@ -23,6 +24,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyView
 
     private List<BasicInfoSheet> allBasicInfo = new ArrayList<>();
     private List<SensorSheet> allLatestSensorSheets = new ArrayList<>();
+    private List<FancoilSheet> allLatestFancoilSheets = new ArrayList<>();
     private HomeViewModel homeViewModel;
 
     public HomepageAdapter(HomeViewModel homeViewModel) {//构造函数
@@ -33,8 +35,12 @@ public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyView
         this.allBasicInfo = allBasicInfo;
     }
 
-    public void setAllLatestIndoorDBs(List<SensorSheet> allLatestSensorSheets) {
+    public void setAllLatestSensorSheets(List<SensorSheet> allLatestSensorSheets) {
         this.allLatestSensorSheets = allLatestSensorSheets;
+    }
+
+    public void setAllLatestFancoilSheets(List<FancoilSheet> allLatestFancoilSheets) {
+        this.allLatestFancoilSheets = allLatestFancoilSheets;
     }
 
     @NonNull
@@ -65,7 +71,11 @@ public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyView
             SensorSheet sensorSheet = allLatestSensorSheets.get(position);//在这个给 position+1 会导致闪退的。
             holder.textViewRoomTemperature.setText("当前温度：" + sensorSheet.getCurrentTemperature() / 10 + " C");
             holder.textViewRoomHumidity.setText("当前湿度：" + sensorSheet.getCurrentHumidity() / 10 + "%RH");
-            switch (sensorSheet.getRoomStatus()) {
+        }
+        //TODO: 房间的数据需要按照 roomid 或者 roomname 匹配一下
+        if (!allLatestFancoilSheets.isEmpty()) {
+            FancoilSheet fancoilSheet = allLatestFancoilSheets.get(0);
+            switch (fancoilSheet.getRoomStatus()) {
                 case Constants.roomState_OFF:
                     holder.textViewRoomStatus.setText("当前状态：停止运行");
                     break;
@@ -83,6 +93,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyView
                     break;
             }
         }
+
 
         //如果是耗时很少的操作可以在这里出现，或者item的内部有很多部件需要绑定，也在这里。
     }

@@ -54,31 +54,31 @@ public class IndoorFragment extends Fragment {
         indoorViewModel.setCurrentlyRoomId(roomId);
         indoorViewModel.setCurrentlyRoomName(roomName);
 
-        indoorViewModel.getAllLatestIndoorDBsLive(Constants.deviceType_fancoil).observe(getViewLifecycleOwner(), indoorDBS -> {
-            indoorViewModel.setAllLatestIndoorDBs(indoorDBS);
+        indoorViewModel.getAllLatestFancoilSheetsLive().observe(getViewLifecycleOwner(), fancoilSheets -> {
+            indoorViewModel.setAllLatestFancoilSheets(fancoilSheets);
             //****数据驱动界面改变,所以代码要放在fragment或者Activity里面。只处理界面****
             //显示当前温度
-            currentTemperature = indoorViewModel.currentlySensorSheet.getCurrentTemperature() / 10;
+            currentTemperature = indoorViewModel.currentlyFancoilSheet.getCurrentTemperature() / 10;
             binding.currentTemperatureView.setText(currentTemperature + "℃");//假浮点需要除以10
 
             //以下空调相关显示
             //显示空调设置温度（现在只有一个设置温度）//假浮点需要除以10
-            displaySetTemperature = indoorViewModel.currentlySensorSheet.getSettingTemperature() / 10;
+            displaySetTemperature = indoorViewModel.currentlyFancoilSheet.getSettingTemperature() / 10;
             binding.showAirconditionSettingTemperature.setText("空调设置温度             " + displaySetTemperature + "℃");
             binding.airconditionSetTemperatureNumber.setText(String.valueOf(accessSetTemperature));
             binding.floorheatTemperatureSetNumber.setText(String.valueOf(accessSetTemperature));
 
             //TODO 湿度暂时不搞！！
             //显示当前湿度
-//            binding.tempHumidityTextView.setText(String.valueOf(indoorViewModel.currentlySensorSheet.getCurrentHumidity() / 10));//假浮点需要除以10
+//            binding.tempHumidityTextView.setText(String.valueOf(indoorViewModel.currentlyFancoilSheet.getCurrentHumidity() / 10));//假浮点需要除以10
 
             //显示设置湿度
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                binding.humiditySeekBar.setProgress(indoorViewModel.currentlySensorSheet.getSettingHumidity() / 10, true);//假浮点需要除以10
+//                binding.humiditySeekBar.setProgress(indoorViewModel.currentlyFancoilSheet.getSettingHumidity() / 10, true);//假浮点需要除以10
 //            }
 
             //依据房间的状态改变显示的文字(停止，手动，自动)
-            switch (indoorViewModel.currentlySensorSheet.getRoomStatus()) {
+            switch (indoorViewModel.currentlyFancoilSheet.getRoomStatus()) {
                 case Constants.roomState_OFF: //stop 0, manual 1, auto 2
                     binding.showAirconditionRunningModel.setText("运行模式                停止模式");
                     break;
@@ -105,7 +105,7 @@ public class IndoorFragment extends Fragment {
             }
 
             //风机状态数据驱动显示的文字变化（高中低及自动风）
-            switch (indoorViewModel.currentlySensorSheet.getCurrentFanStatus()) {
+            switch (indoorViewModel.currentlyFancoilSheet.getCurrentFanStatus()) {
                 case Constants.fanSpeed_STOP:
                     binding.showAirconditionRunningFanspeed.setText("风机状态                   停止");
                     break;
@@ -124,7 +124,7 @@ public class IndoorFragment extends Fragment {
             }
 
             //显示空调的运行状态即 两通阀的开关状态
-            if (indoorViewModel.currentlySensorSheet.isCoilValveOpen()) {
+            if (indoorViewModel.currentlyFancoilSheet.isCoilValveOpen()) {
                 binding.showAirconditionRunningStateCoilvalve.setText(R.string.coilvalveopen);
             } else {
                 binding.showAirconditionRunningStateCoilvalve.setText(R.string.coilvalveshut);
@@ -135,7 +135,7 @@ public class IndoorFragment extends Fragment {
             binding.showFloorheatSettingTemperature.setText("地暖设置温度  " + displaySetTemperature + "℃");//TODO 假浮点需要除以10
 
             //依据房间的状态改变显示的文字(停止，手动，自动)
-            switch (indoorViewModel.currentlySensorSheet.getRoomStatus()) {
+            switch (indoorViewModel.currentlyFancoilSheet.getRoomStatus()) {
                 case Constants.roomState_OFF: //stop 0, manual 1, auto 2
                     binding.showFloorheatRunningModel.setText("运行模式                 停止模式");
                     break;
@@ -162,12 +162,12 @@ public class IndoorFragment extends Fragment {
                     break;
             }
 
-            //显示地暖的运行状态
-            if (indoorViewModel.currentlySensorSheet.isFloorValveOpen()) {
-                binding.showFloorheatRunningStates.setText(R.string.floorvalveopen);
-            } else {
-                binding.showFloorheatRunningStates.setText(R.string.floorvalveshut);
-            }
+            //TODO:fancoil里面没有地暖阀的，需要在另外的函数里面再观察watershed的状态，    显示地暖的运行状态
+//            if (indoorViewModel.currentlyFancoilSheet.isFloorValveOpen()) {
+//                binding.showFloorheatRunningStates.setText(R.string.floorvalveopen);
+//            } else {
+//                binding.showFloorheatRunningStates.setText(R.string.floorvalveshut);
+//            }
 
         });
 

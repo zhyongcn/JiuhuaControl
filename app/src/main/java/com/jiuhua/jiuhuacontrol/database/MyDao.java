@@ -46,7 +46,8 @@ public interface MyDao {
 
     @SuppressWarnings( RoomWarnings.CURSOR_MISMATCH )  //TODO  每次编译都出错，能正常运行，太烦了，才加上的。
     @Query( "SELECT * , MAX(timeStamp)  FROM SensorSheet WHERE device_type = :devicetypeId GROUP BY room_id" )
-    LiveData<List<SensorSheet>> loadLatestSensorSheetsLive(int devicetypeId);   //only can use LiveData<> !   这里添加了Max（timestamp）一列，但是IndoorDB里面没有。
+    //only can use LiveData<> !   这里添加了Max（timestamp）一列，但是IndoorDB里面没有。
+    LiveData<List<SensorSheet>> loadLatestSensorSheetsLive(int devicetypeId);
 
     /**
      * FancoilSheet的相关方法
@@ -58,8 +59,9 @@ public interface MyDao {
     void deleteAllFancoilSheet();
 
     @SuppressWarnings( RoomWarnings.CURSOR_MISMATCH )  //TODO  每次编译都出错，能正常运行，太烦了，才加上的。
-    @Query( "SELECT * , MAX(timeStamp)  FROM FancoilSheet WHERE device_type = :devicetypeId GROUP BY room_id" )
-    LiveData<List<FancoilSheet>> loadLatestFancoilSheetsLive(int devicetypeId);   //only can use LiveData<> !   这里添加了Max（timestamp）一列，但是IndoorDB里面没有。
+    @Query( "SELECT * , MAX(timeStamp)  FROM FancoilSheet GROUP BY room_id" )
+    //only can use LiveData<> !   这里添加了Max（timestamp）一列，但是IndoorDB里面没有。
+    LiveData<List<FancoilSheet>> loadLatestFancoilSheetsLive();
 
     /**
      * WatershedSheet的相关方法
@@ -72,7 +74,8 @@ public interface MyDao {
 
     @SuppressWarnings( RoomWarnings.CURSOR_MISMATCH )  //TODO  每次编译都出错，能正常运行，太烦了，才加上的。
     @Query( "SELECT * , MAX(timeStamp)  FROM WatershedSheet WHERE device_type = :devicetypeId GROUP BY room_id" )
-    LiveData<List<WatershedSheet>> loadLatestWatershedSheetsLive(int devicetypeId);   //only can use LiveData<> !   这里添加了Max（timestamp）一列，但是IndoorDB里面没有。
+    //only can use LiveData<> !   这里添加了Max（timestamp）一列，但是IndoorDB里面没有。
+    LiveData<List<WatershedSheet>> loadLatestWatershedSheetsLive(int devicetypeId);
 
     /**
      * EngineSheet的相关方法
@@ -85,7 +88,8 @@ public interface MyDao {
 
     @SuppressWarnings( RoomWarnings.CURSOR_MISMATCH )  //TODO  每次编译都出错，能正常运行，太烦了，才加上的。
     @Query( "SELECT * , MAX(timeStamp)  FROM EngineSheet WHERE device_type = :devicetypeId GROUP BY room_id" )
-    LiveData<List<EngineSheet>> loadLatestEngineSheetsLive(int devicetypeId);   //only can use LiveData<> !   这里添加了Max（timestamp）一列，但是IndoorDB里面没有。
+    //only can use LiveData<> !   这里添加了Max（timestamp）一列，但是IndoorDB里面没有。
+    LiveData<List<EngineSheet>> loadLatestEngineSheetsLive(int devicetypeId);
 
 //    /**TODO：其他表的操作方法需要使用。
 //     * IndoorSheet的相关方法

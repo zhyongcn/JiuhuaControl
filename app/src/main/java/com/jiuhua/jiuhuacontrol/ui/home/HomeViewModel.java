@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.jiuhua.jiuhuacontrol.database.BasicInfoSheet;
+import com.jiuhua.jiuhuacontrol.database.FancoilSheet;
 import com.jiuhua.jiuhuacontrol.database.SensorSheet;
 import com.jiuhua.jiuhuacontrol.repository.MyRepository;
 
@@ -33,8 +34,12 @@ public class HomeViewModel extends AndroidViewModel {
         return myRepository.getAllBasicInfoLive();
     }
 
-    public LiveData<List<SensorSheet>> getAllLatestIndoorDBsLive(int devicetypeId) {
-        return myRepository.getAllLatestIndoorSheetsLive(devicetypeId);
+    public LiveData<List<SensorSheet>> getAllLatestSensorSheetsLive(int devicetypeId) {
+        return myRepository.getAllLatestSensorSheetsLive(devicetypeId);
+    }
+
+    public LiveData<List<FancoilSheet>> getAllLatestFancoilSheetsLive() {
+        return myRepository.getAllLatestFancoilSheetsLive();
     }
 
     //获取普通房间的名字

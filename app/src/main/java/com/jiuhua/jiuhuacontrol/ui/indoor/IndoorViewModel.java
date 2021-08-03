@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.jiuhua.jiuhuacontrol.Constants;
+import com.jiuhua.jiuhuacontrol.database.FancoilSheet;
 import com.jiuhua.jiuhuacontrol.database.SensorSheet;
 import com.jiuhua.jiuhuacontrol.database.PeriodSheet;
 import com.jiuhua.jiuhuacontrol.repository.MyRepository;
@@ -21,9 +22,11 @@ import java.util.List;
 public class IndoorViewModel extends AndroidViewModel {
 
     MyRepository myRepository;
-    List<SensorSheet> allLatestSensorSheets = new ArrayList<>();   //room1,room2...`s settingtempreature etc.
+    List<SensorSheet> allLatestSensorSheets = new ArrayList<>();   //room1,room2...`s currenttempreature .
+    List<FancoilSheet> allLatestFancoilSheets = new ArrayList<>();
     List<PeriodSheet> allLatestPeriodSheets = new ArrayList<>();   //room1,room2...`s period.
     SensorSheet currentlySensorSheet = new SensorSheet();
+    FancoilSheet currentlyFancoilSheet = new FancoilSheet();
     PeriodSheet currentlyPeriodSheet;  //currently room`s one weekly period.
 
 
@@ -43,8 +46,8 @@ public class IndoorViewModel extends AndroidViewModel {
         this.currentlyRoomName = currentlyRoomName;
     }
 
-    public void setAllLatestIndoorDBs(List<SensorSheet> allLatestIndoorDBsLive) {
-        this.allLatestSensorSheets = allLatestIndoorDBsLive;
+    public void setAllLatestSensorSheets(List<SensorSheet> allLatestSensorSheetsLive) {
+        this.allLatestSensorSheets = allLatestSensorSheetsLive;
         if (allLatestSensorSheets.size() > 0) {
             for (SensorSheet sensorSheet : allLatestSensorSheets) {
                 if (sensorSheet.getRoomId() == currentlyRoomId) {
@@ -62,6 +65,29 @@ public class IndoorViewModel extends AndroidViewModel {
         }
         if (currentlySensorSheet.getRoomId() == 0) {
             currentlySensorSheet.setRoomId(currentlyRoomId);
+//            commandESP.setRoomId(currentlyRoomId);
+        }
+    }
+
+    public void setAllLatestFancoilSheets(List<FancoilSheet> allLatestFancoilSheets) {
+        this.allLatestFancoilSheets = allLatestFancoilSheets;
+        if (allLatestFancoilSheets.size() > 0) {
+            for (FancoilSheet fancoilSheet : allLatestFancoilSheets) {
+                if (fancoilSheet.getRoomId() == currentlyRoomId) {
+                    this.currentlyFancoilSheet = fancoilSheet;
+
+//                    commandESP.setRoomId(currentlySensorSheet.getRoomId());
+//                    commandESP.setDeviceType(Constants.deviceType_phone);//已经是来自手机了。
+                    //TODO: 待验证！！ 如果这些缺省为 0 时，模块不写入，是否不要设置了，
+//                    commandESP.setRoomState(currentlySensorSheet.getRoomStatus());
+//                    commandESP.setSettingTemperature(currentlySensorSheet.getSettingTemperature());
+//                    commandESP.setSettingHumidity(currentlySensorSheet.getSettingHumidity());
+//                    commandESP.setSettingFanSpeed(currentlySensorSheet.getSettingFanStatus());
+                }
+            }
+        }
+        if (currentlyFancoilSheet.getRoomId() == 0) {
+            currentlyFancoilSheet.setRoomId(currentlyRoomId);
 //            commandESP.setRoomId(currentlyRoomId);
         }
     }
@@ -160,15 +186,15 @@ public class IndoorViewModel extends AndroidViewModel {
     /**
      * 包装 myRepository 里的方法：
      */
-    public LiveData<List<SensorSheet>> getAllLatestIndoorDBsLive(int devicetypeId) {
-        return myRepository.getAllLatestIndoorSheetsLive(devicetypeId);
+    public LiveData<List<FancoilSheet>> getAllLatestFancoilSheetsLive() {
+        return myRepository.getAllLatestFancoilSheetsLive();
     }
 
-    public LiveData<List<PeriodSheet>> getAllLatestPeriodDBsLive() {
+    public LiveData<List<PeriodSheet>> getAllLatestPeriodSheetsLive() {
         return myRepository.getAllLatestPeriodSheetsLive();
     }
 
-    public void insertPeriodDB(int roomId) {
+    public void insertPeriodSheet(int roomId) {
         currentlyPeriodSheet.setId(currentlyPeriodSheet.getId()+ allLatestPeriodSheets.size());
                     //id是从数据库里取出的，加上有几个房间，不会冲掉数据。id不同，数据库认为不是一个数据
         currentlyPeriodSheet.setRoomId(roomId);

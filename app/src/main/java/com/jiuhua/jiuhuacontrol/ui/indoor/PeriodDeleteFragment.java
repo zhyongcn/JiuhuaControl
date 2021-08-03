@@ -71,7 +71,7 @@ public class PeriodDeleteFragment extends Fragment implements View.OnClickListen
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        indoorViewModel.getAllLatestPeriodDBsLive().observe(getViewLifecycleOwner(), periodDBS -> {
+        indoorViewModel.getAllLatestPeriodSheetsLive().observe(getViewLifecycleOwner(), periodDBS -> {
             indoorViewModel.setAllLatestPeriodDBs(periodDBS); //viewmodel是单例，这个保存是有价值的。
         });
 
@@ -142,7 +142,7 @@ public class PeriodDeleteFragment extends Fragment implements View.OnClickListen
             case R.id.button_period_delete:
                 remove_daily_fragment_from_weekly_list(weekday);
                 //新的周期写入数据库
-                indoorViewModel.insertPeriodDB(roomId);
+                indoorViewModel.insertPeriodSheet(roomId);
                 //send MQTT message
                 indoorViewModel.periodToDevice(roomId, indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod());
                 getActivity().onBackPressed();

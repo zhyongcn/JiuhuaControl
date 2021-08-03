@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jiuhua.jiuhuacontrol.R;
 import com.jiuhua.jiuhuacontrol.database.BasicInfoSheet;
+import com.jiuhua.jiuhuacontrol.database.FancoilSheet;
 import com.jiuhua.jiuhuacontrol.database.SensorSheet;
 import com.jiuhua.jiuhuacontrol.Constants;
 
@@ -66,11 +67,21 @@ public class HomeFragment extends Fragment {
 //            }
 //        });
 
-        homeViewModel.getAllLatestIndoorDBsLive(Constants.deviceType_DHTsensor).observe(getViewLifecycleOwner(),
+        homeViewModel.getAllLatestSensorSheetsLive(Constants.deviceType_DHTsensor).observe(getViewLifecycleOwner(),
                 new Observer<List<SensorSheet>>() {
                     @Override
                     public void onChanged(List<SensorSheet> sensorSheets) {
-                        homepageAdapter.setAllLatestIndoorDBs(sensorSheets);//设置数据
+                        homepageAdapter.setAllLatestSensorSheets(sensorSheets);//设置数据
+//                homeViewModel.myRepository.
+                        homepageAdapter.notifyDataSetChanged();  //去刷新视图
+                    }
+                });
+
+        homeViewModel.getAllLatestFancoilSheetsLive().observe(getViewLifecycleOwner(),
+                new Observer<List<FancoilSheet>>() {
+                    @Override
+                    public void onChanged(List<FancoilSheet> fancoilSheets) {
+                        homepageAdapter.setAllLatestFancoilSheets(fancoilSheets);//设置数据
 //                homeViewModel.myRepository.
                         homepageAdapter.notifyDataSetChanged();  //去刷新视图
                     }

@@ -51,10 +51,35 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         MyRepository myRepository = MyRepository.getInstance(this.getApplicationContext());
-        myRepository.requestTDengineData();
+        String sql;
+        sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room1' and ts > now - 1h";
+        myRepository.requestTDengineData(sql);
+        sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room2' and ts > now - 1h";
+        myRepository.requestTDengineData(sql);
+        sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room3' and ts > now - 1h";
+        myRepository.requestTDengineData(sql);
+        sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room4' and ts > now - 1h";
+        myRepository.requestTDengineData(sql);
+        sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room5' and ts > now - 1h";
+        myRepository.requestTDengineData(sql);
+        sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room6' and ts > now - 1h";
+        myRepository.requestTDengineData(sql);
+        sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room7' and ts > now - 1h";
+        myRepository.requestTDengineData(sql);
+        sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room8' and ts > now - 1h";
+        myRepository.requestTDengineData(sql);
+        sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room9' and ts > now - 1h";
+        myRepository.requestTDengineData(sql);
+        sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room10' and ts > now - 1h";
+        myRepository.requestTDengineData(sql);
+        sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room11' and ts > now - 1h";
+        myRepository.requestTDengineData(sql);
+
+        sql = "select  * from homedevice.fancoils where location = '86518/yuxiuhuayuan/12-1-101/room3' and ts > now - 1h";
+        myRepository.requestTDengineData(sql);
+
 
     }
-
 
 
     @Override
