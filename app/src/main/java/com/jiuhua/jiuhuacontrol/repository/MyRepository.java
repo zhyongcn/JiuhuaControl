@@ -29,7 +29,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-//TODO: *** 是不是单例，应该采用单例模式！！***
+//单例模式
 public class MyRepository {
     private final String TAG = getClass().getName();
     private static MyRepository INSTANCE;
@@ -80,20 +80,6 @@ public class MyRepository {
         String credentials = "zz" + ":" + "700802";
         final String basic = "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
 
-
-//        String sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room1' and ts > now - 1h";
-//        String sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room2' and ts > now - 1h";
-//        String sql3 = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room3' and ts > now - 1h";
-//        String sql4 = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room4' and ts > now - 1h";
-//        String sql5 = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room5' and ts > now - 1h";
-//        String sql6 = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room6' and ts > now - 1h";
-//        String sql7 = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room7' and ts > now - 1h";
-//        String sql8 = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room8' and ts > now - 1h";
-//        String sql9 = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room9' and ts > now - 1h";
-//        String sql10 = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room10' and ts > now - 1h";
-//        String sql11 = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room11' and ts > now - 1h";
-
-
         RequestBody body = RequestBody.create(MediaType.parse("text/plain"), sql);
 
         Call<TDReception> call = cloudServer.respoFormTDengine(basic, body);
@@ -116,7 +102,7 @@ public class MyRepository {
                         }
                     }
 
-                    if (sql.contains("homedevice.fancoils")) {//fixme
+                    if (sql.contains("homedevice.fancoils")) {
                         FancoilSheet[] fancoilSheets = TDReceptionConverter.toFancoilSheet(response.body());
                         if (fancoilSheets != null) {
                             new Thread(() -> {
@@ -130,7 +116,7 @@ public class MyRepository {
                         }
                     }
 
-                    if (sql.contains("homedevice.boilers")) {//fixme
+                    if (sql.contains("homedevice.boilers")) {
                         EngineSheet[] engineSheets = TDReceptionConverter.toEngineSheet(response.body());
                         if (engineSheets != null) {
                             new Thread(() -> {
@@ -144,7 +130,7 @@ public class MyRepository {
                         }
                     }
 
-                    if (sql.contains("homedevice.watersheds")) {//fixme
+                    if (sql.contains("homedevice.watersheds")) {
                         WatershedSheet[] watershedSheets = TDReceptionConverter.toWatershedSheet(response.body());
                         if (watershedSheets != null) {
                             new Thread(() -> {
@@ -312,6 +298,7 @@ public class MyRepository {
     public void insertFancoilSheet(FancoilSheet... fancoilSheets) {  // 这个 ... 接收的是数组！！
         new AnsyMyDaoTask.InsertFancoilSheetAsyncTask(myDao).execute(fancoilSheets);
     }
+
     //获取房间风机的全部信息
     public LiveData<List<FancoilSheet>> getAllLatestFancoilSheetsLive() {
         //获取房间的最新信息指定了参数设备类型，继续包装下去，让调用者决定设备的类型。
@@ -328,6 +315,14 @@ public class MyRepository {
     //WATERSHED 插入房间风机的状态信息
     public void insertWatershedSheet(WatershedSheet... watershedSheets) {  // 这个 ... 接收的是数组！！
         new AnsyMyDaoTask.InsertWatershedSheetAsyncTask(myDao).execute(watershedSheets);
+    }
+
+    //获取房间分水器的全部信息
+    public LiveData<List<WatershedSheet>> getAllLatestWatershedSheetsLive() {
+        //获取房间的最新信息指定了参数设备类型，继续包装下去，让调用者决定设备的类型。
+        allLatestWatershedSheetsLive = myDao.loadLatestWatershedSheetsLive();
+        //一般查询系统会自动安排在非主线程，不需要自己写。其他的需要自己写非主线程。？？right？？
+        return allLatestWatershedSheetsLive;
     }
 
     //TODO 存储的数据优化降维的时候，还是需要删除数据的。

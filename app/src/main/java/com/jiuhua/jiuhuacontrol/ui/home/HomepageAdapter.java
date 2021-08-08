@@ -45,13 +45,16 @@ public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyView
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {//创建时
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());  //首先要获取父图层的内容
-        View itemView = layoutInflater.inflate(R.layout.home_cell_layout, parent, false);  //view是在父图层的基础上再吹气子图层
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        //创建时，首先要获取父图层的内容
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        //view是在父图层的基础上再吹气子图层
+        View itemView = layoutInflater.inflate(R.layout.home_cell_layout, parent, false);
         final MyViewHolder holder = new MyViewHolder(itemView);  //赋值于一个句柄以方便其他操作。
-        //单个条目的整体点击。
+        //单个条目的整体点击。 跳转并传参。
         holder.itemView.setOnClickListener(v -> {
-            int k = holder.getAdapterPosition();   //获取具体哪个条目了
+            //int k = holder.getAdapterPosition();   //google舍弃的API
+            int k = holder.getBindingAdapterPosition();   //获取具体哪个条目了
             int roomId = allBasicInfo.get(k).getRoomId();
             String currentRoomName = allBasicInfo.get(k).getRoomName();
             Bundle bundle = new Bundle();
@@ -67,33 +70,35 @@ public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyView
         //具体视图元素赋值。
         BasicInfoSheet basicInfoSheet = allBasicInfo.get(position);
         holder.textViewRoomName.setText(basicInfoSheet.getRoomName());
-        if (position < allLatestSensorSheets.size()) {
-            SensorSheet sensorSheet = allLatestSensorSheets.get(position);//在这个给 position+1 会导致闪退的。
-            holder.textViewRoomTemperature.setText("当前温度：" + sensorSheet.getCurrentTemperature() / 10 + " C");
-            holder.textViewRoomHumidity.setText("当前湿度：" + sensorSheet.getCurrentHumidity() / 10 + "%RH");
-        }
-        //TODO: 房间的数据需要按照 roomid 或者 roomname 匹配一下
-        if (!allLatestFancoilSheets.isEmpty()) {
-            FancoilSheet fancoilSheet = allLatestFancoilSheets.get(0);
-            switch (fancoilSheet.getRoomStatus()) {
-                case Constants.roomState_OFF:
-                    holder.textViewRoomStatus.setText("当前状态：停止运行");
-                    break;
-                case Constants.roomState_MANUAL:
-                    holder.textViewRoomStatus.setText("当前状态：手动运行");
-                    break;
-                case Constants.roomState_AUTO:
-                    holder.textViewRoomStatus.setText("当前状态：自动运行");
-                    break;
-                case Constants.roomState_DEHUMIDITY:
-                    holder.textViewRoomStatus.setText("当前状态： 除湿运行");
-                    break;
-                case Constants.roomState_FEAST:
-                    holder.textViewRoomStatus.setText("当前状态： 宴会运行");
-                    break;
+        //display sensor`s temperature and humidity.
+        for (SensorSheet sensorSheet:allLatestSensorSheets ) {
+            if (sensorSheet.getRoomId() == basicInfoSheet.getRoomId()) {
+                holder.textViewRoomTemperature.setText("当前温度：" + sensorSheet.getCurrentTemperature() / 10 + " C");
+                holder.textViewRoomHumidity.setText("当前湿度：" + sensorSheet.getCurrentHumidity() / 10 + "%RH");
             }
         }
-
+        //display fancoil`s roomstatus
+        for (FancoilSheet fancoilSheet:allLatestFancoilSheets) {
+            if (fancoilSheet.getRoomId() == basicInfoSheet.getRoomId()) {
+                switch (fancoilSheet.getRoomStatus()) {
+                    case Constants.roomState_OFF:
+                        holder.textViewRoomStatus.setText("当前状态：停止运行");
+                        break;
+                    case Constants.roomState_MANUAL:
+                        holder.textViewRoomStatus.setText("当前状态：手动运行");
+                        break;
+                    case Constants.roomState_AUTO:
+                        holder.textViewRoomStatus.setText("当前状态：自动运行");
+                        break;
+                    case Constants.roomState_DEHUMIDITY:
+                        holder.textViewRoomStatus.setText("当前状态： 除湿运行");
+                        break;
+                    case Constants.roomState_FEAST:
+                        holder.textViewRoomStatus.setText("当前状态： 宴会运行");
+                        break;
+                }
+            }
+        }
 
         //如果是耗时很少的操作可以在这里出现，或者item的内部有很多部件需要绑定，也在这里。
     }

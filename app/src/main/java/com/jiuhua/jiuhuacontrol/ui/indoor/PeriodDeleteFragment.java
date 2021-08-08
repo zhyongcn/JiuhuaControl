@@ -144,7 +144,7 @@ public class PeriodDeleteFragment extends Fragment implements View.OnClickListen
                 //新的周期写入数据库
                 indoorViewModel.insertPeriodSheet(roomId);
                 //send MQTT message
-                indoorViewModel.periodToDevice(roomId, indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod());
+                indoorViewModel.periodToDevice(roomId, indoorViewModel.currentOneWeeklyPeriodSheet.getOneRoomWeeklyPeriod());
                 getActivity().onBackPressed();
                 break;
         }
@@ -158,15 +158,15 @@ public class PeriodDeleteFragment extends Fragment implements View.OnClickListen
         dayPeriodFromJson = gson.fromJson(s, DayPeriod.class);
         dayPeriodFromJson.setWeekday(weekday);
 
-        for (int i = 0; i < indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod().size(); i++) {
-            if (dayPeriodFromJson.getStartMinuteStamp() == indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod().get(i).getStartMinuteStamp()
-                    && dayPeriodFromJson.getEndMinuteStamp() == indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod().get(i).getEndMinuteStamp()
-                    && dayPeriodFromJson.getWeekday() == indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod().get(i).getWeekday()) {
-                indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod().remove(i);
+        for (int i = 0; i < indoorViewModel.currentOneWeeklyPeriodSheet.getOneRoomWeeklyPeriod().size(); i++) {
+            if (dayPeriodFromJson.getStartMinuteStamp() == indoorViewModel.currentOneWeeklyPeriodSheet.getOneRoomWeeklyPeriod().get(i).getStartMinuteStamp()
+                    && dayPeriodFromJson.getEndMinuteStamp() == indoorViewModel.currentOneWeeklyPeriodSheet.getOneRoomWeeklyPeriod().get(i).getEndMinuteStamp()
+                    && dayPeriodFromJson.getWeekday() == indoorViewModel.currentOneWeeklyPeriodSheet.getOneRoomWeeklyPeriod().get(i).getWeekday()) {
+                indoorViewModel.currentOneWeeklyPeriodSheet.getOneRoomWeeklyPeriod().remove(i);
                 i--;
             }
         }
-        Log.d("remove", gson.toJson(indoorViewModel.currentlyPeriodSheet));
+        Log.d("remove", gson.toJson(indoorViewModel.currentOneWeeklyPeriodSheet));
 
     }
 

@@ -24,9 +24,10 @@ public class SensorSheet {
     @SerializedName( "roomId" )
     private int roomId;
     //
-    @ColumnInfo( name = "device_type" )
     @SerializedName( "deviceType" )
-    private int deviceType; //FANCOIL 0, FLOORWATERSHED 1, RADIATOR 2, BOILER 3, HEATPUMP 4, DHTSENSOR 5, NTCSENSOR 6, PHONE 7
+    @ColumnInfo( name = "device_type" )
+    /** FANCOIL 0, FLOORWATERSHED 1, RADIATOR 2, BOILER 3, HEATPUMP 4, DHTSENSOR 5, NTCSENSOR 6, PHONE 7, */
+    private int deviceType;
 
     @ColumnInfo(name = "device_id")
     @SerializedName("deviceId")

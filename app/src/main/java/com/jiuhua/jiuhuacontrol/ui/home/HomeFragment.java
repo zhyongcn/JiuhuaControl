@@ -34,7 +34,6 @@ public class HomeFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -50,30 +49,24 @@ public class HomeFragment extends Fragment {
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         homepageAdapter = new HomepageAdapter(homeViewModel);//这个类以及需要的参数是自己写的。
 
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));//RecyclerView是需要管理器的，网格管理，两行。
+        //RecyclerView是需要管理器的，网格管理，两行。
+        // TODO: 老年人需要两行，字大一些，年轻人需要一行，内容多一些。依据用户情况调整。
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         recyclerView.setAdapter(homepageAdapter);//adapter肯定是必须的！！
 
         //
-        homeViewModel.getAllBasicInfoLive().observe(getViewLifecycleOwner(), basicInfoDBS -> {
-//                int temp = homepageAdapter.getItemCount();
-            homepageAdapter.setAllBasicInfo(basicInfoDBS);   //设置数据
-//                homepageAdapter.notifyDataSetChanged();     //没有必要两次去刷新视图
+        homeViewModel.getAllBasicInfoLive().observe(getViewLifecycleOwner(), basicInfoSheets -> {
+                //int temp = homepageAdapter.getItemCount();
+            homepageAdapter.setAllBasicInfo(basicInfoSheets);   //设置数据
+                homepageAdapter.notifyDataSetChanged();     //没有必要两次去刷新视图
         });
-        //非lambda用法
-//        homeViewModel.getAllBasicInfoLive().observe(getViewLifecycleOwner(), new Observer<List<BasicInfoSheet>>() {
-//            @Override
-//            public void onChanged(List<BasicInfoSheet> basicInfoDBS) {
-//                homepageAdapter.setAllBasicInfo(basicInfoDBS);   //设置数据
-//            }
-//        });
 
         homeViewModel.getAllLatestSensorSheetsLive(Constants.deviceType_DHTsensor).observe(getViewLifecycleOwner(),
                 new Observer<List<SensorSheet>>() {
                     @Override
                     public void onChanged(List<SensorSheet> sensorSheets) {
                         homepageAdapter.setAllLatestSensorSheets(sensorSheets);//设置数据
-//                homeViewModel.myRepository.
-                        homepageAdapter.notifyDataSetChanged();  //去刷新视图
+                        homepageAdapter.notifyDataSetChanged();  //去刷新视图，没有重复刷新，新数据来了，需要刷新。
                     }
                 });
 
@@ -82,7 +75,6 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onChanged(List<FancoilSheet> fancoilSheets) {
                         homepageAdapter.setAllLatestFancoilSheets(fancoilSheets);//设置数据
-//                homeViewModel.myRepository.
                         homepageAdapter.notifyDataSetChanged();  //去刷新视图
                     }
                 });

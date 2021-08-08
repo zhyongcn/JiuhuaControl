@@ -43,7 +43,7 @@ public class IndoorHostFragment extends Fragment {
         int roomId = getArguments().getInt("roomId");//bundle的参数接收：具体哪个房间。
         String roomName = getArguments().getString("roomName");
 
-        fragmentList = new ArrayList<Fragment>();
+        fragmentList = new ArrayList<>();
         fragmentList.add(new HistoryFragment());
         fragmentList.add(new IndoorFragment(roomId, roomName));//参数传入：具体哪个房间，
         fragmentList.add(new PeriodFragment(roomId, roomName));

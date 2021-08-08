@@ -53,7 +53,7 @@ public class PeriodFragment extends Fragment {
 
         indoorViewModel.getAllLatestPeriodSheetsLive().observe(getViewLifecycleOwner(), periodDBS -> {
             indoorViewModel.setAllLatestPeriodDBs(periodDBS); //viewmodel是单例，这个保存是有价值的。
-            myView.getWeeklyPeriod(indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod());
+            myView.getWeeklyPeriod(indoorViewModel.currentOneWeeklyPeriodSheet.getOneRoomWeeklyPeriod());
         });
 
         myView.setClickCrossListener((weekday, hour, dayPeriod) -> {
