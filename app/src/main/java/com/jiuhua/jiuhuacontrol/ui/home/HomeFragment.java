@@ -51,7 +51,7 @@ public class HomeFragment extends Fragment {
 
         //RecyclerView是需要管理器的，网格管理，两行。
         // TODO: 老年人需要两行，字大一些，年轻人需要一行，内容多一些。依据用户情况调整。
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
         recyclerView.setAdapter(homepageAdapter);//adapter肯定是必须的！！
 
         //

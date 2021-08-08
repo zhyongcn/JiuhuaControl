@@ -41,11 +41,11 @@ public class IndoorFragment extends Fragment {
         //这里不再需要原始的创建视图的方法了,这个方法也生成视图但是没有绑定数据
         //View view = inflater.inflate(R.layout.fragment_indoor, container, false);
 
-//        binding = FragmentRoomBinding.inflate(LayoutInflater.from(getContext()), null, false); //从绑定类吹气
-//        binding = FragmentRoomBinding.inflate(inflater, container, false);
-//        binding = FragmentRoomBinding.inflate(inflater);
-//        //**这句不行**  binding = DataBindingUtil.setContentView(getActivity(), R.layout.fragment_indoor);
-        //上面三句也是可以的
+        //下面三句也是可以的
+        //binding = FragmentRoomBinding.inflate(LayoutInflater.from(getContext()), null, false); //从绑定类吹气
+        //binding = FragmentRoomBinding.inflate(inflater, container, false);
+        //binding = FragmentRoomBinding.inflate(inflater);
+        //**这句不行**  binding = DataBindingUtil.setContentView(getActivity(), R.layout.fragment_indoor);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_indoor, container, false);
 
         indoorViewModel = new ViewModelProvider(this).get(IndoorViewModel.class);  //涉及一个单例？？
@@ -63,7 +63,6 @@ public class IndoorFragment extends Fragment {
             binding.currentTemperatureView.setText(currentTemperature + "℃");//假浮点需要除以10
         });
 
-
         indoorViewModel.getAllLatestFancoilSheetsLive().observe(getViewLifecycleOwner(), fancoilSheets -> {
             indoorViewModel.setAllLatestFancoilSheets(fancoilSheets);
             //****数据驱动界面改变,所以代码要放在fragment或者Activity里面。只处理界面****
@@ -77,12 +76,12 @@ public class IndoorFragment extends Fragment {
 
             //TODO 湿度暂时不搞！！
             //显示当前湿度
-//            binding.tempHumidityTextView.setText(String.valueOf(indoorViewModel.currentlyFancoilSheet.getCurrentHumidity() / 10));//假浮点需要除以10
+            //binding.tempHumidityTextView.setText(String.valueOf(indoorViewModel.currentlyFancoilSheet.getCurrentHumidity() / 10));
+            // 假浮点需要除以10
 
             //显示设置湿度
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                binding.humiditySeekBar.setProgress(indoorViewModel.currentlyFancoilSheet.getSettingHumidity() / 10, true);//假浮点需要除以10
-//            }
+            //binding.XXXX.setText(indoorViewModel.currentlyFancoilSheet.getSettingHumidity() / 10);
+            // 假浮点需要除以10
 
             //依据房间的状态改变显示的文字(停止，手动，自动)
             switch (indoorViewModel.currentlyFancoilSheet.getRoomStatus()) {
@@ -139,7 +138,6 @@ public class IndoorFragment extends Fragment {
 
         });
 
-
         indoorViewModel.getAllLatestWatershedSheetsLive().observe(getViewLifecycleOwner(), watershedSheets -> {
             indoorViewModel.setAllLatestWatershedSheets(watershedSheets);
             //****数据驱动界面改变,所以代码要放在fragment或者Activity里面。只处理界面****
@@ -189,7 +187,7 @@ public class IndoorFragment extends Fragment {
         return binding.getRoot(); // getRoot() solved databinding problem.
     }
 
-    //这里有操作界面相关的  TODO FIXME ***使用云端转发的方式重新实现具体的操作逻辑***
+    //这里有操作界面相关的，使用云端转发的方式重新实现具体的操作逻辑
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -249,7 +247,6 @@ public class IndoorFragment extends Fragment {
                 //    break;
             }
 
-            //还是使用从数据库中提取的返回数据来驱动界面，不要多此一举在这里修改了。
         });
 
         //风速：
@@ -277,7 +274,6 @@ public class IndoorFragment extends Fragment {
                     //    break;
             }
 
-            //还是使用从数据库中提取的返回数据来驱动界面，不要多此一举在这里修改了。
         });
 
 
@@ -337,8 +333,6 @@ public class IndoorFragment extends Fragment {
                 //    break;
             }
 
-            //还是使用从数据库中提取的返回数据来驱动界面，不要多此一举在这里修改了。
-
         });
 
     }
@@ -346,7 +340,6 @@ public class IndoorFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        //indoorViewModel.temperatureToDevice(roomId, tempTemperature * 10);//fixme 假浮点？？
     }
 
     //@Override

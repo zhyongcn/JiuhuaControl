@@ -7,6 +7,16 @@ public class CommandFromPhone {
     private String message;
     private boolean retained;
 
+    public CommandFromPhone() {
+    }
+
+    public CommandFromPhone(String topic, int qos, String message, boolean retained) {
+        this.topic = topic;
+        this.qos = qos;
+        this.message = message;
+        this.retained = retained;
+    }
+
     public String getTopic() {
         return topic;
     }

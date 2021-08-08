@@ -74,7 +74,14 @@ public class MainActivity extends AppCompatActivity {
         sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room11' and ts > now - 1h";
         myRepository.requestTDengineData(sql);
 
-        sql = "select  * from homedevice.fancoils where location = '86518/yuxiuhuayuan/12-1-101/room3' and ts > now - 1h";
+        sql = "select  * from homedevice.fancoils where location = '86518/yuxiuhuayuan/12-1-101/room1' and ts > now - 1h";
+        myRepository.requestTDengineData(sql);
+
+        sql = "select  * from homedevice.watersheds where location = '86518/yuxiuhuayuan/12-1-101/Room1' and ts > now - 1h";
+        myRepository.requestTDengineData(sql);
+        sql = "select  * from homedevice.watersheds where location = '86518/yuxiuhuayuan/12-1-101/Room2' and ts > now - 1h";
+        myRepository.requestTDengineData(sql);
+        sql = "select  * from homedevice.watersheds where location = '86518/yuxiuhuayuan/12-1-101/Room3' and ts > now - 1h";
         myRepository.requestTDengineData(sql);
 
 

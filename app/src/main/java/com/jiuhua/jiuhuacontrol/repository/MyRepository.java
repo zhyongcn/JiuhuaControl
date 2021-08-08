@@ -88,6 +88,7 @@ public class MyRepository {
             @Override
             public void onResponse(Call<TDReception> call, Response<TDReception> response) {
                 try {//回来的数据不稳定，保护一下。
+                    //请求传感器的数据
                     if (sql.contains("homedevice.sensors")) {
                         SensorSheet[] sensorSheetArray = TDReceptionConverter.toSensorSheet(response.body());
                         if (sensorSheetArray != null) {
@@ -101,7 +102,7 @@ public class MyRepository {
                             }).start();
                         }
                     }
-
+                    //请求风机盘管的数据
                     if (sql.contains("homedevice.fancoils")) {
                         FancoilSheet[] fancoilSheets = TDReceptionConverter.toFancoilSheet(response.body());
                         if (fancoilSheets != null) {
@@ -115,7 +116,21 @@ public class MyRepository {
                             }).start();
                         }
                     }
-
+                    //请求分水器的数据
+                    if (sql.contains("homedevice.watersheds")) {
+                        WatershedSheet[] watershedSheets = TDReceptionConverter.toWatershedSheet(response.body());
+                        if (watershedSheets != null) {
+                            new Thread(() -> {
+                                try {
+                                    insertWatershedSheet(watershedSheets);//这里接收的是数组！！
+                                    Log.d("insert in sqlite", gson.toJson(watershedSheets));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }).start();
+                        }
+                    }
+                    //请求锅炉的数据
                     if (sql.contains("homedevice.boilers")) {
                         EngineSheet[] engineSheets = TDReceptionConverter.toEngineSheet(response.body());
                         if (engineSheets != null) {
@@ -130,20 +145,7 @@ public class MyRepository {
                         }
                     }
 
-                    if (sql.contains("homedevice.watersheds")) {
-                        WatershedSheet[] watershedSheets = TDReceptionConverter.toWatershedSheet(response.body());
-                        if (watershedSheets != null) {
-                            new Thread(() -> {
-                                try {
-                                    insertWatershedSheet(watershedSheets);//这里接收的是数组！！
-                                    Log.d("insert in sqlite", gson.toJson(watershedSheets));
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }).start();
-                        }
-                    }
-
+                    //TODO heatpump
 //                    response.body().show();//检查调试的功能
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -158,14 +160,7 @@ public class MyRepository {
         });
     }
 
-    //TODO 完善它！
-    public void commandToModule() {
-        //接口需要的参数。
-        CommandFromPhone commandFromPhone = new CommandFromPhone();
-        commandFromPhone.setTopic("TopicTestTest2");
-        commandFromPhone.setQos(1);
-        commandFromPhone.setMessage("I am real from phone!2");
-        commandFromPhone.setRetained(false);
+    public void commandToModule(CommandFromPhone commandFromPhone) {
 
         //定义去联网的call 使用实例的哪一个方法&传入需要的参数。
         Call<String> call = cloudServer.reposForCommand("http://175.24.33.56:8080/command", commandFromPhone);
@@ -175,70 +170,21 @@ public class MyRepository {
             //** retrofit的封装，下面两个override都回到了主线程 UI线程来执行。**
             @Override
             public void onResponse(retrofit2.Call<String> call, retrofit2.Response<String> response) {
-                System.out.println("success :) ok!\n" + response.body());
+                System.out.println("send command to 云端转发器 success :) ok!\n" + response.body());
             }
 
             @Override
             public void onFailure(retrofit2.Call<String> call, Throwable t) {
-                Log.d(this.getClass().getSimpleName(), "onFailure: " + t.toString());
+                Log.d(this.getClass().getSimpleName(), "send to 云端转发器 onFailure: " + t.toString());
             }
 
         });
     }
 
-//    //发送指令 command to device
-//    public void commandToDevice(CommandESP commandESP) {
-//        int roomID = commandESP.getRoomId();
-//        String jsonCommandESP = gson.toJson(commandESP);
-
-//        mqttService = serviceConnection.getMqttService();  //这句可有可无，有就用小写的，没有就用大写的MQTTService
-////        mqttService.myPublishToDevice(roomID, jsonCommandESP, 1, true);
-//        MQTTService.myPublishToDevice(roomID, jsonCommandESP, 1, false);//这里的retained指令如果为true，会不断发送，摧毁模块。（浪费一天时间）
-//        Log.d("jsonCommandToDevice", jsonCommandESP);
-//    }
-
-    //发送指令 command to device TODO: 改成云端转发
-    public void commandToDevice(int roomid, String msg) {
-//        MQTTService.myPublishToDevice(roomid, msg, 1, false);//这里的retained指令如果为true，会不断发送，摧毁模块。（浪费一天时间）
-        Log.d("jsonCommandToDevice", msg);
-    }
-
     //period to device  send currentlyPeriodDB. 发送 currentlyPeriodDB 。
-    //TODO 改成云端转发
+    //TODO 改成云端转发, 逻辑改在别处，需要删除
     public void periodToDevice(PeriodSheet periodSheet) {
-        new Thread(new Runnable() {//FIXME: 线程方法不成功！！
-            @Override
-            public void run() {
-                int roomid = periodSheet.getRoomId();
 
-                for (int wd = 0; wd < 7; wd++) {
-                    CommandPeriod commandPeriod = new CommandPeriod();
-                    commandPeriod.setRoomId(roomid);
-                    int[][] temperatureArray = new int[15][3];
-                    int k = 0;
-                    commandPeriod.setWeekday(wd);
-                    for (int i = 0; i < periodSheet.getOneRoomWeeklyPeriod().size(); i++) {
-                        if (wd == periodSheet.getOneRoomWeeklyPeriod().get(i).getWeekday()) {
-                            temperatureArray[k][0] = periodSheet.getOneRoomWeeklyPeriod().get(i).getStartMinuteStamp();
-                            temperatureArray[k][1] = periodSheet.getOneRoomWeeklyPeriod().get(i).getEndMinuteStamp();
-                            temperatureArray[k][2] = periodSheet.getOneRoomWeeklyPeriod().get(i).getTempreature();
-                            k++;
-                        }
-                    }
-                    commandPeriod.setPeriod(temperatureArray);
-                    String s = gson.toJson(commandPeriod);
-//                    mqttService = serviceConnection.getMqttService();
-//                    MQTTService.myPublishToDevice(roomid, s, 1, false);//这里的retained指令如果为true，会不断发送，摧毁模块。（一天）
-                    Log.d("periodToDevice", s);
-                    try {
-                        Thread.sleep(500);//延迟发送，太快模块接受不了。
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }
-        }).start();//FIXME：***少写了“.start()”，基本概念不清害死人啊！！***
 
 
     }
@@ -282,14 +228,14 @@ public class MyRepository {
     public void insertSensorSheet(SensorSheet... sensorSheets) {  // 这个 ... 接收的是数组！！
         new AnsyMyDaoTask.InsertSensorSheetAsyncTask(myDao).execute(sensorSheets);
     }
-    //获取房间传感器的全部信息
+    //SENSOR 获取房间传感器的全部信息
     public LiveData<List<SensorSheet>> getAllLatestSensorSheetsLive(int devicetypeId) {
         //获取房间的最新信息指定了参数设备类型，继续包装下去，让调用者决定设备的类型。
         allLatestSensorSheetsLive = myDao.loadLatestSensorSheetsLive(devicetypeId);
         //一般查询系统会自动安排在非主线程，不需要自己写。其他的需要自己写非主线程。？？right？？
         return allLatestSensorSheetsLive;
     }
-    //删除所有房间传感器的信息
+    //SENSOR 删除所有房间传感器的信息
     public void deleteAllSensorSheet() {
         new AnsyMyDaoTask.DeleteAllSensorSheetAsyncTask(myDao).execute();
     }
@@ -299,7 +245,7 @@ public class MyRepository {
         new AnsyMyDaoTask.InsertFancoilSheetAsyncTask(myDao).execute(fancoilSheets);
     }
 
-    //获取房间风机的全部信息
+    //FANCOIL 获取房间风机的全部信息
     public LiveData<List<FancoilSheet>> getAllLatestFancoilSheetsLive() {
         //获取房间的最新信息指定了参数设备类型，继续包装下去，让调用者决定设备的类型。
         allLatestFancoilSheetsLive = myDao.loadLatestFancoilSheetsLive();
@@ -317,7 +263,7 @@ public class MyRepository {
         new AnsyMyDaoTask.InsertWatershedSheetAsyncTask(myDao).execute(watershedSheets);
     }
 
-    //获取房间分水器的全部信息
+    //WATERSHED 获取房间分水器的全部信息
     public LiveData<List<WatershedSheet>> getAllLatestWatershedSheetsLive() {
         //获取房间的最新信息指定了参数设备类型，继续包装下去，让调用者决定设备的类型。
         allLatestWatershedSheetsLive = myDao.loadLatestWatershedSheetsLive();

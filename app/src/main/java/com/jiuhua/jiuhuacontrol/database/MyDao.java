@@ -113,9 +113,11 @@ public interface MyDao {
     @Delete
     void deletePeriodSheet(PeriodSheet... periodSheets);
 
-    @SuppressWarnings( RoomWarnings.CURSOR_MISMATCH )  //TODO  每次编译都出错，能正常运行，太烦了，才加上的。
+    //每次编译都出错，能正常运行，太烦了，才加上的。 //其实多出来一项，entity里面没有的。
+    @SuppressWarnings( RoomWarnings.CURSOR_MISMATCH )
     @Query( "SELECT * , MAX(timestamp) FROM PeriodSheet GROUP BY room_id" )
-    LiveData<List<PeriodSheet>> loadLatestPeriodSheetsLive();  //only can use LiveData<> ! 加了转换器居然编译通过了。//FIXME ??其实多出来一项，entity里面没有的。
+    //only can use LiveData<> ! 加了转换器居然编译通过了。
+    LiveData<List<PeriodSheet>> loadLatestPeriodSheetsLive();
 
     /**
      * IndoorLongtimeSheet的相关方法

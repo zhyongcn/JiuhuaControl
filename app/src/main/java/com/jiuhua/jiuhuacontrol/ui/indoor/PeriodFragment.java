@@ -51,9 +51,9 @@ public class PeriodFragment extends Fragment {
 
         myView = view.findViewById(R.id.myview);//从传入的view中获取
 
-        indoorViewModel.getAllLatestPeriodSheetsLive().observe(getViewLifecycleOwner(), periodDBS -> {
-            indoorViewModel.setAllLatestPeriodDBs(periodDBS); //viewmodel是单例，这个保存是有价值的。
-            myView.getWeeklyPeriod(indoorViewModel.currentOneWeeklyPeriodSheet.getOneRoomWeeklyPeriod());
+        indoorViewModel.getAllLatestPeriodSheetsLive().observe(getViewLifecycleOwner(), periodSheets -> {
+            indoorViewModel.setAllLatestPeriodSheets(periodSheets); //viewmodel是单例，这个保存是有价值的。
+            myView.getWeeklyPeriod(indoorViewModel.currentRoomWeeklyPeriodSheet.getOneRoomWeeklyPeriod());
         });
 
         myView.setClickCrossListener((weekday, hour, dayPeriod) -> {
@@ -93,25 +93,16 @@ public class PeriodFragment extends Fragment {
 //    @Override
 //    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
 //        super.onViewStateRestored(savedInstanceState);
-//        //start service
-//        Intent intent = new Intent(getContext(), MQTTService.class);
-//        getContext().startService(intent);
 //    }
 
     @Override
     public void onStart() {
         super.onStart();
-        //start service
-//        Intent intent = new Intent(getActivity(), MQTTService.class);
-//        getActivity().startService(intent);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        //start service
-//        Intent intent = new Intent(getActivity(), MQTTService.class);
-//        getActivity().startService(intent);
     }
 
 }

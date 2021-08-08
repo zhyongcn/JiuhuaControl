@@ -35,4 +35,6 @@ public interface Constants {
     int Saturday = 5;
     int Sunday = 6;
 
+    String mqtt_publish_topic_prefix = "86518/yuxiuhuayuan/12-1-101/Room";//FIXME 到底用Room 还是 room ？？
+
 }

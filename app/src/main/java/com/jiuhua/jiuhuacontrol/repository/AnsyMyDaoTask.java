@@ -153,6 +153,7 @@ public class AnsyMyDaoTask {
 
     static class InsertEngineSheetAsyncTask extends AsyncTask<EngineSheet, Void, Void>{
         private MyDao myDao;
+
         InsertEngineSheetAsyncTask(MyDao myDao) {
             this.myDao = myDao;
         }
@@ -166,6 +167,7 @@ public class AnsyMyDaoTask {
 
     static class InsertWatershedSheetAsyncTask extends AsyncTask<WatershedSheet, Void, Void>{
         private MyDao myDao;
+
         InsertWatershedSheetAsyncTask(MyDao myDao) {
             this.myDao = myDao;
         }
