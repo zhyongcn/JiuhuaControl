@@ -5,10 +5,12 @@ import android.util.Base64;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.gson.Gson;
 import com.jiuhua.jiuhuacontrol.CommandFromPhone;
 import com.jiuhua.jiuhuacontrol.CommandPeriod;
+import com.jiuhua.jiuhuacontrol.Constants;
 import com.jiuhua.jiuhuacontrol.database.BasicInfoSheet;
 import com.jiuhua.jiuhuacontrol.database.EngineSheet;
 import com.jiuhua.jiuhuacontrol.database.FancoilSheet;
@@ -17,6 +19,7 @@ import com.jiuhua.jiuhuacontrol.database.MyDatabase;
 import com.jiuhua.jiuhuacontrol.database.SensorSheet;
 import com.jiuhua.jiuhuacontrol.database.PeriodSheet;
 import com.jiuhua.jiuhuacontrol.database.WatershedSheet;
+import com.jiuhua.jiuhuacontrol.ui.HomeViewModel;
 
 import java.util.List;
 
@@ -41,7 +44,7 @@ public class MyRepository {
     LiveData<List<WatershedSheet>> allLatestWatershedSheetsLive;
     LiveData<List<EngineSheet>> allLatestEngineSheetsLive;
     LiveData<List<PeriodSheet>> allLatestPeriodSheetsLive;
-    private MyDao myDao;
+    MyDao myDao;
     Gson gson = new Gson();
 
     private Retrofit retrofit;
@@ -146,7 +149,7 @@ public class MyRepository {
                     }
 
                     //TODO heatpump
-//                    response.body().show();//检查调试的功能
+                    response.body().show();//检查调试的功能
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -186,7 +189,6 @@ public class MyRepository {
     public void periodToDevice(PeriodSheet periodSheet) {
 
 
-
     }
 
     /**  ******实现 Dao 的所有方法******   */
@@ -223,11 +225,14 @@ public class MyRepository {
         return myDao.loadRoomName(roomid);
     }
 
-    /** room information not include period */
+    /**
+     * room information not include period
+     */
     //SENSOR 插入房间传感器的状态信息
     public void insertSensorSheet(SensorSheet... sensorSheets) {  // 这个 ... 接收的是数组！！
         new AnsyMyDaoTask.InsertSensorSheetAsyncTask(myDao).execute(sensorSheets);
     }
+
     //SENSOR 获取房间传感器的全部信息
     public LiveData<List<SensorSheet>> getAllLatestSensorSheetsLive(int devicetypeId) {
         //获取房间的最新信息指定了参数设备类型，继续包装下去，让调用者决定设备的类型。
@@ -235,6 +240,7 @@ public class MyRepository {
         //一般查询系统会自动安排在非主线程，不需要自己写。其他的需要自己写非主线程。？？right？？
         return allLatestSensorSheetsLive;
     }
+
     //SENSOR 删除所有房间传感器的信息
     public void deleteAllSensorSheet() {
         new AnsyMyDaoTask.DeleteAllSensorSheetAsyncTask(myDao).execute();
@@ -274,14 +280,13 @@ public class MyRepository {
     //TODO 存储的数据优化降维的时候，还是需要删除数据的。
 
 
-
     /**
      * the period information of room
      */
     //插入某个房间一周运行的周期
     public void insertPeriodSheet(PeriodSheet... periodSheets) {//这里的参数需要使用数组，或者单个，多个
         new AnsyMyDaoTask.InsertPeriodSheetAsyncTask(myDao).execute(periodSheets);
-        //FIXME: 这里没有写入参数periodDBs ，导致数据库没有写入，耽误了两三天时间。没有报错误。
+        //FIXME: 这里没有写入参数periodSheets ，导致数据库没有写入，耽误了两三天时间。没有报错误。
         //FIXME： 再放弃的时候，才发现。应该是基本的概念不清楚，只知道照抄代码，抄的不仔细。
         //FIXME： 如果概念清楚，会发现灰色的 periodDBs 没有被使用，肯定不能写入数据库。
         //FIXME： 异步执行的函数也不是很了解，不知道 execute 是要执行什么的！
@@ -294,6 +299,8 @@ public class MyRepository {
     public LiveData<List<PeriodSheet>> getAllLatestPeriodSheetsLive() {
         return allLatestPeriodSheetsLive;
     }
+
+
 
 
 }

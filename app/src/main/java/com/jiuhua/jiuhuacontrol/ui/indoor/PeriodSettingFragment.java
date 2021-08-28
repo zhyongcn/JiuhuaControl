@@ -25,6 +25,7 @@ import com.google.gson.Gson;
 import com.jiuhua.jiuhuacontrol.Constants;
 import com.jiuhua.jiuhuacontrol.R;
 import com.jiuhua.jiuhuacontrol.database.DayPeriod;
+import com.jiuhua.jiuhuacontrol.ui.HomeViewModel;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static java.lang.String.valueOf;
@@ -43,7 +44,7 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
     private DayPeriod dayPeriod = new DayPeriod();
 
     private Context context;
-    private IndoorViewModel indoorViewModel;
+    private HomeViewModel homeViewModel;
 
     TextView textViewTitle, textViewPeriodName, textViewStartTime, textViewEndTime, textViewSettingTemperature, textViewRepeat;
     EditText editTextDayperiodName;
@@ -66,9 +67,9 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
         clickedWeekday = getArguments().getInt("clickedweekday");//0是周一，6是周日
         clickedHour = getArguments().getInt("clickedhour"); // 0是0:00  23是23:00
 
-        indoorViewModel = new ViewModelProvider(this).get(IndoorViewModel.class);
-        indoorViewModel.setCurrentlyRoomId(roomId);
-        indoorViewModel.setCurrentlyRoomName(roomName);
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        homeViewModel.setCurrentlyRoomId(roomId);
+        homeViewModel.setCurrentlyRoomName(roomName);
 
         return view;
     }
@@ -76,8 +77,8 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        indoorViewModel.getAllLatestPeriodSheetsLive().observe(getViewLifecycleOwner(), periodSheets -> {
-            indoorViewModel.setAllLatestPeriodSheets(periodSheets); //viewmodel是单例，这个保存是有价值的。
+        homeViewModel.getAllLatestPeriodSheetsLive().observe(getViewLifecycleOwner(), periodSheets -> {
+            homeViewModel.setAllLatestPeriodSheets(periodSheets); //viewmodel是单例，这个保存是有价值的。
         });
 
         //创建一个DayPeriod，供将来写入，或者删除使用。
@@ -316,9 +317,9 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
                 if (check_daily_fragment_add_to_Weekly_list(clickedWeekday) == 1) {
                     dayPeriod.setDayPeriodName(editTextDayperiodName.getText().toString());
                     //写入数据库
-                    indoorViewModel.insertPeriodSheet(roomId);
+                    homeViewModel.insertPeriodSheet(roomId);
                     //send MQTT message  TODO: 统一在传出环节使用假浮点？？
-                    indoorViewModel.periodToDevice(roomId, indoorViewModel.currentRoomWeeklyPeriodSheet.getOneRoomWeeklyPeriod());
+                    homeViewModel.periodToDevice(roomId, homeViewModel.getCurrentRoomWeeklyPeriodSheet().getOneRoomWeeklyPeriod());
                     getActivity().onBackPressed();
                 }
                 break;
@@ -353,9 +354,9 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
             Toast.makeText(getContext(), "设置时间不对", LENGTH_SHORT).show();
             return -1;
         }
-        if (indoorViewModel.currentRoomWeeklyPeriodSheet.getOneRoomWeeklyPeriod().size() > 0) {
+        if (homeViewModel.getCurrentRoomWeeklyPeriodSheet().getOneRoomWeeklyPeriod().size() > 0) {
             //循环判断所有周期段
-            for (DayPeriod d : indoorViewModel.currentRoomWeeklyPeriodSheet.getOneRoomWeeklyPeriod()) {
+            for (DayPeriod d : homeViewModel.getCurrentRoomWeeklyPeriodSheet().getOneRoomWeeklyPeriod()) {
                 //同一天的才判断（星期几相同）
                 if (d.getWeekday() == weekday) {
                     int Tstart = d.getStartMinuteStamp();//距离零点的分钟数
@@ -380,17 +381,17 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
         }
 
         //通过之后就是合理的数据，先写入list，再排序，再删除超过6个的。
-        indoorViewModel.currentRoomWeeklyPeriodSheet.getOneRoomWeeklyPeriod().add(dayPeriodFromJson);
+        homeViewModel.getCurrentRoomWeeklyPeriodSheet().getOneRoomWeeklyPeriod().add(dayPeriodFromJson);
 
         //排序
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod()[wday].sort(comparingInt(DayPeriod::getStartMinuteStamp));
+//                homeViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod()[wday].sort(comparingInt(DayPeriod::getStartMinuteStamp));
 //            }
         //删除多于六个的
-//            if (indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod()[wday].size() > 6) {  //限制一天六个时段。Limited to six periods a day.
-//                indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod()[wday]
-//                        = indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod()[wday].subList(0,
-//                        indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod()[wday].size() - 1);
+//            if (homeViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod()[wday].size() > 6) {  //限制一天六个时段。Limited to six periods a day.
+//                homeViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod()[wday]
+//                        = homeViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod()[wday].subList(0,
+//                        homeViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod()[wday].size() - 1);
 //            }
 
 
@@ -405,7 +406,7 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
         dayPeriodFromJson.setWeekday(weekday);
 
         //这个方法不熟练，没有做好，不熟悉 iterator。
-//        Iterator<DayPeriod> iterator = indoorViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod().iterator();
+//        Iterator<DayPeriod> iterator = homeViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod().iterator();
 //        while (iterator.hasNext()) {
 //            if (dayPeriodFromJson.getStartMinuteStamp() == iterator.next().getStartMinuteStamp()
 //                    && dayPeriodFromJson.getEndMinuteStamp() == iterator.next().getEndMinuteStamp()
@@ -414,15 +415,15 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
 //            }
 //        }
 
-        for (int i = 0; i < indoorViewModel.currentRoomWeeklyPeriodSheet.getOneRoomWeeklyPeriod().size(); i++) {
-            if (dayPeriodFromJson.getStartMinuteStamp() == indoorViewModel.currentRoomWeeklyPeriodSheet.getOneRoomWeeklyPeriod().get(i).getStartMinuteStamp()
-                    && dayPeriodFromJson.getEndMinuteStamp() == indoorViewModel.currentRoomWeeklyPeriodSheet.getOneRoomWeeklyPeriod().get(i).getEndMinuteStamp()
-                    && dayPeriodFromJson.getWeekday() == indoorViewModel.currentRoomWeeklyPeriodSheet.getOneRoomWeeklyPeriod().get(i).getWeekday()) {
-                indoorViewModel.currentRoomWeeklyPeriodSheet.getOneRoomWeeklyPeriod().remove(i);
+        for (int i = 0; i < homeViewModel.getCurrentRoomWeeklyPeriodSheet().getOneRoomWeeklyPeriod().size(); i++) {
+            if (dayPeriodFromJson.getStartMinuteStamp() == homeViewModel.getCurrentRoomWeeklyPeriodSheet().getOneRoomWeeklyPeriod().get(i).getStartMinuteStamp()
+                    && dayPeriodFromJson.getEndMinuteStamp() == homeViewModel.getCurrentRoomWeeklyPeriodSheet().getOneRoomWeeklyPeriod().get(i).getEndMinuteStamp()
+                    && dayPeriodFromJson.getWeekday() == homeViewModel.getCurrentRoomWeeklyPeriodSheet().getOneRoomWeeklyPeriod().get(i).getWeekday()) {
+                homeViewModel.getCurrentRoomWeeklyPeriodSheet().getOneRoomWeeklyPeriod().remove(i);
                 i--;
             }
         }
-        Log.d("remove", gson.toJson(indoorViewModel.currentRoomWeeklyPeriodSheet));
+        Log.d("remove", gson.toJson(homeViewModel.getCurrentRoomWeeklyPeriodSheet()));
 
     }
 

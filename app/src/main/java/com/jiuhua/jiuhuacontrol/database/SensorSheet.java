@@ -48,7 +48,7 @@ public class SensorSheet {
     private int adjustingHumidity;
 
     public SensorSheet() {
-        //empty public constructor for IndoorViewModel
+        //empty public constructor for HomeViewModel
     }
 
 //    @Ignore

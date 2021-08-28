@@ -62,7 +62,7 @@ public class FancoilSheet {
     private int roomStatus; //Constants.roomState_XXXX
 
     public FancoilSheet() {
-        //empty public constructor for IndoorViewModel
+        //empty public constructor for HomeViewModel
     }
 
     @Ignore

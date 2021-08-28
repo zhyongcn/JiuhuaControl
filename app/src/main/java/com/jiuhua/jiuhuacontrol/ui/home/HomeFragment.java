@@ -20,6 +20,7 @@ import com.jiuhua.jiuhuacontrol.database.BasicInfoSheet;
 import com.jiuhua.jiuhuacontrol.database.FancoilSheet;
 import com.jiuhua.jiuhuacontrol.database.SensorSheet;
 import com.jiuhua.jiuhuacontrol.Constants;
+import com.jiuhua.jiuhuacontrol.ui.HomeViewModel;
 
 import java.util.List;
 
@@ -51,14 +52,15 @@ public class HomeFragment extends Fragment {
 
         //RecyclerView是需要管理器的，网格管理，两行。
         // TODO: 老年人需要两行，字大一些，年轻人需要一行，内容多一些。依据用户情况调整。
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         recyclerView.setAdapter(homepageAdapter);//adapter肯定是必须的！！
 
         //
         homeViewModel.getAllBasicInfoLive().observe(getViewLifecycleOwner(), basicInfoSheets -> {
-                //int temp = homepageAdapter.getItemCount();
+            //int temp = homepageAdapter.getItemCount();
             homepageAdapter.setAllBasicInfo(basicInfoSheets);   //设置数据
-                homepageAdapter.notifyDataSetChanged();     //没有必要两次去刷新视图
+            homeViewModel.setAllBasicInfo(basicInfoSheets);
+            homepageAdapter.notifyDataSetChanged();     //没有必要两次去刷新视图
         });
 
         homeViewModel.getAllLatestSensorSheetsLive(Constants.deviceType_DHTsensor).observe(getViewLifecycleOwner(),
@@ -78,6 +80,14 @@ public class HomeFragment extends Fragment {
                         homepageAdapter.notifyDataSetChanged();  //去刷新视图
                     }
                 });
+
+        homeViewModel.getAllLatestWatershedSheetsLive().observe(getViewLifecycleOwner(), watershedSheets -> {
+            homeViewModel.setAllLatestWatershedSheets(watershedSheets);
+        });
+
+        homeViewModel.getAllLatestPeriodSheetsLive().observe(getViewLifecycleOwner(), periodSheets -> {
+            homeViewModel.setAllLatestPeriodSheets(periodSheets);
+        });
 
         buttonInHome = view.findViewById(R.id.buttonInhome);
         buttonOutHome = view.findViewById(R.id.button_Outhome);
@@ -120,10 +130,13 @@ public class HomeFragment extends Fragment {
         });
         buttonECO.setOnClickListener(v -> {
             //pass
+            //TODO FIXME 究竟什么问题！！
+            homeViewModel.firstAskTDengine();
         });
         buttonSleep.setOnClickListener(v -> {
             //pass
         });
+
     }
 }
 

@@ -1,4 +1,4 @@
-package com.jiuhua.jiuhuacontrol.ui.indoor;
+package com.jiuhua.jiuhuacontrol.ui;
 
 import android.app.Application;
 import android.util.Log;
@@ -12,6 +12,7 @@ import com.google.gson.JsonObject;
 import com.jiuhua.jiuhuacontrol.CommandFromPhone;
 import com.jiuhua.jiuhuacontrol.CommandPeriod;
 import com.jiuhua.jiuhuacontrol.Constants;
+import com.jiuhua.jiuhuacontrol.database.BasicInfoSheet;
 import com.jiuhua.jiuhuacontrol.database.FancoilSheet;
 import com.jiuhua.jiuhuacontrol.database.SensorSheet;
 import com.jiuhua.jiuhuacontrol.database.PeriodSheet;
@@ -23,9 +24,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class IndoorViewModel extends AndroidViewModel {
+public class HomeViewModel extends AndroidViewModel {
 
     MyRepository myRepository;
+    List<BasicInfoSheet> allLatestBasicInfoSheets = new ArrayList<>();
     List<SensorSheet> allLatestSensorSheets = new ArrayList<>();   //room1,room2...`s currenttempreature .
     List<FancoilSheet> allLatestFancoilSheets = new ArrayList<>();
     List<WatershedSheet> allLatestWatershedSheets = new ArrayList<>();
@@ -53,6 +55,63 @@ public class IndoorViewModel extends AndroidViewModel {
         this.currentlyRoomName = currentlyRoomName;
     }
 
+    public void setAllBasicInfo(List<BasicInfoSheet> basicInfoSheets) {
+        this.allLatestBasicInfoSheets = basicInfoSheets;
+    }
+
+    public List<SensorSheet> getAllLatestSensorSheets() {
+        return allLatestSensorSheets;
+    }
+
+    public List<FancoilSheet> getAllLatestFancoilSheets() {
+        return allLatestFancoilSheets;
+    }
+
+    public List<WatershedSheet> getAllLatestWatershedSheets() {
+        return allLatestWatershedSheets;
+    }
+
+    public List<PeriodSheet> getAllLatestPeriodSheets() {
+        return allLatestPeriodSheets;
+    }
+
+    public SensorSheet getCurrentlySensorSheet() {
+        return currentlySensorSheet;
+    }
+
+    public void setCurrentlySensorSheet(SensorSheet currentlySensorSheet) {
+        this.currentlySensorSheet = currentlySensorSheet;
+    }
+
+    public FancoilSheet getCurrentlyFancoilSheet() {
+        return currentlyFancoilSheet;
+    }
+
+    public void setCurrentlyFancoilSheet(FancoilSheet currentlyFancoilSheet) {
+        this.currentlyFancoilSheet = currentlyFancoilSheet;
+    }
+
+    public WatershedSheet getCurrentlyWatershedSheet() {
+        return currentlyWatershedSheet;
+    }
+
+    public void setCurrentlyWatershedSheet(WatershedSheet currentlyWatershedSheet) {
+        this.currentlyWatershedSheet = currentlyWatershedSheet;
+    }
+
+    public PeriodSheet getCurrentRoomWeeklyPeriodSheet() {
+        return currentRoomWeeklyPeriodSheet;
+    }
+
+    public void setCurrentRoomWeeklyPeriodSheet(PeriodSheet currentRoomWeeklyPeriodSheet) {
+        this.currentRoomWeeklyPeriodSheet = currentRoomWeeklyPeriodSheet;
+    }
+
+    public int getCurrentlyRoomId() {
+        return currentlyRoomId;
+    }
+
+    //当前所有传感器的状态以及当前房间的传感器状态
     public void setAllLatestSensorSheets(List<SensorSheet> allLatestSensorSheetsLive) {
         this.allLatestSensorSheets = allLatestSensorSheetsLive;
         for (SensorSheet sensorSheet : allLatestSensorSheets) {
@@ -62,6 +121,7 @@ public class IndoorViewModel extends AndroidViewModel {
         }
     }
 
+    //设置风机的当前所有状态以及当前房间的风机状态
     public void setAllLatestFancoilSheets(List<FancoilSheet> allLatestFancoilSheets) {
         this.allLatestFancoilSheets = allLatestFancoilSheets;
         if (allLatestFancoilSheets.size() > 0) {
@@ -73,6 +133,7 @@ public class IndoorViewModel extends AndroidViewModel {
         }
     }
 
+    //设置当前分水器的所有状态，以及当前分水器（地暖）的状态
     public void setAllLatestWatershedSheets(List<WatershedSheet> allLatestWatershedSheets) {
         this.allLatestWatershedSheets = allLatestWatershedSheets;
         for (WatershedSheet watershedSheet : allLatestWatershedSheets) {
@@ -82,7 +143,7 @@ public class IndoorViewModel extends AndroidViewModel {
         }
     }
 
-    //TODO 需要修改！！！
+    //设置当前的所有周期以及当前的房间的周期
     public void setAllLatestPeriodSheets(List<PeriodSheet> allLatestPeriodDBsLive) {
         this.allLatestPeriodSheets = allLatestPeriodDBsLive;
         for (PeriodSheet periodSheet : allLatestPeriodSheets) {
@@ -95,27 +156,52 @@ public class IndoorViewModel extends AndroidViewModel {
             currentRoomWeeklyPeriodSheet.setRoomId(currentlyRoomId);
             currentRoomWeeklyPeriodSheet.setOneRoomWeeklyPeriod(new ArrayList<>());
         }
-        //else {
-        //说明在开始的状态没有任何数据，新建一个房间的基础数据
-        //currentIndoorWeeklyPeriodSheet = new PeriodSheet();
-        //currentIndoorWeeklyPeriodSheet.setRoomId(currentlyRoomId);
-        //currentIndoorWeeklyPeriodSheet.setOneRoomWeeklyPeriod(new ArrayList<>());
-        //}
     }
 
     //构造方法
-    public IndoorViewModel(@NonNull Application application) {
+    public HomeViewModel(@NonNull Application application) {
         super(application);
         this.myRepository = MyRepository.getInstance(application);
+
+
+    }
+
+    public void firstAskTDengine(){
+        //去云端获取数据
+        for (BasicInfoSheet basicInfoSheet :allLatestBasicInfoSheets) {
+            long ts = 0;
+            for (SensorSheet sensorSheet : allLatestSensorSheets) {
+                if (sensorSheet.getRoomId() == basicInfoSheet.getRoomId()) {
+                    ts = sensorSheet.getTimeStamp();
+                }
+            }
+            if (ts > 16000000) {
+                String sql = "select  * from homedevice.sensors where location = '"
+                        + Constants.mqtt_topic_prefix
+                        + basicInfoSheet.getRoomId()
+                        + "' and ts > " + ts + "000";
+                myRepository.requestTDengineData(sql);
+            }
+        }
+
+//sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room2' and ts > now - 1h";
+//myRepository.requestTDengineData(sql);
+//
+//sql = "select  * from homedevice.fancoils where location = '86518/yuxiuhuayuan/12-1-101/room1' and ts > now - 1h";
+//myRepository.requestTDengineData(sql);
+//
+//sql = "select  * from homedevice.watersheds where location = '86518/yuxiuhuayuan/12-1-101/Room1' and ts > now - 1h";
+//myRepository.requestTDengineData(sql);
+
     }
 
     /**
      * 设备设置调整页面的各种实现方法，供其调用。
      * ***改变了需要改变的参数，其他参数不动。***
      */
-    //传送房间设置状态的方法
+    //传送房间设置状态
     public void roomstateToDevice(int roomid, int roomstates) {
-        String topic = Constants.mqtt_publish_topic_prefix + roomid;
+        String topic = Constants.mqtt_topic_prefix + roomid;
 
         Gson gson = new Gson();
         JsonObject jsonObject = new JsonObject();
@@ -128,9 +214,9 @@ public class IndoorViewModel extends AndroidViewModel {
         myRepository.commandToModule(commandFromPhone);
     }
 
-    //风速按钮实现方法
+    //传送风速设置按钮
     public void fanSpeedToDevice(int roomid, int fanSpeed) {
-        String topic = Constants.mqtt_publish_topic_prefix + roomid;
+        String topic = Constants.mqtt_topic_prefix + roomid;
 
         Gson gson = new Gson();
         JsonObject jsonObject = new JsonObject();
@@ -145,7 +231,7 @@ public class IndoorViewModel extends AndroidViewModel {
 
     //传送设置温度
     public void temperatureToDevice(int roomid, int temp) {
-        String topic = Constants.mqtt_publish_topic_prefix + roomid;
+        String topic = Constants.mqtt_topic_prefix + roomid;
 
         Gson gson = new Gson();
         JsonObject jsonObject = new JsonObject();
@@ -160,7 +246,7 @@ public class IndoorViewModel extends AndroidViewModel {
 
     //传送设定湿度
     public void humidityToDevice(int roomid, int humidity) {
-        String topic = Constants.mqtt_publish_topic_prefix + roomid;
+        String topic = Constants.mqtt_topic_prefix + roomid;
 
         Gson gson = new Gson();
         JsonObject jsonObject = new JsonObject();
@@ -207,7 +293,7 @@ public class IndoorViewModel extends AndroidViewModel {
 
     //把周期传递给模块 period[15][3]  一个星期的有必要。
     public void periodToDevice(int roomid, List<DayPeriod> dayPeriods) {
-        String topic = Constants.mqtt_publish_topic_prefix + roomid;
+        String topic = Constants.mqtt_topic_prefix + roomid;
 
         Gson gson = new Gson();
 
@@ -251,5 +337,30 @@ public class IndoorViewModel extends AndroidViewModel {
         }).start();//FIXME：***少写了“.start()”，基本概念不清害死人啊！！***
 
     }
+
+    //包装 Repository 里面的 Dao 方法
+    public void insertRoomName(BasicInfoSheet... basicInfoSheets) {
+        myRepository.insertBasicInfo(basicInfoSheets);
+    }
+
+    public void deleteAllRoomsName() {
+        myRepository.deleteAllBasicInfo();
+    }
+
+    public LiveData<List<BasicInfoSheet>> getAllBasicInfoLive() {
+        return myRepository.getAllBasicInfoLive();
+    }
+
+    public LiveData<List<SensorSheet>> getAllLatestSensorSheetsLive(int devicetypeId) {
+        return myRepository.getAllLatestSensorSheetsLive(devicetypeId);
+    }
+
+    //获取普通房间的名字
+    public String loadRoomName(int roomid) {
+        return myRepository.loadRoomName(roomid);
+    }
+
+
+
 
 }

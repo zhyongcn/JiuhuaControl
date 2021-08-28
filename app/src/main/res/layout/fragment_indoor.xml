@@ -7,7 +7,7 @@
 
         <variable
             name="data"
-            type="com.jiuhua.jiuhuacontrol.ui.indoor.IndoorViewModel" />
+            type="com.jiuhua.jiuhuacontrol.ui.HomeViewModel" />
     </data>
     <!--这个FrameLayou 是为了动态代码的加载？  就是为了左右滑动加载的页面！！TODO 不要动！！-->
     <FrameLayout

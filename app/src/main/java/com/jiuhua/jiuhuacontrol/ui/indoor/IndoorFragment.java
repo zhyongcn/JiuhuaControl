@@ -15,11 +15,12 @@ import androidx.lifecycle.ViewModelProvider;
 import com.jiuhua.jiuhuacontrol.Constants;
 import com.jiuhua.jiuhuacontrol.R;
 import com.jiuhua.jiuhuacontrol.databinding.FragmentIndoorBinding;
+import com.jiuhua.jiuhuacontrol.ui.HomeViewModel;
 
 public class IndoorFragment extends Fragment {
 
     private FragmentIndoorBinding binding;
-    private IndoorViewModel indoorViewModel;
+    private HomeViewModel homeViewModel;
 
     int roomId;
     String roomName;
@@ -48,43 +49,43 @@ public class IndoorFragment extends Fragment {
         //**这句不行**  binding = DataBindingUtil.setContentView(getActivity(), R.layout.fragment_indoor);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_indoor, container, false);
 
-        indoorViewModel = new ViewModelProvider(this).get(IndoorViewModel.class);  //涉及一个单例？？
-        indoorViewModel.setCurrentlyRoomId(roomId);
-        indoorViewModel.setCurrentlyRoomName(roomName);
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);  //涉及一个单例？？
+        homeViewModel.setCurrentlyRoomId(roomId);
+        homeViewModel.setCurrentlyRoomName(roomName);
 
-        binding.setData(indoorViewModel);
+        binding.setData(homeViewModel);
         binding.setLifecycleOwner(this);
 
-        indoorViewModel.getAllLatestSensorSheetsLive().observe(getViewLifecycleOwner(), sensorSheets -> {
-            indoorViewModel.setAllLatestSensorSheets(sensorSheets);
+        homeViewModel.getAllLatestSensorSheetsLive().observe(getViewLifecycleOwner(), sensorSheets -> {
+            homeViewModel.setAllLatestSensorSheets(sensorSheets);
             //****数据驱动界面改变,所以代码要放在fragment或者Activity里面。只处理界面****
             //显示当前温度
-            currentTemperature = indoorViewModel.currentlySensorSheet.getCurrentTemperature() / 10;
+            currentTemperature = homeViewModel.getCurrentlySensorSheet().getCurrentTemperature() / 10;
             binding.currentTemperatureView.setText(currentTemperature + "℃");//假浮点需要除以10
         });
 
-        indoorViewModel.getAllLatestFancoilSheetsLive().observe(getViewLifecycleOwner(), fancoilSheets -> {
-            indoorViewModel.setAllLatestFancoilSheets(fancoilSheets);
+        homeViewModel.getAllLatestFancoilSheetsLive().observe(getViewLifecycleOwner(), fancoilSheets -> {
+            homeViewModel.setAllLatestFancoilSheets(fancoilSheets);
             //****数据驱动界面改变,所以代码要放在fragment或者Activity里面。只处理界面****
 
             //以下空调相关显示
             //显示空调设置温度（现在只有一个设置温度）//假浮点需要除以10
-            displayAirSetTemperature = indoorViewModel.currentlyFancoilSheet.getSettingTemperature() / 10;
+            displayAirSetTemperature = homeViewModel.getCurrentlyFancoilSheet().getSettingTemperature() / 10;
             binding.showAirconditionSettingTemperature.setText("空调设置温度             " + displayAirSetTemperature + "℃");
             binding.airconditionSetTemperatureNumber.setText(String.valueOf(accessSetTemperature));
             binding.floorheatTemperatureSetNumber.setText(String.valueOf(accessSetTemperature));
 
             //TODO 湿度暂时不搞！！
             //显示当前湿度
-            //binding.tempHumidityTextView.setText(String.valueOf(indoorViewModel.currentlyFancoilSheet.getCurrentHumidity() / 10));
+            //binding.tempHumidityTextView.setText(String.valueOf(homeViewModel.currentlyFancoilSheet.getCurrentHumidity() / 10));
             // 假浮点需要除以10
 
             //显示设置湿度
-            //binding.XXXX.setText(indoorViewModel.currentlyFancoilSheet.getSettingHumidity() / 10);
+            //binding.XXXX.setText(homeViewModel.currentlyFancoilSheet.getSettingHumidity() / 10);
             // 假浮点需要除以10
 
             //依据房间的状态改变显示的文字(停止，手动，自动)
-            switch (indoorViewModel.currentlyFancoilSheet.getRoomStatus()) {
+            switch (homeViewModel.getCurrentlyFancoilSheet().getRoomStatus()) {
                 case Constants.roomState_OFF: //stop 0, manual 1, auto 2
                     binding.showAirconditionRunningModel.setText("运行模式                停止模式");
                     break;
@@ -111,7 +112,7 @@ public class IndoorFragment extends Fragment {
             }
 
             //风机状态数据驱动显示的文字变化（高中低及自动风）
-            switch (indoorViewModel.currentlyFancoilSheet.getCurrentFanStatus()) {
+            switch (homeViewModel.getCurrentlyFancoilSheet().getCurrentFanStatus()) {
                 case Constants.fanSpeed_STOP:
                     binding.showAirconditionRunningFanspeed.setText("风机状态                   停止");
                     break;
@@ -130,7 +131,7 @@ public class IndoorFragment extends Fragment {
             }
 
             //显示空调的运行状态即 两通阀的开关状态
-            if (indoorViewModel.currentlyFancoilSheet.isCoilValveOpen()) {
+            if (homeViewModel.getCurrentlyFancoilSheet().isCoilValveOpen()) {
                 binding.showAirconditionRunningStateCoilvalve.setText(R.string.coilvalveopen);
             } else {
                 binding.showAirconditionRunningStateCoilvalve.setText(R.string.coilvalveshut);
@@ -138,17 +139,17 @@ public class IndoorFragment extends Fragment {
 
         });
 
-        indoorViewModel.getAllLatestWatershedSheetsLive().observe(getViewLifecycleOwner(), watershedSheets -> {
-            indoorViewModel.setAllLatestWatershedSheets(watershedSheets);
+        homeViewModel.getAllLatestWatershedSheetsLive().observe(getViewLifecycleOwner(), watershedSheets -> {
+            homeViewModel.setAllLatestWatershedSheets(watershedSheets);
             //****数据驱动界面改变,所以代码要放在fragment或者Activity里面。只处理界面****
             //以下地暖参数显示
             //显示地暖设置温度（现在只有一个设置温度）
-            displayFloorSetTemperature = indoorViewModel.currentlyWatershedSheet.getSettingTemperature() / 10;
+            displayFloorSetTemperature = homeViewModel.getCurrentlyWatershedSheet().getSettingTemperature() / 10;
             binding.floorheatTemperatureSetNumber.setText(String.valueOf(accessSetTemperature));
             binding.showFloorheatSettingTemperature.setText("地暖设置温度  " + displayFloorSetTemperature + "℃");
 
             //依据房间的状态改变显示的文字(停止，手动，自动)
-            switch (indoorViewModel.currentlyWatershedSheet.getRoomStatus()) {
+            switch (homeViewModel.getCurrentlyWatershedSheet().getRoomStatus()) {
                 case Constants.roomState_OFF: //stop 0, manual 1, auto 2
                     binding.showFloorheatRunningModel.setText("运行模式                 停止模式");
                     break;
@@ -176,7 +177,7 @@ public class IndoorFragment extends Fragment {
             }
 
             //显示地暖的运行状态
-            if (indoorViewModel.currentlyWatershedSheet.isFloorValveOpen()) {
+            if (homeViewModel.getCurrentlyWatershedSheet().isFloorValveOpen()) {
                 binding.showFloorheatRunningStates.setText(R.string.floorvalveopen);
             } else {
                 binding.showFloorheatRunningStates.setText(R.string.floorvalveshut);
@@ -194,13 +195,13 @@ public class IndoorFragment extends Fragment {
 
         binding.airconditionDownTemperature.setOnClickListener(v -> {
             accessSetTemperature--;
-            indoorViewModel.temperatureToDevice(roomId, accessSetTemperature * 10);//fixme 假浮点？？
+            homeViewModel.temperatureToDevice(roomId, accessSetTemperature * 10);//fixme 假浮点？？
             binding.airconditionSetTemperatureNumber.setText(String.valueOf(accessSetTemperature));
             Toast.makeText(getContext(), roomName + "设置温度为" + accessSetTemperature + "℃", Toast.LENGTH_SHORT).show();
         });
         binding.airconditionUpTemperature.setOnClickListener(v -> {
             accessSetTemperature++;
-            indoorViewModel.temperatureToDevice(roomId, accessSetTemperature * 10);//fixme 假浮点？？
+            homeViewModel.temperatureToDevice(roomId, accessSetTemperature * 10);//fixme 假浮点？？
             binding.airconditionSetTemperatureNumber.setText(String.valueOf(accessSetTemperature));
             Toast.makeText(getContext(), roomName + "设置温度为" + accessSetTemperature + "℃", Toast.LENGTH_SHORT).show();
         });
@@ -209,15 +210,15 @@ public class IndoorFragment extends Fragment {
         binding.radioGroupAirconditionSetModel.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId) {
                 case R.id.radioButton_aircondition_model_Off:
-                    indoorViewModel.roomstateToDevice(roomId, Constants.roomState_OFF);
+                    homeViewModel.roomstateToDevice(roomId, Constants.roomState_OFF);
                         //Toast.makeText(getContext(), roomName + "空调关闭模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                     break;
                 case R.id.radioButton_aircondition_mode_Manual:
-                    indoorViewModel.roomstateToDevice(roomId, Constants.roomState_MANUAL);
+                    homeViewModel.roomstateToDevice(roomId, Constants.roomState_MANUAL);
                         //Toast.makeText(getContext(), roomName + "空调手动模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                     break;
                 case R.id.radioButton_aircondition_mode_Automatic:
-                    indoorViewModel.roomstateToDevice(roomId, Constants.roomState_AUTO);
+                    homeViewModel.roomstateToDevice(roomId, Constants.roomState_AUTO);
                         //Toast.makeText(getContext(), roomName + "空调自动模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                     break;
                 //TODO:
@@ -230,19 +231,19 @@ public class IndoorFragment extends Fragment {
                  *      需要输入时间参数，预升温吗？
                  */
                 //case R.id.radioButton_aircondition_mode_Outside:
-                //    indoorViewModel.roomstateToDevice(roomId, Constants.roomState_OUTSIDE);
+                //    homeViewModel.roomstateToDevice(roomId, Constants.roomState_OUTSIDE);
                 //        Toast.makeText(getContext(), roomName + "空调外出模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                 //    break;
                 //case R.id.radioButton_aircondition_mode_Sleep:
-                //    indoorViewModel.roomstateToDevice(roomId, Constants.roomState_SLEEP);
+                //    homeViewModel.roomstateToDevice(roomId, Constants.roomState_SLEEP);
                 //        Toast.makeText(getContext(), roomName + "空调睡眠模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                 //    break;
                 case R.id.radioButton_aircondition_mode_Humidity:
-                    indoorViewModel.roomstateToDevice(roomId, Constants.roomState_DEHUMIDITY);
+                    homeViewModel.roomstateToDevice(roomId, Constants.roomState_DEHUMIDITY);
                     //Toast.makeText(getContext(), roomName + "空调除湿模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                     break;
                 //default:  //好像没有必要
-                //    indoorViewModel.fanSpeedRoomDevice(roomNameId, Constants.fanSpeed_STOP);
+                //    homeViewModel.fanSpeedRoomDevice(roomNameId, Constants.fanSpeed_STOP);
                 //    Toast.makeText(getContext(), roomName + "风机盘管停止运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                 //    break;
             }
@@ -253,23 +254,23 @@ public class IndoorFragment extends Fragment {
         binding.fanspeed.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId) {
                 case R.id.radioButtonlowfan:
-                    indoorViewModel.fanSpeedToDevice(roomId, Constants.fanSpeed_LOW);
+                    homeViewModel.fanSpeedToDevice(roomId, Constants.fanSpeed_LOW);
                         //Toast.makeText(getContext(), roomName + "风机盘管低风速运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                     break;
                 case R.id.radioButtonmiddlefan:
-                    indoorViewModel.fanSpeedToDevice(roomId, Constants.fanSpeed_MEDIUM);
+                    homeViewModel.fanSpeedToDevice(roomId, Constants.fanSpeed_MEDIUM);
                         //Toast.makeText(getContext(), roomName + "风机盘管中风速运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                     break;
                 case R.id.radioButtonhighfan:
-                    indoorViewModel.fanSpeedToDevice(roomId, Constants.fanSpeed_HIGH);
+                    homeViewModel.fanSpeedToDevice(roomId, Constants.fanSpeed_HIGH);
                         //Toast.makeText(getContext(), roomName + "风机盘管高风速运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                     break;
                 case R.id.radioButtonautofan:
-                    indoorViewModel.fanSpeedToDevice(roomId, Constants.fanSpeed_AUTO);
+                    homeViewModel.fanSpeedToDevice(roomId, Constants.fanSpeed_AUTO);
                         //Toast.makeText(getContext(), roomName + "风机盘管自动风速运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                     break;
                     //default:  //好像没有必要
-                    //    indoorViewModel.fanSpeedRoomDevice(roomNameId, Constants.fanSpeed_STOP);
+                    //    homeViewModel.fanSpeedRoomDevice(roomNameId, Constants.fanSpeed_STOP);
                     //    Toast.makeText(getContext(), roomName + "风机盘管停止运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                     //    break;
             }
@@ -280,13 +281,13 @@ public class IndoorFragment extends Fragment {
         //以下地暖的操作
         binding.floorheatTemperatureDown.setOnClickListener(v -> {
             accessSetTemperature--;
-            indoorViewModel.temperatureToDevice(roomId, accessSetTemperature * 10);//fixme 假浮点？？
+            homeViewModel.temperatureToDevice(roomId, accessSetTemperature * 10);//fixme 假浮点？？
             binding.floorheatTemperatureSetNumber.setText(String.valueOf(accessSetTemperature));
             Toast.makeText(getContext(), roomName + "设置温度为       " + accessSetTemperature + "℃", Toast.LENGTH_SHORT).show();
         });
         binding.floorheatTemperatureUp.setOnClickListener(v -> {
             accessSetTemperature++;
-            indoorViewModel.temperatureToDevice(roomId, accessSetTemperature * 10);//fixme 假浮点？？
+            homeViewModel.temperatureToDevice(roomId, accessSetTemperature * 10);//fixme 假浮点？？
             binding.floorheatTemperatureSetNumber.setText(String.valueOf(accessSetTemperature));
             Toast.makeText(getContext(), roomName + "设置温度为       " + accessSetTemperature + "℃", Toast.LENGTH_SHORT).show();
         });
@@ -295,15 +296,15 @@ public class IndoorFragment extends Fragment {
         binding.radioGroupFloorHeatSetModel.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId) {
                 case R.id.radioButton_floorheat_model_Off:
-                    indoorViewModel.roomstateToDevice(roomId, Constants.roomState_OFF);
+                    homeViewModel.roomstateToDevice(roomId, Constants.roomState_OFF);
                         //Toast.makeText(getContext(), roomName + "地暖关闭模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                     break;
                 case R.id.radioButton_floorheat_model_Manual:
-                    indoorViewModel.roomstateToDevice(roomId, Constants.roomState_MANUAL);
+                    homeViewModel.roomstateToDevice(roomId, Constants.roomState_MANUAL);
                         //Toast.makeText(getContext(), roomName + "地暖手动模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                     break;
                 case R.id.radioButton_floorheat_model_Automatic:
-                    indoorViewModel.roomstateToDevice(roomId, Constants.roomState_AUTO);
+                    homeViewModel.roomstateToDevice(roomId, Constants.roomState_AUTO);
                         //Toast.makeText(getContext(), roomName + "地暖自动模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                     break;
                 //TODO:
@@ -316,19 +317,19 @@ public class IndoorFragment extends Fragment {
                  *      需要输入时间参数，预升温吗？
                  */
                 //case R.id.radioButton_floorheat_model_Outside:
-                //    indoorViewModel.roomstateToDevice(roomId, Constants.roomState_OUTSIDE);
+                //    homeViewModel.roomstateToDevice(roomId, Constants.roomState_OUTSIDE);
                 //    Toast.makeText(getContext(), roomName + "地暖外出模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                 //    break;
                 //case R.id.radioButton_floorheat_model_Sleep:
-                //    indoorViewModel.roomstateToDevice(roomId, Constants.roomState_SLEEP);
+                //    homeViewModel.roomstateToDevice(roomId, Constants.roomState_SLEEP);
                 //    Toast.makeText(getContext(), roomName + "地暖睡眠模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                 //    break;
                 case R.id.radioButton_floorheat_model_Feast:
-                    indoorViewModel.roomstateToDevice(roomId, Constants.roomState_FEAST);
+                    homeViewModel.roomstateToDevice(roomId, Constants.roomState_FEAST);
                     Toast.makeText(getContext(), roomName + "地暖宴会模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                     break;
                 //default:  //好像没有必要
-                //    indoorViewModel.fanSpeedRoomDevice(roomNameId, Constants.fanSpeed_STOP);
+                //    homeViewModel.fanSpeedRoomDevice(roomNameId, Constants.fanSpeed_STOP);
                 //    Toast.makeText(getContext(), roomName + "风机盘管停止运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                 //    break;
             }

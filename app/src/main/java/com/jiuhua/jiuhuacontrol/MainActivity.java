@@ -5,18 +5,27 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
+import com.jiuhua.jiuhuacontrol.database.BasicInfoSheet;
+import com.jiuhua.jiuhuacontrol.database.SensorSheet;
 import com.jiuhua.jiuhuacontrol.repository.MyRepository;
+import com.jiuhua.jiuhuacontrol.ui.HomeViewModel;
+
+import java.util.List;
 
 //FIXME: Dev分支目标是基础的架构，软件架构，数据形式，存储方法，基本逻辑等等，不可见的，共性的。
 //TODO: 在云端使用数据库存储用户的数据，使用workmanager ?? 管理一个任务，定时去获取数据
 // 另外：app彻底终止和重启系统，非原生系统有可能终止workmanager的任务。时间不是很精确。
 //TODO: 功能添加：维护&运行的记录。更换配件（下拉列表？），保养（下拉列表？）
+
+//TODO: select * from sensors/fancoils/wateshed/boilers/heatpumps/ where location = "86518/xx/xx/RoomX" and ts > sqlite`s lateset timestamp
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;//首页需要appbar的一个实例，先新建一个句柄。
@@ -49,41 +58,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        MyRepository myRepository = MyRepository.getInstance(this.getApplicationContext());
-        String sql;
-        sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room1' and ts > now - 1h";
-        myRepository.requestTDengineData(sql);
-        sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room2' and ts > now - 1h";
-        myRepository.requestTDengineData(sql);
-        sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room3' and ts > now - 1h";
-        myRepository.requestTDengineData(sql);
-        sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room4' and ts > now - 1h";
-        myRepository.requestTDengineData(sql);
-        sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room5' and ts > now - 1h";
-        myRepository.requestTDengineData(sql);
-        sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room6' and ts > now - 1h";
-        myRepository.requestTDengineData(sql);
-        sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room7' and ts > now - 1h";
-        myRepository.requestTDengineData(sql);
-        sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room8' and ts > now - 1h";
-        myRepository.requestTDengineData(sql);
-        sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room9' and ts > now - 1h";
-        myRepository.requestTDengineData(sql);
-        sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room10' and ts > now - 1h";
-        myRepository.requestTDengineData(sql);
-        sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room11' and ts > now - 1h";
-        myRepository.requestTDengineData(sql);
-
-        sql = "select  * from homedevice.fancoils where location = '86518/yuxiuhuayuan/12-1-101/room1' and ts > now - 1h";
-        myRepository.requestTDengineData(sql);
-
-        sql = "select  * from homedevice.watersheds where location = '86518/yuxiuhuayuan/12-1-101/Room1' and ts > now - 1h";
-        myRepository.requestTDengineData(sql);
-        sql = "select  * from homedevice.watersheds where location = '86518/yuxiuhuayuan/12-1-101/Room2' and ts > now - 1h";
-        myRepository.requestTDengineData(sql);
-        sql = "select  * from homedevice.watersheds where location = '86518/yuxiuhuayuan/12-1-101/Room3' and ts > now - 1h";
-        myRepository.requestTDengineData(sql);
-
+        final MyRepository myRepository = MyRepository.getInstance(this.getApplicationContext());
 
     }
 

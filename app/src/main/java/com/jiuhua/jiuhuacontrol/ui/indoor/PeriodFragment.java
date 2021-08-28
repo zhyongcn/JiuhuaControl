@@ -14,6 +14,7 @@ import androidx.navigation.Navigation;
 
 import com.jiuhua.jiuhuacontrol.R;
 import com.jiuhua.jiuhuacontrol.database.DayPeriod;
+import com.jiuhua.jiuhuacontrol.ui.HomeViewModel;
 
 
 /**
@@ -22,7 +23,7 @@ import com.jiuhua.jiuhuacontrol.database.DayPeriod;
  */
 public class PeriodFragment extends Fragment {
 
-    private IndoorViewModel indoorViewModel;
+    private HomeViewModel homeViewModel;
 
     private int roomId;
     private String roomName;
@@ -39,9 +40,9 @@ public class PeriodFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_peroid, container, false);
-        indoorViewModel = new ViewModelProvider(this).get(IndoorViewModel.class);
-        indoorViewModel.setCurrentlyRoomId(roomId);
-        indoorViewModel.setCurrentlyRoomName(roomName);
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        homeViewModel.setCurrentlyRoomId(roomId);
+        homeViewModel.setCurrentlyRoomName(roomName);
         return view;
     }
 
@@ -51,9 +52,9 @@ public class PeriodFragment extends Fragment {
 
         myView = view.findViewById(R.id.myview);//从传入的view中获取
 
-        indoorViewModel.getAllLatestPeriodSheetsLive().observe(getViewLifecycleOwner(), periodSheets -> {
-            indoorViewModel.setAllLatestPeriodSheets(periodSheets); //viewmodel是单例，这个保存是有价值的。
-            myView.getWeeklyPeriod(indoorViewModel.currentRoomWeeklyPeriodSheet.getOneRoomWeeklyPeriod());
+        homeViewModel.getAllLatestPeriodSheetsLive().observe(getViewLifecycleOwner(), periodSheets -> {
+            homeViewModel.setAllLatestPeriodSheets(periodSheets); //viewmodel是单例，这个保存是有价值的。
+            myView.getWeeklyPeriod(homeViewModel.getCurrentRoomWeeklyPeriodSheet().getOneRoomWeeklyPeriod());
         });
 
         myView.setClickCrossListener((weekday, hour, dayPeriod) -> {

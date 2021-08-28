@@ -58,7 +58,7 @@ public class WatershedSheet {
     private int roomStatus; //Constants.roomState_XXXX
 
     public WatershedSheet() {
-        //empty public constructor for IndoorViewModel
+        //empty public constructor for HomeViewModel
     }
 
     @Ignore
