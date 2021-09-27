@@ -164,7 +164,16 @@
             app:layout_constraintTop_toTopOf="@+id/guideline21">
 
             <CheckBox
-                android:id="@+id/checkBox1"
+                android:id="@+id/checkBoxSun"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableBottom="?android:attr/listChoiceIndicatorMultiple"
+                android:gravity="center"
+                android:text="日" />
+
+            <CheckBox
+                android:id="@+id/checkBoxMon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@null"
@@ -173,7 +182,7 @@
                 android:text="一" />
 
             <CheckBox
-                android:id="@+id/checkBox2"
+                android:id="@+id/checkBoxTue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@null"
@@ -182,7 +191,7 @@
                 android:text="二" />
 
             <CheckBox
-                android:id="@+id/checkBox3"
+                android:id="@+id/checkBoxWed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@null"
@@ -191,7 +200,7 @@
                 android:text="三" />
 
             <CheckBox
-                android:id="@+id/checkBox4"
+                android:id="@+id/checkBoxThu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@null"
@@ -200,7 +209,7 @@
                 android:text="四" />
 
             <CheckBox
-                android:id="@+id/checkBox5"
+                android:id="@+id/checkBoxFri"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@null"
@@ -209,22 +218,13 @@
                 android:text="五" />
 
             <CheckBox
-                android:id="@+id/checkBox6"
+                android:id="@+id/checkBoxSat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@null"
                 android:drawableBottom="?android:attr/listChoiceIndicatorMultiple"
                 android:gravity="center"
                 android:text="六" />
-
-            <CheckBox
-                android:id="@+id/checkBox7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:button="@null"
-                android:drawableBottom="?android:attr/listChoiceIndicatorMultiple"
-                android:gravity="center"
-                android:text="日" />
         </LinearLayout>
 
         <Button

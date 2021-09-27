@@ -57,7 +57,7 @@ public class MyRepository {
         //获取操作数据库的办法实例
         myDao = myDatabase.getRoomDao();
         //获取数据库里的数据
-//        allBasicInfo = myDao.loadAllBasicInfo();  //相关于Dao里面的一个有问题的方法。好像不能用。
+        //allBasicInfo = myDao.loadAllBasicInfo();  //相关于Dao里面的一个有问题的方法。好像不能用。
         allBasicInfoLive = myDao.loadAllBasicInfoLive();
         allLatestPeriodSheetsLive = myDao.loadLatestPeriodSheetsLive();
 

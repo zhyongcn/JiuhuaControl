@@ -6,7 +6,7 @@ public class DayPeriod {
     int startMinuteStamp;  //the minutes after 0:00
     int endMinuteStamp;
     int tempreature; //default 240 ℃。
-    int weekday;//0 -- Monday
+    int weekday;//周日0开始
 
 
     public DayPeriod() {
@@ -33,7 +33,7 @@ public class DayPeriod {
     }
 
     public void setTempreature(int tempreature) {
-        this.tempreature = tempreature*10;//在这里转换为假浮点。
+        this.tempreature = tempreature;
     }
 
     public int getWeekday() {

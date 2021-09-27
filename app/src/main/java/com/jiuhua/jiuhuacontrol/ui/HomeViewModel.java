@@ -42,7 +42,7 @@ public class HomeViewModel extends AndroidViewModel {
     private int currentlyRoomId;
     private String currentlyRoomName;
 
-    //变量getter & setter 方法
+    //变量 getter & setter 方法
     public void setCurrentlyRoomId(int currentlyRoomId) {
         this.currentlyRoomId = currentlyRoomId;
     }
@@ -166,16 +166,25 @@ public class HomeViewModel extends AndroidViewModel {
 
     }
 
-    public void firstAskTDengine(){
+    public void firstAskTDengine() {
         //去云端获取数据
-        for (BasicInfoSheet basicInfoSheet :allLatestBasicInfoSheets) {
+        for (BasicInfoSheet basicInfoSheet : allLatestBasicInfoSheets) {
+            //TODO： 会重复输入数据！！数据库需要滤除重复数据。
             long ts = 0;
             for (SensorSheet sensorSheet : allLatestSensorSheets) {
                 if (sensorSheet.getRoomId() == basicInfoSheet.getRoomId()) {
                     ts = sensorSheet.getTimeStamp();
                 }
             }
-            if (ts > 16000000) {
+            if (ts < 1600000000) {
+                String sql = "select  * from homedevice.sensors where location = '"
+                        + Constants.mqtt_topic_prefix
+                        + basicInfoSheet.getRoomId()
+                        //+ "' and ts > now - 24h";
+                        + "'";//10万条数据也就一瞬间！
+                myRepository.requestTDengineData(sql);
+            }
+            if (ts > 1600000000) {
                 String sql = "select  * from homedevice.sensors where location = '"
                         + Constants.mqtt_topic_prefix
                         + basicInfoSheet.getRoomId()
@@ -184,15 +193,61 @@ public class HomeViewModel extends AndroidViewModel {
             }
         }
 
-//sql = "select  * from homedevice.sensors where location = '86518/yuxiuhuayuan/12-1-101/Room2' and ts > now - 1h";
-//myRepository.requestTDengineData(sql);
-//
-//sql = "select  * from homedevice.fancoils where location = '86518/yuxiuhuayuan/12-1-101/room1' and ts > now - 1h";
-//myRepository.requestTDengineData(sql);
-//
-//sql = "select  * from homedevice.watersheds where location = '86518/yuxiuhuayuan/12-1-101/Room1' and ts > now - 1h";
-//myRepository.requestTDengineData(sql);
+        //TODO: 暂时不考虑！！ 集中精力搞地暖的。！  TDengine中的数据可能有问题。
+        for (BasicInfoSheet basicInfoSheet : allLatestBasicInfoSheets) {
+            long ts = 0;
+            for (FancoilSheet fancoilSheet : allLatestFancoilSheets) {
+                if (fancoilSheet.getRoomId() == basicInfoSheet.getRoomId()) {
+                    ts = fancoilSheet.getTimeStamp();
+                }
+            }
+            if (ts < 1600000000) {
+                String sql = "select  * from homedevice.fancoils where location = '"
+                        + Constants.mqtt_topic_prefix
+                        + basicInfoSheet.getRoomId()
+                        //+ "' and ts > now - 24h";
+                        + "'";//10万条数据也就一瞬间！
+                myRepository.requestTDengineData(sql);
+            }
+            if (ts > 1600000000) {
+                String sql = "select  * from homedevice.fancoils where location = '"
+                        + Constants.mqtt_topic_prefix
+                        + basicInfoSheet.getRoomId()
+                        + "' and ts > " + ts + "000";
+                myRepository.requestTDengineData(sql);
+            }
+        }
 
+        for (BasicInfoSheet basicInfoSheet : allLatestBasicInfoSheets) {
+            long ts = 0;
+            for (WatershedSheet watershedSheet : allLatestWatershedSheets) {
+                if (watershedSheet.getRoomId() == basicInfoSheet.getRoomId()) {
+                    ts = watershedSheet.getTimeStamp();
+                }
+            }
+            if (ts < 1600000000) {
+                String sql = "select  * from homedevice.watersheds where location = '"
+                        + Constants.mqtt_topic_prefix
+                        + basicInfoSheet.getRoomId()//TODO: 分水器的roomid 还在调整
+                        //+ "' and ts > now - 24h";
+                        + "'";//10万条数据也就一瞬间！
+                myRepository.requestTDengineData(sql);
+            }
+            if (ts > 1600000000) {
+                String sql = "select  * from homedevice.watersheds where location = '"
+                        + Constants.mqtt_topic_prefix
+                        + basicInfoSheet.getRoomId()//TODO: 分水器的roomid 还在调整
+                        + "' and ts > " + ts + "000";
+                myRepository.requestTDengineData(sql);
+            }
+
+
+            //sql = "select  * from homedevice.fancoils where location = '86518/yuxiuhuayuan/12-1-101/room1' and ts > now - 1h";
+            //myRepository.requestTDengineData(sql);
+
+            //sql = "select  * from homedevice.watersheds where location = '86518/yuxiuhuayuan/12-1-101/Room1' and ts > now - 1h";
+            //myRepository.requestTDengineData(sql);
+        }
     }
 
     /**
@@ -200,14 +255,14 @@ public class HomeViewModel extends AndroidViewModel {
      * ***改变了需要改变的参数，其他参数不动。***
      */
     //传送房间设置状态
-    public void roomstateToDevice(int roomid, int roomstates) {
+    public void roomstateToDevice(int roomid, int roomstate) {
         String topic = Constants.mqtt_topic_prefix + roomid;
 
         Gson gson = new Gson();
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("roomId", roomid);
         jsonObject.addProperty("deviceType", Constants.deviceType_phone);//手机来的命令才接受。DHT，NTC模块接收不在mqttconfig里面？
-        jsonObject.addProperty("roomState", roomstates);
+        jsonObject.addProperty("roomState", roomstate);
         String msg = gson.toJson(jsonObject);
 
         CommandFromPhone commandFromPhone = new CommandFromPhone(topic, 1, msg, false);
@@ -359,8 +414,6 @@ public class HomeViewModel extends AndroidViewModel {
     public String loadRoomName(int roomid) {
         return myRepository.loadRoomName(roomid);
     }
-
-
 
 
 }

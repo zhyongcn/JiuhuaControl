@@ -27,14 +27,14 @@ public interface Constants {
     int deviceType_sendperiod = 8;
     int deviceType_mqttconfig = 9;
 
-    int Monday = 0;
-    int Tuesday = 1;
-    int Wednesday = 2;
-    int Thursday = 3;
-    int Friday = 4;
-    int Saturday = 5;
-    int Sunday = 6;
+    int Sunday = 0;
+    int Monday = 1;
+    int Tuesday = 2;
+    int Wednesday = 3;
+    int Thursday = 4;
+    int Friday = 5;
+    int Saturday = 6;
 
-    String mqtt_topic_prefix = "86518/yuxiuhuayuan/12-1-101/Room";//FIXME 到底用Room 还是 room ？？
+    String mqtt_topic_prefix = "86518/yuxiuhuayuan/12-1-101/room";
 
 }

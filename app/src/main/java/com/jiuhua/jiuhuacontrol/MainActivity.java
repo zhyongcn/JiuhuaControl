@@ -21,7 +21,7 @@ import com.jiuhua.jiuhuacontrol.ui.HomeViewModel;
 import java.util.List;
 
 //FIXME: Dev分支目标是基础的架构，软件架构，数据形式，存储方法，基本逻辑等等，不可见的，共性的。
-//TODO: 在云端使用数据库存储用户的数据，使用workmanager ?? 管理一个任务，定时去获取数据
+//TODO: 在云端使用数据库存储用户的数据，使用workmanager ?可靠? 管理一个任务，定时15min去获取数据
 // 另外：app彻底终止和重启系统，非原生系统有可能终止workmanager的任务。时间不是很精确。
 //TODO: 功能添加：维护&运行的记录。更换配件（下拉列表？），保养（下拉列表？）
 

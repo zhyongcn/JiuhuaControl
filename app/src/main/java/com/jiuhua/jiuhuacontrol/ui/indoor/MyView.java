@@ -86,7 +86,7 @@ public class MyView extends View {
         deepRectPaint.setAntiAlias(true);
     }
 
-    @SuppressLint("DefaultLocale")
+    @SuppressLint( "DefaultLocale" )
     @Override
     protected void onDraw(Canvas canvas) {
         float square = (screenWidth - 60) / 8;  //每个小方格的宽度
@@ -117,8 +117,8 @@ public class MyView extends View {
                     //写 时间段的名称
                     canvas.drawText(dayPeriod.getDayPeriodName(), square * (dayPeriod.getWeekday() + 1) + 90,
                             dayPeriod.getStartMinuteStamp() * square / 60 + 50, textPaintCross);
-                    //写 设置的温度
-                    canvas.drawText(String.format("%d ℃", dayPeriod.getTempreature()), square * (dayPeriod.getWeekday() + 1) + 80,
+                    //写 设置的温度,显示的时候把假浮点/10。
+                    canvas.drawText(String.format("%d ℃", dayPeriod.getTempreature() / 10), square * (dayPeriod.getWeekday() + 1) + 80,
                             dayPeriod.getStartMinuteStamp() * square / 60 + 90, textPaintCross);
                 }
             }
@@ -136,10 +136,12 @@ public class MyView extends View {
 
             if (checkedDayPeriod.getTempreature() != 0) {  //判断一下，去除未设置，0，的干扰
                 //写 时间段的名称
-                canvas.drawText(checkedDayPeriod.getDayPeriodName(), square * (checkedDayPeriod.getWeekday() + 1) + 90,
+                canvas.drawText(checkedDayPeriod.getDayPeriodName(),
+                        square * (checkedDayPeriod.getWeekday() + 1) + 90,
                         checkedDayPeriod.getStartMinuteStamp() * square / 60 + 50, textPaintCross);
-                //写 设置的温度
-                canvas.drawText(String.format("%d ℃", checkedDayPeriod.getTempreature()), square * (checkedDayPeriod.getWeekday() + 1) + 80,
+                //写 设置的温度  设置温度不会有浮点（零头）
+                canvas.drawText(String.format("%d ℃", checkedDayPeriod.getTempreature() / 10),
+                        square * (checkedDayPeriod.getWeekday() + 1) + 80,
                         checkedDayPeriod.getStartMinuteStamp() * square / 60 + 90, textPaintCross);
             }
         }
@@ -199,7 +201,7 @@ public class MyView extends View {
                 } else {
                     //不在时间段执行下面的代码。
                     if (clickedX == (int) ((x - 30) / square) && clickedX != 0 && clickedY == (int) (y / square)) {
-                        //传出clickedX 1是周一，7是周日  clieckedY 0是0:00  23是23:00
+                        //传出clickedX 1是周日开始，7是周六  clieckedY 0是0:00  23是23:00
                         //把信息传送到调用的fragment，由fragment去处理，解耦。这个类只管图形和传出图形相关的数据。
                         clickCrossListener.onClick(clickedX, clickedY, checkedDayPeriod);
                     } else {//第一次点击给 clickedX，clickedY 先赋值，提供给第二次比较，如果不同继续赋值。

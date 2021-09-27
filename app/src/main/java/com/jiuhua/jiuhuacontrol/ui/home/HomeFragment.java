@@ -68,6 +68,7 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onChanged(List<SensorSheet> sensorSheets) {
                         homepageAdapter.setAllLatestSensorSheets(sensorSheets);//设置数据
+                        //homeViewModel.setAllLatestSensorSheets(sensorSheets);
                         homepageAdapter.notifyDataSetChanged();  //去刷新视图，没有重复刷新，新数据来了，需要刷新。
                     }
                 });
@@ -77,6 +78,7 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onChanged(List<FancoilSheet> fancoilSheets) {
                         homepageAdapter.setAllLatestFancoilSheets(fancoilSheets);//设置数据
+                        //homeViewModel.setAllLatestFancoilSheets(fancoilSheets);
                         homepageAdapter.notifyDataSetChanged();  //去刷新视图
                     }
                 });
@@ -118,8 +120,8 @@ public class HomeFragment extends Fragment {
                     true, null, null, false));
             homeViewModel.insertRoomName(new BasicInfoSheet(11, "房间十一", 0, "麦克维尔", "FP-120", true, false,
                     true, null, null, false));
-            homeViewModel.insertRoomName(new BasicInfoSheet(12, "房间十二", 0, "麦克维尔", "FP-120", true, false,
-                    true, null, null, false));
+            //homeViewModel.insertRoomName(new BasicInfoSheet(12, "房间十二", 0, "麦克维尔", "FP-120", true, false,
+            //        true, null, null, false));
         });
 
         buttonOutHome.setOnClickListener(new View.OnClickListener() {

@@ -38,7 +38,7 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
     private int clickedHour;
     private int hour;
     private int minute;
-    private int temperature = 24; //default temperature is 24 ℃ 。
+    private int temperature = 50; //default temperature is 24 ℃ 。
     private int temp;//临时存储的温度值
 
     private DayPeriod dayPeriod = new DayPeriod();
@@ -46,7 +46,8 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
     private Context context;
     private HomeViewModel homeViewModel;
 
-    TextView textViewTitle, textViewPeriodName, textViewStartTime, textViewEndTime, textViewSettingTemperature, textViewRepeat;
+    TextView textViewTitle, textViewPeriodName, textViewStartTime, textViewEndTime,
+            textViewSettingTemperature, textViewRepeat;
     EditText editTextDayperiodName;
     CheckBox SunCheckBox, MonCheckBox, TueCheckBox, WedCheckBox, ThuCheckBox, FriCheckBox, SatCheckBox;
     Button buttonPeriodComfirm, buttonPeriodCancel;
@@ -64,7 +65,7 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
         //get the passed parameters
         roomId = getArguments().getInt("roomId");//bundle的参数接收：具体哪个房间。
         roomName = getArguments().getString("roomName");
-        clickedWeekday = getArguments().getInt("clickedweekday");//0是周一，6是周日
+        clickedWeekday = getArguments().getInt("clickedweekday");//周日0开始
         clickedHour = getArguments().getInt("clickedhour"); // 0是0:00  23是23:00
 
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
@@ -77,6 +78,7 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        //观察是什么意思？？
         homeViewModel.getAllLatestPeriodSheetsLive().observe(getViewLifecycleOwner(), periodSheets -> {
             homeViewModel.setAllLatestPeriodSheets(periodSheets); //viewmodel是单例，这个保存是有价值的。
         });
@@ -84,8 +86,8 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
         //创建一个DayPeriod，供将来写入，或者删除使用。
         dayPeriod.setStartMinuteStamp(clickedHour * 60);
         dayPeriod.setEndMinuteStamp((clickedHour + 1) * 60);
-        dayPeriod.setTempreature(temperature);
-        dayPeriod.setWeekday(clickedWeekday);
+        dayPeriod.setTempreature(temperature);//该周期的设置温度赋一个初始值240
+        dayPeriod.setWeekday(clickedWeekday);//把调用者送来的参数给这个日周期，周日0开始
 
         textViewTitle = view.findViewById(R.id.run_time_title);
 //        textViewPeriodName = view.findViewById(R.id.periodname);//仅提示而已，没有其他作用。
@@ -95,16 +97,19 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
         textViewSettingTemperature = view.findViewById(R.id.setPeroidTemperature);
 //        textViewRepeat = view.findViewById(R.id.repeat);//仅提示而已，没有其他作用。
 
-        MonCheckBox = view.findViewById(R.id.checkBox1);
-        TueCheckBox = view.findViewById(R.id.checkBox2);
-        WedCheckBox = view.findViewById(R.id.checkBox3);
-        ThuCheckBox = view.findViewById(R.id.checkBox4);
-        FriCheckBox = view.findViewById(R.id.checkBox5);
-        SatCheckBox = view.findViewById(R.id.checkBox6);
-        SunCheckBox = view.findViewById(R.id.checkBox7);
+        SunCheckBox = view.findViewById(R.id.checkBoxSun);
+        MonCheckBox = view.findViewById(R.id.checkBoxMon);
+        TueCheckBox = view.findViewById(R.id.checkBoxTue);
+        WedCheckBox = view.findViewById(R.id.checkBoxWed);
+        ThuCheckBox = view.findViewById(R.id.checkBoxThu);
+        FriCheckBox = view.findViewById(R.id.checkBoxFri);
+        SatCheckBox = view.findViewById(R.id.checkBoxSat);
 
         //依据传入的clickedweekday 当前缺省的星期，显示默认的勾选日。
         switch (clickedWeekday) {
+            case Constants.Sunday:
+                SunCheckBox.setChecked(true);
+                break;
             case Constants.Monday:
                 MonCheckBox.setChecked(true);
                 break;
@@ -123,9 +128,6 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
             case Constants.Saturday:
                 SatCheckBox.setChecked(true);
                 break;
-            case Constants.Sunday:
-                SunCheckBox.setChecked(true);
-                break;
         }
 
         buttonPeriodCancel = view.findViewById(R.id.buttonperiodcancel);
@@ -134,9 +136,19 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
         textViewTitle.setText(roomName + "运行时段设置");
         textViewStartTime.setText("开始时间：                 " + clickedHour + ":" + "00");
         textViewEndTime.setText("结束时间：                 " + valueOf(clickedHour + 1) + ":" + "00");
-        textViewSettingTemperature.setText("设置温度：                 " + temperature + " ℃");
+        textViewSettingTemperature.setText("设置温度：                 " + temperature / 10 + " ℃");
 
         //业务逻辑
+        SunCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            textViewStartTime.setClickable(false);
+            textViewEndTime.setClickable(false);
+            textViewSettingTemperature.setClickable(false);
+            if (isChecked) {
+                check_daily_fragment_add_to_Weekly_list(Constants.Sunday);
+            } else {
+                remove_daily_fragment_from_weekly_list(Constants.Sunday);
+            }
+        });
         MonCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             //如果点击了星期，就不能再设置开始时间，结束时间，温度参数了。
             textViewStartTime.setClickable(false);
@@ -198,16 +210,6 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
                 check_daily_fragment_add_to_Weekly_list(Constants.Saturday);
             } else {
                 remove_daily_fragment_from_weekly_list(Constants.Saturday);
-            }
-        });
-        SunCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            textViewStartTime.setClickable(false);
-            textViewEndTime.setClickable(false);
-            textViewSettingTemperature.setClickable(false);
-            if (isChecked) {
-                check_daily_fragment_add_to_Weekly_list(Constants.Sunday);
-            } else {
-                remove_daily_fragment_from_weekly_list(Constants.Sunday);
             }
         });
 
@@ -286,10 +288,10 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
                 builder3.setPositiveButton("设置", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        textViewSettingTemperature.setText("设置温度               " + valueOf(temp) + "  ℃");
-                        //这里必须要valueof（temp）否则会崩溃
-                        temperature = temp;
-                        dayPeriod.setTempreature(temp);
+                        //***这里必须要valueof（temp）否则会崩溃***
+                        textViewSettingTemperature.setText("设置温度:                    " + valueOf(temp) + "  ℃");
+                        temperature = temp * 10;
+                        dayPeriod.setTempreature(temp * 10);
                     }
                 });
                 builder3.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -301,14 +303,14 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
                 AlertDialog dialog3 = builder3.create();
                 View dialogView3 = View.inflate(context, R.layout.dialog_number, null);
                 NumberPicker numberPicker = dialogView3.findViewById(R.id.numberpicker);
-                numberPicker.setMaxValue(30);
+                numberPicker.setMaxValue(35);
                 numberPicker.setMinValue(5);
-                numberPicker.setValue(temp);
+                numberPicker.setValue(temperature / 10);
                 numberPicker.setOnValueChangedListener(this);
                 dialog3.setTitle("设置温度");
                 dialog3.setView(dialogView3);
                 dialog3.show();
-                temperature = temp;
+                temperature = temp * 10;
                 break;
             case R.id.buttonperiodcancel:
                 getActivity().onBackPressed();
@@ -318,7 +320,7 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
                     dayPeriod.setDayPeriodName(editTextDayperiodName.getText().toString());
                     //写入数据库
                     homeViewModel.insertPeriodSheet(roomId);
-                    //send MQTT message  TODO: 统一在传出环节使用假浮点？？
+                    //send MQTT message 后台统一使用假浮点
                     homeViewModel.periodToDevice(roomId, homeViewModel.getCurrentRoomWeeklyPeriodSheet().getOneRoomWeeklyPeriod());
                     getActivity().onBackPressed();
                 }
@@ -327,6 +329,7 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
 
     }
 
+    //只有值改变的时候才会调用这个方法。
     @Override
     public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
         this.temp = newVal;
@@ -339,7 +342,7 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
     }
 
     //检查周期是否冲突的方法
-    private int check_daily_fragment_add_to_Weekly_list(int weekday) {  //传入weekday指定是哪一天的周期。0 is Monday 。
+    private int check_daily_fragment_add_to_Weekly_list(int weekday) {  //传入weekday指定是哪一天的周期。。Sunday is zero to begin。
         Gson gson = new Gson();
         DayPeriod dayPeriodFromJson;
         String s = gson.toJson(this.dayPeriod);
@@ -349,7 +352,7 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
 
         int start = dayPeriodFromJson.getStartMinuteStamp();
         int end = dayPeriodFromJson.getEndMinuteStamp();
-        //小于15分钟的设置不予执行。Not do the period less than 15 minute.
+        //小于15分钟的设置不予执行。Not do the period short than 15 minute.
         if (dayPeriodFromJson.getEndMinuteStamp() - dayPeriodFromJson.getStartMinuteStamp() <= 15) {
             Toast.makeText(getContext(), "设置时间不对", LENGTH_SHORT).show();
             return -1;
@@ -385,15 +388,16 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
 
         //排序
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                homeViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod()[wday].sort(comparingInt(DayPeriod::getStartMinuteStamp));
+//                homeViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod()[wday]
+//                .sort(comparingInt(DayPeriod::getStartMinuteStamp));
 //            }
         //删除多于六个的
-//            if (homeViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod()[wday].size() > 6) {  //限制一天六个时段。Limited to six periods a day.
+        // 限制一天六个时段。//Limited to six periods a day.
+//            if (homeViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod()[wday].size() > 6) {
 //                homeViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod()[wday]
 //                        = homeViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod()[wday].subList(0,
 //                        homeViewModel.currentlyPeriodSheet.getOneRoomWeeklyPeriod()[wday].size() - 1);
 //            }
-
 
         return 1;
     }

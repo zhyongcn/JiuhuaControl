@@ -58,15 +58,15 @@ public class PeriodFragment extends Fragment {
         });
 
         myView.setClickCrossListener((weekday, hour, dayPeriod) -> {
-            int clickedweekday = weekday - 1;//调整为： 周一 0
+            int clickedweekday = weekday - 1;//周日 0 开始
             int clickedhour = hour;
             DayPeriod checkedDayPeriod = dayPeriod;
-            if (dayPeriod != null){
+            if (dayPeriod != null) {
                 String dn = dayPeriod.getDayPeriodName();
                 int st = dayPeriod.getStartMinuteStamp();
                 int et = dayPeriod.getEndMinuteStamp();
                 int tm = dayPeriod.getTempreature();
-                int we = dayPeriod.getWeekday();
+                int we = dayPeriod.getWeekday();//TODO:这里获取的weekday是不是周日0开始？？
                 Bundle bundle = new Bundle();
                 bundle.putInt("roomId", roomId);
                 bundle.putString("roomName", roomName);
@@ -74,14 +74,15 @@ public class PeriodFragment extends Fragment {
                 bundle.putInt("startMinute", st);
                 bundle.putInt("endMinute", et);
                 bundle.putInt("temperature", tm);
-                bundle.putInt("weekday", we);
+                bundle.putInt("weekday", we);//TODO: 上面获取的weekday是不是周日0开始？？
                 Navigation.findNavController(getView()).navigate(R.id.periodDeleteFragment, bundle);
-            }else {
+            } else {
                 Bundle bundle = new Bundle();
                 bundle.putInt("roomId", roomId);
                 bundle.putString("roomName", roomName);
 //                bundle.putString("roomName", roomName);
-                bundle.putInt("clickedweekday", clickedweekday);
+                //MyView.java送来的是周日1开始，现在传过去的周日0开始
+                bundle.putInt("clickedweekday", clickedweekday);//上面减过1了，不用再减了。
                 bundle.putInt("clickedhour", clickedhour);
                 Navigation.findNavController(getView()).navigate(R.id.peroidSettingFragment, bundle);
                 //id是目的地的id，不是动作的id，fuck,一天的时间。

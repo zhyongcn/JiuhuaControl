@@ -74,7 +74,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyView
         //display sensor`s temperature and humidity.
         for (SensorSheet sensorSheet:allLatestSensorSheets ) {
             if (sensorSheet.getRoomId() == basicInfoSheet.getRoomId()) {
-                holder.textViewRoomTemperature.setText("当前温度：" + sensorSheet.getCurrentTemperature() / 10 + " C");
+                holder.textViewRoomTemperature.setText("当前温度：" + sensorSheet.getCurrentTemperature() / 10 + " ℃");
                 holder.textViewRoomHumidity.setText("当前湿度：" + sensorSheet.getCurrentHumidity() / 10 + "%RH");
             }
         }
