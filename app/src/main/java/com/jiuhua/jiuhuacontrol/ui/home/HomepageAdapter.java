@@ -15,6 +15,7 @@ import com.jiuhua.jiuhuacontrol.database.BasicInfoSheet;
 import com.jiuhua.jiuhuacontrol.database.FancoilSheet;
 import com.jiuhua.jiuhuacontrol.database.SensorSheet;
 import com.jiuhua.jiuhuacontrol.Constants;
+import com.jiuhua.jiuhuacontrol.database.WatershedSheet;
 import com.jiuhua.jiuhuacontrol.ui.HomeViewModel;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyView
     private List<BasicInfoSheet> allBasicInfo = new ArrayList<>();
     private List<SensorSheet> allLatestSensorSheets = new ArrayList<>();
     private List<FancoilSheet> allLatestFancoilSheets = new ArrayList<>();
+    private List<WatershedSheet> allLatestWatershedSheets = new ArrayList<>();
     private HomeViewModel homeViewModel;
 
     public HomepageAdapter(HomeViewModel homeViewModel) {//构造函数
@@ -44,6 +46,10 @@ public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyView
         this.allLatestFancoilSheets = allLatestFancoilSheets;
     }
 
+    public void setAllLatestWatershedSheets(List<WatershedSheet> allLatestWatershedSheets) {
+        this.allLatestWatershedSheets = allLatestWatershedSheets;
+    }
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -51,6 +57,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyView
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         //view是在父图层的基础上再吹气子图层
         View itemView = layoutInflater.inflate(R.layout.home_cell_layout, parent, false);
+
         final MyViewHolder holder = new MyViewHolder(itemView);  //赋值于一个句柄以方便其他操作。
         //单个条目的整体点击。 跳转并传参。
         holder.itemView.setOnClickListener(v -> {
@@ -69,33 +76,55 @@ public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {//绑定时，position位置参数指定了使用哪个具体数据。
         //具体视图元素赋值。
-        BasicInfoSheet basicInfoSheet = allBasicInfo.get(position);
-        holder.textViewRoomName.setText(basicInfoSheet.getRoomName());
+        BasicInfoSheet currentBasicInfoSheet = allBasicInfo.get(position);
+        holder.textViewRoomName.setText(currentBasicInfoSheet.getRoomName());
         //display sensor`s temperature and humidity.
         for (SensorSheet sensorSheet:allLatestSensorSheets ) {
-            if (sensorSheet.getRoomId() == basicInfoSheet.getRoomId()) {
+            if (sensorSheet.getRoomId() == currentBasicInfoSheet.getRoomId()) {
                 holder.textViewRoomTemperature.setText("当前温度：" + sensorSheet.getCurrentTemperature() / 10 + " ℃");
                 holder.textViewRoomHumidity.setText("当前湿度：" + sensorSheet.getCurrentHumidity() / 10 + "%RH");
             }
         }
-        //display fancoil`s roomstatus
+        //display fancoil`s status
         for (FancoilSheet fancoilSheet:allLatestFancoilSheets) {
-            if (fancoilSheet.getRoomId() == basicInfoSheet.getRoomId()) {
+            if (fancoilSheet.getRoomId() == currentBasicInfoSheet.getRoomId()) {
                 switch (fancoilSheet.getRoomStatus()) {
                     case Constants.roomState_OFF:
-                        holder.textViewRoomStatus.setText("当前状态：停止运行");
+                        holder.textViewAirconditionStatus.setText("当前状态：空调停止运行");
                         break;
                     case Constants.roomState_MANUAL:
-                        holder.textViewRoomStatus.setText("当前状态：手动运行");
+                        holder.textViewAirconditionStatus.setText("当前状态：空调手动运行");
                         break;
                     case Constants.roomState_AUTO:
-                        holder.textViewRoomStatus.setText("当前状态：自动运行");
+                        holder.textViewAirconditionStatus.setText("当前状态：空调自动运行");
                         break;
                     case Constants.roomState_DEHUMIDITY:
-                        holder.textViewRoomStatus.setText("当前状态： 除湿运行");
+                        holder.textViewAirconditionStatus.setText("当前状态： 空调除湿运行");
                         break;
+                    //case Constants.roomState_FEAST:
+                    //    holder.textViewAirconditionStatus.setText("当前状态： 空调宴会运行");
+                    //    break;
+                }
+            }
+        }
+        //display floor`s status
+        for (WatershedSheet watershedSheet:allLatestWatershedSheets) {
+            if (watershedSheet.getRoomId() == currentBasicInfoSheet.getRoomId()) {
+                switch (watershedSheet.getRoomStatus()) {
+                    case Constants.roomState_OFF:
+                        holder.textViewFloorStatus.setText("当前状态：地暖停止运行");
+                        break;
+                    case Constants.roomState_MANUAL:
+                        holder.textViewFloorStatus.setText("当前状态：地暖手动运行");
+                        break;
+                    case Constants.roomState_AUTO:
+                        holder.textViewFloorStatus.setText("当前状态：地暖自动运行");
+                        break;
+                    //case Constants.roomState_DEHUMIDITY:
+                    //    holder.textViewFloorStatus.setText("当前状态： 地暖除湿运行");
+                    //    break;
                     case Constants.roomState_FEAST:
-                        holder.textViewRoomStatus.setText("当前状态： 宴会运行");
+                        holder.textViewFloorStatus.setText("当前状态： 地暖宴会运行");
                         break;
                 }
             }
@@ -109,13 +138,15 @@ public class HomepageAdapter extends RecyclerView.Adapter<HomepageAdapter.MyView
         return allBasicInfo.size();
     }
 
+
     static class MyViewHolder extends RecyclerView.ViewHolder {  //内部类实现了recyclerview的具体条目
-        TextView textViewRoomName, textViewRoomStatus, textViewRoomTemperature, textViewRoomHumidity;
+        TextView textViewRoomName, textViewAirconditionStatus, textViewFloorStatus, textViewRoomTemperature, textViewRoomHumidity;
 
         public MyViewHolder(@NonNull View itemView) {//构造方法，具体实现。
             super(itemView);
             textViewRoomName = itemView.findViewById(R.id.roomName);
-            textViewRoomStatus = itemView.findViewById(R.id.roomStatus);
+            textViewAirconditionStatus = itemView.findViewById(R.id.airconditionStatus);
+            textViewFloorStatus = itemView.findViewById(R.id.floorStatus);
             textViewRoomTemperature = itemView.findViewById(R.id.roomTemp);
             textViewRoomHumidity = itemView.findViewById(R.id.roomHumidity);
         }

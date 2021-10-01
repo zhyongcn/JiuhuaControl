@@ -11,6 +11,7 @@ import retrofit2.http.Url;
 
 public interface CloudServer {
 
+    //查询和上传数据都用它了，反正返回的格式差不多。
     @POST("rest/sqlt/")
     Call<TDReception> respoFormTDengine(@Header("Authorization") String authorization,
                                         @Body RequestBody sql);

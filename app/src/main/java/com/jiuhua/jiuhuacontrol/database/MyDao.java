@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.RoomWarnings;
 import androidx.room.Update;
@@ -16,8 +17,9 @@ import static androidx.room.OnConflictStrategy.REPLACE;
 public interface MyDao {
     /**
      * BasicInfoSheet的相关方法
+     * 配合索引使用 onConflict = OnConflictStrategy.IGNORE，保证不重复插入。
      */
-    @Insert
+    @Insert( onConflict = OnConflictStrategy.IGNORE )
     void insertBasicInfoSheet(BasicInfoSheet... basicInfoSheets);
 
     @Update
@@ -37,8 +39,9 @@ public interface MyDao {
 
     /**
      * SensorSheet的相关方法
+     * 配合索引使用 onConflict = OnConflictStrategy.IGNORE，保证不重复插入。
      */
-    @Insert
+    @Insert( onConflict = OnConflictStrategy.IGNORE )
     void insertSensorSheet(SensorSheet... sensorSheets); // ... 任意个该类型的参数，可以数组？？
 
     @Query( "DELETE FROM SensorSheet" )
@@ -46,7 +49,7 @@ public interface MyDao {
 
     @SuppressWarnings( RoomWarnings.CURSOR_MISMATCH )  //TODO  每次编译都出错，能正常运行，太烦了，才加上的。
     @Query( "SELECT * , MAX(timeStamp)  FROM SensorSheet WHERE device_type = :devicetypeId GROUP BY room_id" )
-    //only can use LiveData<> !   这里添加了Max（timestamp）一列，但是IndoorDB里面没有。
+        //only can use LiveData<> !   这里添加了Max（timestamp）一列，但是IndoorDB里面没有。
     LiveData<List<SensorSheet>> loadLatestSensorSheetsLive(int devicetypeId);
 
     /**
@@ -60,7 +63,7 @@ public interface MyDao {
 
     @SuppressWarnings( RoomWarnings.CURSOR_MISMATCH )  //TODO  每次编译都出错，能正常运行，太烦了，才加上的。
     @Query( "SELECT * , MAX(timeStamp)  FROM FancoilSheet GROUP BY room_id" )
-    //only can use LiveData<> !   这里添加了Max（timestamp）一列，但是IndoorDB里面没有。
+        //only can use LiveData<> !   这里添加了Max（timestamp）一列，但是IndoorDB里面没有。
     LiveData<List<FancoilSheet>> loadLatestFancoilSheetsLive();
 
     /**
@@ -74,7 +77,7 @@ public interface MyDao {
 
     @SuppressWarnings( RoomWarnings.CURSOR_MISMATCH )  //TODO  每次编译都出错，能正常运行，太烦了，才加上的。
     @Query( "SELECT * , MAX(timeStamp)  FROM WatershedSheet  GROUP BY room_id" )
-    //only can use LiveData<> !   这里添加了Max（timestamp）一列，但是IndoorDB里面没有。
+        //only can use LiveData<> !   这里添加了Max（timestamp）一列，但是IndoorDB里面没有。
     LiveData<List<WatershedSheet>> loadLatestWatershedSheetsLive();
 
     /**
@@ -88,7 +91,7 @@ public interface MyDao {
 
     @SuppressWarnings( RoomWarnings.CURSOR_MISMATCH )  //TODO  每次编译都出错，能正常运行，太烦了，才加上的。
     @Query( "SELECT * , MAX(timeStamp)  FROM EngineSheet WHERE device_type = :devicetypeId GROUP BY room_id" )
-    //only can use LiveData<> !   这里添加了Max（timestamp）一列，但是IndoorDB里面没有。
+        //only can use LiveData<> !   这里添加了Max（timestamp）一列，但是IndoorDB里面没有。
     LiveData<List<EngineSheet>> loadLatestEngineSheetsLive(int devicetypeId);
 
 //    /**TODO：其他表的操作方法需要使用。

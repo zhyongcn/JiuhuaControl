@@ -3,8 +3,8 @@ package com.jiuhua.jiuhuacontrol.database;
 public class DayPeriod {
 
     String dayPeriodName = "     ";
-    int startMinuteStamp;  //the minutes after 0:00
-    int endMinuteStamp;
+    int startMinutes;  //the minutes after 0:00
+    int endMinutes;
     int tempreature; //default 240 ℃。
     int weekday;//周日0开始
 
@@ -12,20 +12,20 @@ public class DayPeriod {
     public DayPeriod() {
     }
 
-    public int getStartMinuteStamp() {
-        return startMinuteStamp;
+    public int getStartMinutes() {
+        return startMinutes;
     }
 
-    public void setStartMinuteStamp(int startMinuteStamp) {
-        this.startMinuteStamp = startMinuteStamp;
+    public void setStartMinutes(int startMinutes) {
+        this.startMinutes = startMinutes;
     }
 
-    public int getEndMinuteStamp() {
-        return endMinuteStamp;
+    public int getEndMinutes() {
+        return endMinutes;
     }
 
-    public void setEndMinuteStamp(int endMinuteStamp) {
-        this.endMinuteStamp = endMinuteStamp;
+    public void setEndMinutes(int endMinutes) {
+        this.endMinutes = endMinutes;
     }
 
     public int getTempreature() {

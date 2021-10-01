@@ -4,16 +4,20 @@ package com.jiuhua.jiuhuacontrol.database;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Fts4;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 //fixme 添加关联外键，失败了吧！（是不是在线程的问题上，不能在主线程UI线程）
 
-@Entity
+//@Fts4
+@Entity(indices = @Index(value={"timestamp", "room_id"}, unique = true))
 public class SensorSheet {
 
     @PrimaryKey( autoGenerate = true )
+    //@ColumnInfo(name = "rowid")
     private long id;
     //
     @ColumnInfo( name = "timestamp" )
@@ -31,7 +35,7 @@ public class SensorSheet {
 
     @ColumnInfo(name = "device_id")
     @SerializedName("deviceId")
-    private String deviceId; //模块的MAC，
+    private String deviceId; //模块的clipId
     //
     @ColumnInfo( name = "current_temperature" )
     @SerializedName( "currentlyTemperature" )

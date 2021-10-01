@@ -68,7 +68,7 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onChanged(List<SensorSheet> sensorSheets) {
                         homepageAdapter.setAllLatestSensorSheets(sensorSheets);//设置数据
-                        //homeViewModel.setAllLatestSensorSheets(sensorSheets);
+                        homeViewModel.setAllLatestSensorSheets(sensorSheets);
                         homepageAdapter.notifyDataSetChanged();  //去刷新视图，没有重复刷新，新数据来了，需要刷新。
                     }
                 });
@@ -78,13 +78,15 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onChanged(List<FancoilSheet> fancoilSheets) {
                         homepageAdapter.setAllLatestFancoilSheets(fancoilSheets);//设置数据
-                        //homeViewModel.setAllLatestFancoilSheets(fancoilSheets);
+                        homeViewModel.setAllLatestFancoilSheets(fancoilSheets);
                         homepageAdapter.notifyDataSetChanged();  //去刷新视图
                     }
                 });
 
         homeViewModel.getAllLatestWatershedSheetsLive().observe(getViewLifecycleOwner(), watershedSheets -> {
+            homepageAdapter.setAllLatestWatershedSheets(watershedSheets);
             homeViewModel.setAllLatestWatershedSheets(watershedSheets);
+            homepageAdapter.notifyDataSetChanged();
         });
 
         homeViewModel.getAllLatestPeriodSheetsLive().observe(getViewLifecycleOwner(), periodSheets -> {
@@ -132,7 +134,6 @@ public class HomeFragment extends Fragment {
         });
         buttonECO.setOnClickListener(v -> {
             //pass
-            //TODO FIXME 究竟什么问题！！
             homeViewModel.firstAskTDengine();
         });
         buttonSleep.setOnClickListener(v -> {

@@ -18,7 +18,8 @@ import com.jiuhua.jiuhuacontrol.ui.HomeViewModel;
 
 
 /**
- * 一周运行时间段的显示和设置
+ * 一周运行时间段的显示和设置，
+ *   *** 周期就是周期，不需要关心冷热以及设备，设置的温度就代表了要求，各个设备可以自己判断 ***
  * A simple {@link Fragment} subclass.
  */
 public class PeriodFragment extends Fragment {
@@ -54,7 +55,7 @@ public class PeriodFragment extends Fragment {
 
         homeViewModel.getAllLatestPeriodSheetsLive().observe(getViewLifecycleOwner(), periodSheets -> {
             homeViewModel.setAllLatestPeriodSheets(periodSheets); //viewmodel是单例，这个保存是有价值的。
-            myView.getWeeklyPeriod(homeViewModel.getCurrentRoomWeeklyPeriodSheet().getOneRoomWeeklyPeriod());
+            myView.getWeeklyPeriod(homeViewModel.getCurrentRoomPeriodSheet().getOneRoomWeeklyPeriod());
         });
 
         myView.setClickCrossListener((weekday, hour, dayPeriod) -> {
@@ -63,8 +64,8 @@ public class PeriodFragment extends Fragment {
             DayPeriod checkedDayPeriod = dayPeriod;
             if (dayPeriod != null) {
                 String dn = dayPeriod.getDayPeriodName();
-                int st = dayPeriod.getStartMinuteStamp();
-                int et = dayPeriod.getEndMinuteStamp();
+                int st = dayPeriod.getStartMinutes();
+                int et = dayPeriod.getEndMinutes();
                 int tm = dayPeriod.getTempreature();
                 int we = dayPeriod.getWeekday();//TODO:这里获取的weekday是不是周日0开始？？
                 Bundle bundle = new Bundle();

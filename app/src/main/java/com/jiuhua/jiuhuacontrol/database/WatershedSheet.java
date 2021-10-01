@@ -30,7 +30,7 @@ public class WatershedSheet {
 
     @ColumnInfo(name = "device_id")
     @SerializedName("deviceId")
-    private String deviceId; //模块的MAC，
+    private String deviceId; //模块的deviceId，
     //
     @ColumnInfo(name = "setting_temperature")
     @SerializedName("settingTemperature")

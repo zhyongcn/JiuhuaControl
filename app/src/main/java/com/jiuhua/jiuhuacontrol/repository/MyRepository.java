@@ -79,7 +79,7 @@ public class MyRepository {
     }
 
     //请求云端数据库并写入本机数据库
-    public void requestTDengineData(String sql) {
+    public void readTDengine(String sql) {
         String credentials = "zz" + ":" + "700802";
         final String basic = "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
 
@@ -163,6 +163,30 @@ public class MyRepository {
         });
     }
 
+    //上传数据到云端数据库
+    public void updateTDengine(String sql) {
+        String credentials = "zz" + ":" + "700802";
+        final String basic = "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
+
+        RequestBody body = RequestBody.create(MediaType.parse("text/plain"), sql);
+
+        Call<TDReception> call = cloudServer.respoFormTDengine(basic, body);
+
+        call.enqueue(new Callback<TDReception>() {
+            @Override
+            public void onResponse(Call<TDReception> call, Response<TDReception> response) {
+                System.out.println("上传成功！");
+            }
+
+            @Override
+            public void onFailure(Call<TDReception> call, Throwable t) {
+                System.out.println("连接失败！");
+
+            }
+        });
+    }
+
+    //这是一个云端转发的方法，也可以传送周期到模块
     public void commandToModule(CommandFromPhone commandFromPhone) {
 
         //定义去联网的call 使用实例的哪一个方法&传入需要的参数。
@@ -184,12 +208,6 @@ public class MyRepository {
         });
     }
 
-    //period to device  send currentlyPeriodDB. 发送 currentlyPeriodDB 。
-    //TODO 改成云端转发, 逻辑改在别处，需要删除
-    public void periodToDevice(PeriodSheet periodSheet) {
-
-
-    }
 
     /**  ******实现 Dao 的所有方法******   */
     /**

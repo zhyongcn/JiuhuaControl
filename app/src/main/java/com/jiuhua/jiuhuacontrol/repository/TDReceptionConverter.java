@@ -96,8 +96,7 @@ public class TDReceptionConverter {
                             fancoilSheet.setCurrentFanStatus(Integer.valueOf(tdReception.getData()[i][j]));
                             break;
                         case "coilvalve":
-                            fancoilSheet.setCoilValveOpen(tdReception.getData()[i][j] == "0" ? false : true);
-//                            fancoilSheet.setCoilValveOpen(Integer.valueOf(tdReception.getData()[i][j]) == 0 ? false : true);
+                            fancoilSheet.setCoilValveOpen(Integer.valueOf(tdReception.getData()[i][j]) != 0);
                             break;
                         case "roomstate":
                             fancoilSheet.setRoomStatus(Integer.valueOf(tdReception.getData()[i][j]));
@@ -149,13 +148,15 @@ public class TDReceptionConverter {
                         case "settinghumidity":
                             watershedSheet.setSettingHumidity(Integer.valueOf(tdReception.getData()[i][j]));
                             break;
+                        //*** 传来0代表阀关，不懂字符非串的比较，转化为Integer比较，有点绕 ***
                         case "coilvalve"://TODO  暂时云端没有，也是枚举
-                            watershedSheet.setCoilValveOpen(tdReception.getData()[i][j] == "0" ? false : true);
+                            watershedSheet.setCoilValveOpen(Integer.valueOf(tdReception.getData()[i][j]) != 0);
                             break;
+                        //*** 传来0代表阀关，不懂字符非串的比较，转化为Integer比较，有点绕 ***
                         case "floorvalve":
-                            watershedSheet.setFloorValveOpen(tdReception.getData()[i][j] == "0" ? false : true);
+                            watershedSheet.setFloorValveOpen(Integer.valueOf(tdReception.getData()[i][j]) != 0);
                             break;
-                        case "roomState":
+                        case "roomstate":
                             watershedSheet.setRoomStatus(Integer.valueOf(tdReception.getData()[i][j]));
                             break;
                         //TODO location 如何使用？现在是topic，如何利用数据库在topic上。
@@ -206,7 +207,7 @@ public class TDReceptionConverter {
                             engineSheet.setSettingHumidity(Integer.valueOf(tdReception.getData()[i][j]));
                             break;
                         case "boilerstate"://枚举量
-                            engineSheet.setIsengineRuning(tdReception.getData()[i][j] == "0" ? false : true);
+                            engineSheet.setIsengineRuning(Integer.valueOf(tdReception.getData()[i][j]) != 0);
                             break;
                         case "roomstate"://TODO  暂时云端没有，也是枚举
                             engineSheet.setRoomState(Integer.valueOf(tdReception.getData()[i][j]));
@@ -225,7 +226,7 @@ public class TDReceptionConverter {
         return null;
     }
 
-    /** 周期的接收 */
+    /** 周期的接收 */    //TODO: 有必要吗？
 //    public static PeriodSheet[] toPeriodSheet(TDReception tdReception) {//FIXME
 //        if (tdReception.getStatus().equals("succ")) {
 //            int rows = Integer.valueOf(tdReception.getRows());
@@ -266,12 +267,12 @@ public class TDReceptionConverter {
 //                            periodSheet.setDeviceId(tdReception.getData()[i][j]);
 //                            break;
 ////                        case "coilvalve"://TODO 枚举量，注意如何转换的，传来的字符串是什么？？
-////                            engineSheet.setCoilValveOpen(Integer.valueOf(tdReception.getData()[i][j]));
+////                            engineSheet.setCoilValveOpen(Integer.valueOf(tdReception.getData()[i][j]) != 0);
 ////                            break;
 ////                        case "floorvalve"://TODO  暂时云端没有，也是枚举
-////                            engineSheet.setFloorValveOpen(Integer.valueOf(tdReception.getData()[i][j]));
+////                            engineSheet.setFloorValveOpen(Integer.valueOf(tdReception.getData()[i][j]) != 0);
 ////                            break;
-//                        //TODO 增加 boiler state， deviceID（使用原生REFUS？？的 MAC地址？？）？？
+//                        //TODO 增加 boiler state， deviceID（使用原生clipId）
 //                        //TODO location 如何使用？现在是topic，如何利用数据库在topic上。
 //
 //                        default:

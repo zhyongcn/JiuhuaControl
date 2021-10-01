@@ -14,6 +14,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.jiuhua.jiuhuacontrol.Constants;
 import com.jiuhua.jiuhuacontrol.R;
+import com.jiuhua.jiuhuacontrol.database.FancoilSheet;
+import com.jiuhua.jiuhuacontrol.database.PeriodSheet;
+import com.jiuhua.jiuhuacontrol.database.SensorSheet;
+import com.jiuhua.jiuhuacontrol.database.WatershedSheet;
 import com.jiuhua.jiuhuacontrol.databinding.FragmentIndoorBinding;
 import com.jiuhua.jiuhuacontrol.ui.HomeViewModel;
 
@@ -56,6 +60,27 @@ public class IndoorFragment extends Fragment {
         binding.setData(homeViewModel);
         binding.setLifecycleOwner(this);
 
+        for (SensorSheet sensorSheet : homeViewModel.getAllLatestSensorSheets()) {
+            if (sensorSheet.getRoomId() == roomId) {
+                homeViewModel.setCurrentlySensorSheet(sensorSheet);
+            }
+        }
+        for (FancoilSheet fancoilSheet : homeViewModel.getAllLatestFancoilSheets()) {
+            if (fancoilSheet.getRoomId() == roomId) {
+                homeViewModel.setCurrentlyFancoilSheet(fancoilSheet);
+            }
+        }
+        for (WatershedSheet watershedSheet : homeViewModel.getAllLatestWatershedSheets()) {
+            if (watershedSheet.getRoomId() == roomId) {
+                homeViewModel.setCurrentlyWatershedSheet(watershedSheet);
+            }
+        }
+        for (PeriodSheet periodSheet : homeViewModel.getAllLatestPeriodSheets()) {
+            if (periodSheet.getRoomId() == roomId) {
+                homeViewModel.setCurrentRoomPeriodSheet(periodSheet);
+            }
+        }
+
         homeViewModel.getAllLatestSensorSheetsLive().observe(getViewLifecycleOwner(), sensorSheets -> {
             homeViewModel.setAllLatestSensorSheets(sensorSheets);
             //****数据驱动界面改变,所以代码要放在fragment或者Activity里面。只处理界面****
@@ -66,6 +91,7 @@ public class IndoorFragment extends Fragment {
 
         homeViewModel.getAllLatestFancoilSheetsLive().observe(getViewLifecycleOwner(), fancoilSheets -> {
             homeViewModel.setAllLatestFancoilSheets(fancoilSheets);
+
             //****数据驱动界面改变,所以代码要放在fragment或者Activity里面。只处理界面****
 
             //以下空调相关显示
@@ -185,6 +211,7 @@ public class IndoorFragment extends Fragment {
 
         });
 
+
         return binding.getRoot(); // getRoot() solved databinding problem.
     }
 
@@ -211,15 +238,15 @@ public class IndoorFragment extends Fragment {
             switch (checkedId) {
                 case R.id.radioButton_aircondition_model_Off:
                     homeViewModel.roomstateToDevice(roomId, Constants.roomState_OFF);
-                        //Toast.makeText(getContext(), roomName + "空调关闭模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
+                    //Toast.makeText(getContext(), roomName + "空调关闭模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                     break;
                 case R.id.radioButton_aircondition_mode_Manual:
                     homeViewModel.roomstateToDevice(roomId, Constants.roomState_MANUAL);
-                        //Toast.makeText(getContext(), roomName + "空调手动模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
+                    //Toast.makeText(getContext(), roomName + "空调手动模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                     break;
                 case R.id.radioButton_aircondition_mode_Automatic:
                     homeViewModel.roomstateToDevice(roomId, Constants.roomState_AUTO);
-                        //Toast.makeText(getContext(), roomName + "空调自动模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
+                    //Toast.makeText(getContext(), roomName + "空调自动模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                     break;
                 //TODO:
                 /**本版不实现。壁挂炉版，两联供高级版再实现
@@ -255,24 +282,24 @@ public class IndoorFragment extends Fragment {
             switch (checkedId) {
                 case R.id.radioButtonlowfan:
                     homeViewModel.fanSpeedToDevice(roomId, Constants.fanSpeed_LOW);
-                        //Toast.makeText(getContext(), roomName + "风机盘管低风速运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
+                    //Toast.makeText(getContext(), roomName + "风机盘管低风速运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                     break;
                 case R.id.radioButtonmiddlefan:
                     homeViewModel.fanSpeedToDevice(roomId, Constants.fanSpeed_MEDIUM);
-                        //Toast.makeText(getContext(), roomName + "风机盘管中风速运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
+                    //Toast.makeText(getContext(), roomName + "风机盘管中风速运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                     break;
                 case R.id.radioButtonhighfan:
                     homeViewModel.fanSpeedToDevice(roomId, Constants.fanSpeed_HIGH);
-                        //Toast.makeText(getContext(), roomName + "风机盘管高风速运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
+                    //Toast.makeText(getContext(), roomName + "风机盘管高风速运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                     break;
                 case R.id.radioButtonautofan:
                     homeViewModel.fanSpeedToDevice(roomId, Constants.fanSpeed_AUTO);
-                        //Toast.makeText(getContext(), roomName + "风机盘管自动风速运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
+                    //Toast.makeText(getContext(), roomName + "风机盘管自动风速运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                     break;
-                    //default:  //好像没有必要
-                    //    homeViewModel.fanSpeedRoomDevice(roomNameId, Constants.fanSpeed_STOP);
-                    //    Toast.makeText(getContext(), roomName + "风机盘管停止运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
-                    //    break;
+                //default:  //好像没有必要
+                //    homeViewModel.fanSpeedRoomDevice(roomNameId, Constants.fanSpeed_STOP);
+                //    Toast.makeText(getContext(), roomName + "风机盘管停止运行", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
+                //    break;
             }
 
         });
@@ -297,15 +324,15 @@ public class IndoorFragment extends Fragment {
             switch (checkedId) {
                 case R.id.radioButton_floorheat_model_Off:
                     homeViewModel.roomstateToDevice(roomId, Constants.roomState_OFF);
-                        //Toast.makeText(getContext(), roomName + "地暖关闭模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
+                    //Toast.makeText(getContext(), roomName + "地暖关闭模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                     break;
                 case R.id.radioButton_floorheat_model_Manual:
                     homeViewModel.roomstateToDevice(roomId, Constants.roomState_MANUAL);
-                        //Toast.makeText(getContext(), roomName + "地暖手动模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
+                    //Toast.makeText(getContext(), roomName + "地暖手动模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                     break;
                 case R.id.radioButton_floorheat_model_Automatic:
                     homeViewModel.roomstateToDevice(roomId, Constants.roomState_AUTO);
-                        //Toast.makeText(getContext(), roomName + "地暖自动模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
+                    //Toast.makeText(getContext(), roomName + "地暖自动模式", Toast.LENGTH_SHORT).show();//点击就标出了，没有必要显示
                     break;
                 //TODO:
                 /**本版不实现。壁挂炉版，两联供高级版再实现

@@ -50,6 +50,7 @@ public class UserInfoFragment extends Fragment {
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("data", MODE_PRIVATE);
         userName = sharedPreferences.getString("userName", "姓名");
         userPhone = sharedPreferences.getString("userPhone", "手机号码");
+        //TODO: 安装地址拆分为86518，小区名，楼号单元户号
         userAddress = sharedPreferences.getString("userAddress", "安装地址");
         userEmail = sharedPreferences.getString("userEmail", "电子邮件");
         userWechat = sharedPreferences.getString("userWechat", "微信号");

@@ -1,9 +1,10 @@
 package com.jiuhua.jiuhuacontrol.database;
 
 
-/*这张表把room表的数据一小时一次加平均，*/
+/*这张表把 room 表的数据一小时一次加平均，*/
+//FIXME: 几张长时间表，还是一张长时间表，待定。。。几张灵活一些
 //TODO 计算时间匹配，风量，开阀时间，平均温度湿度，需要在其他地方。
-//TODO 一小时填表一次，还是三个月填表一次？？
+//TODO：计算量不大，使用workermanager一周计算一次来填表。
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

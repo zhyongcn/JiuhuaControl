@@ -10,11 +10,9 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.google.gson.Gson;
 import com.jiuhua.jiuhuacontrol.database.DayPeriod;
 
 import java.util.List;
-import java.util.StringTokenizer;
 
 import static android.view.View.MeasureSpec.getSize;
 
@@ -105,9 +103,9 @@ public class MyView extends View {
         if (weeklyPeriod != null) {//读取null对象依然是问题。
             for (DayPeriod dayPeriod : weeklyPeriod) {
                 canvas.drawRoundRect(square * (dayPeriod.getWeekday() + 1) + 30,
-                        dayPeriod.getStartMinuteStamp() * square / 60,
+                        dayPeriod.getStartMinutes() * square / 60,
                         square * (dayPeriod.getWeekday() + 2) + 30,
-                        dayPeriod.getEndMinuteStamp() * square / 60,
+                        dayPeriod.getEndMinutes() * square / 60,
                         30,//倒角的数据 the parameter of chamfering
                         30,//圆角的数据 the argument of chamfering
                         rectPaint);
@@ -116,19 +114,19 @@ public class MyView extends View {
                 if (dayPeriod.getTempreature() != 0) {  //判断一下，去除未设置，0，的干扰
                     //写 时间段的名称
                     canvas.drawText(dayPeriod.getDayPeriodName(), square * (dayPeriod.getWeekday() + 1) + 90,
-                            dayPeriod.getStartMinuteStamp() * square / 60 + 50, textPaintCross);
+                            dayPeriod.getStartMinutes() * square / 60 + 50, textPaintCross);
                     //写 设置的温度,显示的时候把假浮点/10。
                     canvas.drawText(String.format("%d ℃", dayPeriod.getTempreature() / 10), square * (dayPeriod.getWeekday() + 1) + 80,
-                            dayPeriod.getStartMinuteStamp() * square / 60 + 90, textPaintCross);
+                            dayPeriod.getStartMinutes() * square / 60 + 90, textPaintCross);
                 }
             }
         }
 
         if (checkedDayPeriod != null) {
             canvas.drawRoundRect(square * (checkedDayPeriod.getWeekday() + 1) + 30,
-                    checkedDayPeriod.getStartMinuteStamp() * square / 60,
+                    checkedDayPeriod.getStartMinutes() * square / 60,
                     square * (checkedDayPeriod.getWeekday() + 2) + 30,
-                    checkedDayPeriod.getEndMinuteStamp() * square / 60,
+                    checkedDayPeriod.getEndMinutes() * square / 60,
                     20,//倒角的数据 the parameter of chamfering
                     20,//圆角的数据 the argument of chamfering
                     deepRectPaint);
@@ -138,11 +136,11 @@ public class MyView extends View {
                 //写 时间段的名称
                 canvas.drawText(checkedDayPeriod.getDayPeriodName(),
                         square * (checkedDayPeriod.getWeekday() + 1) + 90,
-                        checkedDayPeriod.getStartMinuteStamp() * square / 60 + 50, textPaintCross);
+                        checkedDayPeriod.getStartMinutes() * square / 60 + 50, textPaintCross);
                 //写 设置的温度  设置温度不会有浮点（零头）
                 canvas.drawText(String.format("%d ℃", checkedDayPeriod.getTempreature() / 10),
                         square * (checkedDayPeriod.getWeekday() + 1) + 80,
-                        checkedDayPeriod.getStartMinuteStamp() * square / 60 + 90, textPaintCross);
+                        checkedDayPeriod.getStartMinutes() * square / 60 + 90, textPaintCross);
             }
         }
 
@@ -184,8 +182,8 @@ public class MyView extends View {
                 for (DayPeriod dayPeriod : weeklyPeriod) {
                     if (x > square * (dayPeriod.getWeekday() + 1) + 30
                             && x < square * (dayPeriod.getWeekday() + 2) + 30
-                            && y > dayPeriod.getStartMinuteStamp() * square / 60
-                            && y < dayPeriod.getEndMinuteStamp() * square / 60) {
+                            && y > dayPeriod.getStartMinutes() * square / 60
+                            && y < dayPeriod.getEndMinutes() * square / 60) {
                         tempDayPeriod = dayPeriod;
                     }
                 }

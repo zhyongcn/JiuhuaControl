@@ -22,23 +22,37 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textColor="#000000"
+            android:textSize="16sp"
             android:textStyle="bold"
             tools:text="客厅" />
 
         <TextView
-            android:id="@+id/roomStatus"
+            android:id="@+id/airconditionStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="无设备"
+            android:text="空调运行状态"
             android:textColor="#000000"
+            android:textSize="16sp"
             android:textStyle="bold"
-            tools:text="无设备" />
+            tools:text="空调运行状态" />
+
+        <TextView
+            android:id="@+id/floorStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="地暖运行状态"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text="地暖运行状态" />
 
         <TextView
             android:id="@+id/roomTemp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAlignment="center"
             android:textColor="#000000"
+            android:textSize="16sp"
             android:textStyle="bold"
             tools:text="当前温度 18  C" />
 
@@ -46,7 +60,9 @@
             android:id="@+id/roomHumidity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAlignment="center"
             android:textColor="#000000"
+            android:textSize="16sp"
             android:textStyle="bold"
             tools:text="当前湿度  50%" />
 

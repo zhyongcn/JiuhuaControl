@@ -25,22 +25,24 @@ import java.util.Date;
 import java.util.List;
 
 public class HomeViewModel extends AndroidViewModel {
-
     MyRepository myRepository;
+
+    private int currentlyRoomId;
+    private String currentlyRoomName;
+    //所有房间的信息：
     List<BasicInfoSheet> allLatestBasicInfoSheets = new ArrayList<>();
     List<SensorSheet> allLatestSensorSheets = new ArrayList<>();   //room1,room2...`s currenttempreature .
     List<FancoilSheet> allLatestFancoilSheets = new ArrayList<>();
     List<WatershedSheet> allLatestWatershedSheets = new ArrayList<>();
     List<PeriodSheet> allLatestPeriodSheets = new ArrayList<>();   //room1,room2...`s period.
 
+    //当前房间的信息：（需要确认哪一个是当前房间）
     SensorSheet currentlySensorSheet = new SensorSheet();
     FancoilSheet currentlyFancoilSheet = new FancoilSheet();
     WatershedSheet currentlyWatershedSheet = new WatershedSheet();
-    PeriodSheet currentRoomWeeklyPeriodSheet;  //currently room`s one weekly period.
+    PeriodSheet currentRoomPeriodSheet;  //currently room`s one weekly period.
 
 
-    private int currentlyRoomId;
-    private String currentlyRoomName;
 
     //变量 getter & setter 方法
     public void setCurrentlyRoomId(int currentlyRoomId) {
@@ -99,12 +101,12 @@ public class HomeViewModel extends AndroidViewModel {
         this.currentlyWatershedSheet = currentlyWatershedSheet;
     }
 
-    public PeriodSheet getCurrentRoomWeeklyPeriodSheet() {
-        return currentRoomWeeklyPeriodSheet;
+    public PeriodSheet getCurrentRoomPeriodSheet() {
+        return currentRoomPeriodSheet;
     }
 
-    public void setCurrentRoomWeeklyPeriodSheet(PeriodSheet currentRoomWeeklyPeriodSheet) {
-        this.currentRoomWeeklyPeriodSheet = currentRoomWeeklyPeriodSheet;
+    public void setCurrentRoomPeriodSheet(PeriodSheet currentRoomPeriodSheet) {
+        this.currentRoomPeriodSheet = currentRoomPeriodSheet;
     }
 
     public int getCurrentlyRoomId() {
@@ -148,13 +150,13 @@ public class HomeViewModel extends AndroidViewModel {
         this.allLatestPeriodSheets = allLatestPeriodDBsLive;
         for (PeriodSheet periodSheet : allLatestPeriodSheets) {
             if (periodSheet.getRoomId() == currentlyRoomId) {
-                this.currentRoomWeeklyPeriodSheet = periodSheet;
+                this.currentRoomPeriodSheet = periodSheet;
             }
         }
-        if (currentRoomWeeklyPeriodSheet == null) { //如果迭代完成还没有被赋值，说明没有这个房间的数据，新建一个房间的基础数据
-            currentRoomWeeklyPeriodSheet = new PeriodSheet();
-            currentRoomWeeklyPeriodSheet.setRoomId(currentlyRoomId);
-            currentRoomWeeklyPeriodSheet.setOneRoomWeeklyPeriod(new ArrayList<>());
+        if (currentRoomPeriodSheet == null) { //如果迭代完成还没有被赋值，说明没有这个房间的数据，新建一个房间的基础数据
+            currentRoomPeriodSheet = new PeriodSheet();
+            currentRoomPeriodSheet.setRoomId(currentlyRoomId);
+            currentRoomPeriodSheet.setOneRoomWeeklyPeriod(new ArrayList<>());
         }
     }
 
@@ -167,87 +169,63 @@ public class HomeViewModel extends AndroidViewModel {
     }
 
     public void firstAskTDengine() {
-        //去云端获取数据
+        //去云端获取过去1小时的数据
+        //传感器
         for (BasicInfoSheet basicInfoSheet : allLatestBasicInfoSheets) {
-            //TODO： 会重复输入数据！！数据库需要滤除重复数据。
-            long ts = 0;
-            for (SensorSheet sensorSheet : allLatestSensorSheets) {
-                if (sensorSheet.getRoomId() == basicInfoSheet.getRoomId()) {
-                    ts = sensorSheet.getTimeStamp();
-                }
-            }
-            if (ts < 1600000000) {
-                String sql = "select  * from homedevice.sensors where location = '"
-                        + Constants.mqtt_topic_prefix
-                        + basicInfoSheet.getRoomId()
-                        //+ "' and ts > now - 24h";
-                        + "'";//10万条数据也就一瞬间！
-                myRepository.requestTDengineData(sql);
-            }
-            if (ts > 1600000000) {
-                String sql = "select  * from homedevice.sensors where location = '"
-                        + Constants.mqtt_topic_prefix
-                        + basicInfoSheet.getRoomId()
-                        + "' and ts > " + ts + "000";
-                myRepository.requestTDengineData(sql);
-            }
+            String sql = "select  * from homedevice.sensors where location = '"
+                    + Constants.mqtt_topic_prefix
+                    + basicInfoSheet.getRoomId()
+                    + "' and ts > now - 7d ";
+            myRepository.readTDengine(sql);
+        }
+        //风机盘管
+        for (BasicInfoSheet basicInfoSheet : allLatestBasicInfoSheets) {
+            String sql = "select  * from homedevice.fancoils where location = '"
+                    + Constants.mqtt_topic_prefix
+                    + basicInfoSheet.getRoomId()
+                    + "' and ts > now - 7d";
+            myRepository.readTDengine(sql);
+        }
+        //地暖分水器
+        for (BasicInfoSheet basicInfoSheet : allLatestBasicInfoSheets) {
+            String sql = "select  * from homedevice.watersheds where location = '"
+                    + Constants.mqtt_topic_prefix
+                    + basicInfoSheet.getRoomId()
+                    + "' and ts > now - 7d";
+            myRepository.readTDengine(sql);
         }
 
-        //TODO: 暂时不考虑！！ 集中精力搞地暖的。！  TDengine中的数据可能有问题。
-        for (BasicInfoSheet basicInfoSheet : allLatestBasicInfoSheets) {
-            long ts = 0;
-            for (FancoilSheet fancoilSheet : allLatestFancoilSheets) {
-                if (fancoilSheet.getRoomId() == basicInfoSheet.getRoomId()) {
-                    ts = fancoilSheet.getTimeStamp();
-                }
-            }
-            if (ts < 1600000000) {
-                String sql = "select  * from homedevice.fancoils where location = '"
-                        + Constants.mqtt_topic_prefix
-                        + basicInfoSheet.getRoomId()
-                        //+ "' and ts > now - 24h";
-                        + "'";//10万条数据也就一瞬间！
-                myRepository.requestTDengineData(sql);
-            }
-            if (ts > 1600000000) {
-                String sql = "select  * from homedevice.fancoils where location = '"
-                        + Constants.mqtt_topic_prefix
-                        + basicInfoSheet.getRoomId()
-                        + "' and ts > " + ts + "000";
-                myRepository.requestTDengineData(sql);
-            }
-        }
-
-        for (BasicInfoSheet basicInfoSheet : allLatestBasicInfoSheets) {
-            long ts = 0;
-            for (WatershedSheet watershedSheet : allLatestWatershedSheets) {
-                if (watershedSheet.getRoomId() == basicInfoSheet.getRoomId()) {
-                    ts = watershedSheet.getTimeStamp();
-                }
-            }
-            if (ts < 1600000000) {
-                String sql = "select  * from homedevice.watersheds where location = '"
-                        + Constants.mqtt_topic_prefix
-                        + basicInfoSheet.getRoomId()//TODO: 分水器的roomid 还在调整
-                        //+ "' and ts > now - 24h";
-                        + "'";//10万条数据也就一瞬间！
-                myRepository.requestTDengineData(sql);
-            }
-            if (ts > 1600000000) {
-                String sql = "select  * from homedevice.watersheds where location = '"
-                        + Constants.mqtt_topic_prefix
-                        + basicInfoSheet.getRoomId()//TODO: 分水器的roomid 还在调整
-                        + "' and ts > " + ts + "000";
-                myRepository.requestTDengineData(sql);
-            }
-
-
-            //sql = "select  * from homedevice.fancoils where location = '86518/yuxiuhuayuan/12-1-101/room1' and ts > now - 1h";
-            //myRepository.requestTDengineData(sql);
-
-            //sql = "select  * from homedevice.watersheds where location = '86518/yuxiuhuayuan/12-1-101/Room1' and ts > now - 1h";
-            //myRepository.requestTDengineData(sql);
-        }
+        //TODO: 获取周期？？ 有必要？？
+        //for (BasicInfoSheet basicInfoSheet : allLatestBasicInfoSheets) {
+        //    long ts = 0;
+        //    for (PeriodSheet watershedSheet : allLatestWatershedSheets) {
+        //        if (watershedSheet.getRoomId() == basicInfoSheet.getRoomId()) {
+        //            ts = watershedSheet.getTimeStamp();
+        //        }
+        //    }
+        //    //if (ts < 1600000000) {
+        //    //    String sql = "select  * from homedevice.watersheds where location = '"
+        //    //            + Constants.mqtt_topic_prefix
+        //    //            + basicInfoSheet.getRoomId()   //TODO: 分水器的roomid 还在调整
+        //    //            //+ "' and ts > now - 24h";
+        //    //            + "'";//10万条数据也就一瞬间！
+        //    //    myRepository.readTDengine(sql);
+        //    //}
+        //    //if (ts > 1600000000) {
+        //    //    String sql = "select  * from homedevice.watersheds where location = '"
+        //    //            + Constants.mqtt_topic_prefix
+        //    //            + basicInfoSheet.getRoomId()   //TODO: 分水器的roomid 还在调整
+        //    //            + "' and ts > " + ts + "000";
+        //    //    myRepository.readTDengine(sql);
+        //    //}
+        //
+        //        String sql = "select  * from homedevice.watersheds where location = '"
+        //                + Constants.mqtt_topic_prefix
+        //                + basicInfoSheet.getRoomId()   //TODO: 分水器的roomid 还在调整
+        //                + "' and ts > now - 1h";
+        //                //+ "'";//10万条数据也就一瞬间！
+        //        myRepository.readTDengine(sql);
+        //}
     }
 
     /**
@@ -339,11 +317,11 @@ public class HomeViewModel extends AndroidViewModel {
 
     //周期插入数据库
     public void insertPeriodSheet(int roomId) {
-        currentRoomWeeklyPeriodSheet.setId(currentRoomWeeklyPeriodSheet.getId() + allLatestPeriodSheets.size());
+        currentRoomPeriodSheet.setId(currentRoomPeriodSheet.getId() + allLatestPeriodSheets.size());
         //id是从数据库里取出的，加上有几个房间，不会冲掉数据。id不同，数据库认为不是一个数据
-        currentRoomWeeklyPeriodSheet.setRoomId(roomId);
-        currentRoomWeeklyPeriodSheet.setTimeStamp(new Date().getTime() / 1000);  //这个方法得到的是毫秒，this method return ms。
-        myRepository.insertPeriodSheet(currentRoomWeeklyPeriodSheet);
+        currentRoomPeriodSheet.setRoomId(roomId);
+        currentRoomPeriodSheet.setTimeStamp(new Date().getTime() / 1000);  //这个方法得到的是毫秒，this method return ms。
+        myRepository.insertPeriodSheet(currentRoomPeriodSheet);
     }
 
     //把周期传递给模块 period[15][3]  一个星期的有必要。
@@ -352,14 +330,14 @@ public class HomeViewModel extends AndroidViewModel {
 
         Gson gson = new Gson();
 
-        currentRoomWeeklyPeriodSheet.setRoomId(roomid);
-        currentRoomWeeklyPeriodSheet.setTimeStamp(new Date().getTime() / 1000);//没有必要
-        currentRoomWeeklyPeriodSheet.setOneRoomWeeklyPeriod(dayPeriods);
+        currentRoomPeriodSheet.setRoomId(roomid);
+        currentRoomPeriodSheet.setTimeStamp(new Date().getTime() / 1000);//没有必要
+        currentRoomPeriodSheet.setOneRoomWeeklyPeriod(dayPeriods);
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                int roomid = currentRoomWeeklyPeriodSheet.getRoomId();
+                int roomid = currentRoomPeriodSheet.getRoomId();
 
                 for (int wd = 0; wd < 7; wd++) {
                     CommandPeriod commandPeriod = new CommandPeriod();
@@ -367,11 +345,11 @@ public class HomeViewModel extends AndroidViewModel {
                     int[][] temperatureArray = new int[15][3];
                     int k = 0;
                     commandPeriod.setWeekday(wd);
-                    for (int i = 0; i < currentRoomWeeklyPeriodSheet.getOneRoomWeeklyPeriod().size(); i++) {
-                        if (wd == currentRoomWeeklyPeriodSheet.getOneRoomWeeklyPeriod().get(i).getWeekday()) {
-                            temperatureArray[k][0] = currentRoomWeeklyPeriodSheet.getOneRoomWeeklyPeriod().get(i).getStartMinuteStamp();
-                            temperatureArray[k][1] = currentRoomWeeklyPeriodSheet.getOneRoomWeeklyPeriod().get(i).getEndMinuteStamp();
-                            temperatureArray[k][2] = currentRoomWeeklyPeriodSheet.getOneRoomWeeklyPeriod().get(i).getTempreature();
+                    for (int i = 0; i < currentRoomPeriodSheet.getOneRoomWeeklyPeriod().size(); i++) {
+                        if (wd == currentRoomPeriodSheet.getOneRoomWeeklyPeriod().get(i).getWeekday()) {
+                            temperatureArray[k][0] = currentRoomPeriodSheet.getOneRoomWeeklyPeriod().get(i).getStartMinutes();
+                            temperatureArray[k][1] = currentRoomPeriodSheet.getOneRoomWeeklyPeriod().get(i).getEndMinutes();
+                            temperatureArray[k][2] = currentRoomPeriodSheet.getOneRoomWeeklyPeriod().get(i).getTempreature();
                             k++;
                         }
                     }
@@ -381,6 +359,63 @@ public class HomeViewModel extends AndroidViewModel {
 
                     CommandFromPhone commandFromPhone = new CommandFromPhone(topic, 1, s, false);
                     myRepository.commandToModule(commandFromPhone);
+
+                    try {
+                        Thread.sleep(500);//延迟发送，太快模块接受不了。
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();//FIXME：***少写了“.start()”，基本概念不清害死人啊！！***
+
+    }
+
+    //把周期存储到云端数据库TDengine  period[15][3]  一个星期的有必要。 FIXME： 未完成的工作！！
+    //*** 表名使用：period+该房间的sensor的deviceId。可以保证唯一性不会重复了 ***
+    //就用sensor的deviceId，没有传感器其他没有必要安装。
+    public void periodToTDengine(int roomid, List<DayPeriod> dayPeriods) {
+        String location = Constants.mqtt_topic_prefix + roomid;
+
+        Gson gson = new Gson();
+
+        currentRoomPeriodSheet.setRoomId(roomid);
+        currentRoomPeriodSheet.setTimeStamp(new Date().getTime());
+        currentRoomPeriodSheet.setOneRoomWeeklyPeriod(dayPeriods);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int roomid = currentRoomPeriodSheet.getRoomId();
+                String sql = new String();
+                sql += "INSERT INTO period";
+                for (SensorSheet sensorSheet : allLatestSensorSheets) {
+                    if (sensorSheet.getRoomId() == roomid) {
+                        sql += sensorSheet.getDeviceId();//FIXME: 保证获取sensor的正确的deviceID
+                    }
+                }
+                sql += " USING periods TAGS (";
+                sql += location + ", NULL, NULL) VALUES (";
+                sql += new Date().getTime() + ",";
+                sql += roomid + ",";
+
+                for (int wd = 0; wd < 7; wd++) {
+                    sql += wd + ",";
+                    //commandPeriod.setWeekday(wd);
+                    for (int i = 0; i < currentRoomPeriodSheet.getOneRoomWeeklyPeriod().size(); i++) {
+                        if (wd == currentRoomPeriodSheet.getOneRoomWeeklyPeriod().get(i).getWeekday()) {
+                            sql += currentRoomPeriodSheet.getOneRoomWeeklyPeriod().get(i).getStartMinutes() + ",";
+                            sql += currentRoomPeriodSheet.getOneRoomWeeklyPeriod().get(i).getEndMinutes() + ",";
+                            sql += currentRoomPeriodSheet.getOneRoomWeeklyPeriod().get(i).getTempreature() + ",";
+                        }
+                    }
+
+                    sql = sql.substring(0, sql.length() - 1);
+                    sql += ")";
+
+                    System.out.println("测试的SQL是：\n" + sql);
+
+                    myRepository.updateTDengine(sql);
 
                     try {
                         Thread.sleep(500);//延迟发送，太快模块接受不了。

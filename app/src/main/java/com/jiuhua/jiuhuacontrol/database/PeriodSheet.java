@@ -32,7 +32,7 @@ public class PeriodSheet {
     @ColumnInfo(name = "period")
     @SerializedName("period")
     @TypeConverters({Converters.class})
-    private List<DayPeriod> oneRoomWeeklyPeriod;
+    private List<DayPeriod> oneRoomWeeklyPeriod;//好像是乱序，反正全部使用
 
     public PeriodSheet() {
     }

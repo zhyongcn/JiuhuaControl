@@ -3,18 +3,22 @@ package com.jiuhua.jiuhuacontrol.database;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity
+@Entity(indices = @Index(value={"roomId"}, unique = true))
 public class BasicInfoSheet {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private int Id;
+
     @ColumnInfo(name = "roomId")
     private int roomId;
+
     @ColumnInfo(name = "roomname")
     private String roomName;
+
     //温度校准，TODO:是否需要湿度校准？？
     @ColumnInfo(name = "temperatureSensorCalibration")
     private int temperatureSensorCalibration;
