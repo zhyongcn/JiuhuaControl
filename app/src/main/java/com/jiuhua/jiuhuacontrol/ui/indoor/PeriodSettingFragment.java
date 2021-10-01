@@ -79,6 +79,9 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //观察是什么意思？？
+        homeViewModel.getAllLatestSensorSheetsLive().observe(getViewLifecycleOwner(),sensorSheets -> {
+            homeViewModel.setAllLatestSensorSheets(sensorSheets);//保证viewmodel中的allLatestSensors列表里面有值
+        });
         homeViewModel.getAllLatestPeriodSheetsLive().observe(getViewLifecycleOwner(), periodSheets -> {
             homeViewModel.setAllLatestPeriodSheets(periodSheets); //viewmodel是单例，这个保存是有价值的。
         });
@@ -225,7 +228,7 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
 
 
     @Override
-    public void onClick(View v) {  //FIXME: 周期传送出去的温度不是 X10 的伪浮点！！
+    public void onClick(View v) {
         switch (v.getId()) {
             case R.id.starttime:
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);//新建构造器

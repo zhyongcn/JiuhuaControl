@@ -75,6 +75,7 @@ public class IndoorFragment extends Fragment {
                 homeViewModel.setCurrentlyWatershedSheet(watershedSheet);
             }
         }
+        //不是一定要在这里实现的！！！
         for (PeriodSheet periodSheet : homeViewModel.getAllLatestPeriodSheets()) {
             if (periodSheet.getRoomId() == roomId) {
                 homeViewModel.setCurrentRoomPeriodSheet(periodSheet);
@@ -85,8 +86,8 @@ public class IndoorFragment extends Fragment {
             homeViewModel.setAllLatestSensorSheets(sensorSheets);
             //****数据驱动界面改变,所以代码要放在fragment或者Activity里面。只处理界面****
             //显示当前温度
-            currentTemperature = homeViewModel.getCurrentlySensorSheet().getCurrentTemperature() / 10;
-            binding.currentTemperatureView.setText(currentTemperature + "℃");//假浮点需要除以10
+            currentTemperature = homeViewModel.getCurrentlySensorSheet().getCurrentTemperature();
+            binding.currentTemperatureView.setText(currentTemperature / 10 + "℃");//假浮点需要除以10
         });
 
         homeViewModel.getAllLatestFancoilSheetsLive().observe(getViewLifecycleOwner(), fancoilSheets -> {

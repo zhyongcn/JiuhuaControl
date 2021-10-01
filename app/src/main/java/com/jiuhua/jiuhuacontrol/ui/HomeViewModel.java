@@ -1,5 +1,6 @@
 package com.jiuhua.jiuhuacontrol.ui;
 
+
 import android.app.Application;
 import android.util.Log;
 
@@ -41,7 +42,6 @@ public class HomeViewModel extends AndroidViewModel {
     FancoilSheet currentlyFancoilSheet = new FancoilSheet();
     WatershedSheet currentlyWatershedSheet = new WatershedSheet();
     PeriodSheet currentRoomPeriodSheet;  //currently room`s one weekly period.
-
 
 
     //变量 getter & setter 方法
@@ -175,7 +175,7 @@ public class HomeViewModel extends AndroidViewModel {
             String sql = "select  * from homedevice.sensors where location = '"
                     + Constants.mqtt_topic_prefix
                     + basicInfoSheet.getRoomId()
-                    + "' and ts > now - 7d ";
+                    + "' and ts > now - 1h ";
             myRepository.readTDengine(sql);
         }
         //风机盘管
@@ -183,7 +183,7 @@ public class HomeViewModel extends AndroidViewModel {
             String sql = "select  * from homedevice.fancoils where location = '"
                     + Constants.mqtt_topic_prefix
                     + basicInfoSheet.getRoomId()
-                    + "' and ts > now - 7d";
+                    + "' and ts > now - 1h";
             myRepository.readTDengine(sql);
         }
         //地暖分水器
@@ -191,7 +191,7 @@ public class HomeViewModel extends AndroidViewModel {
             String sql = "select  * from homedevice.watersheds where location = '"
                     + Constants.mqtt_topic_prefix
                     + basicInfoSheet.getRoomId()
-                    + "' and ts > now - 7d";
+                    + "' and ts > now - 1h";
             myRepository.readTDengine(sql);
         }
 
@@ -387,27 +387,33 @@ public class HomeViewModel extends AndroidViewModel {
             @Override
             public void run() {
                 int roomid = currentRoomPeriodSheet.getRoomId();
-                String sql = new String();
-                sql += "INSERT INTO period";
-                for (SensorSheet sensorSheet : allLatestSensorSheets) {
-                    if (sensorSheet.getRoomId() == roomid) {
-                        sql += sensorSheet.getDeviceId();//FIXME: 保证获取sensor的正确的deviceID
-                    }
-                }
-                sql += " USING periods TAGS (";
-                sql += location + ", NULL, NULL) VALUES (";
-                sql += new Date().getTime() + ",";
-                sql += roomid + ",";
-
                 for (int wd = 0; wd < 7; wd++) {
+                    String sql = new String();
+                    sql += "INSERT INTO period";
+                    for (SensorSheet sensorSheet : allLatestSensorSheets) {
+                        if (sensorSheet.getRoomId() == roomid) {
+                            sql += sensorSheet.getDeviceId();
+                        }
+                    }
+                    sql += " USING periods TAGS ('";
+                    sql += location + "', NULL, NULL) VALUES (";
+                    sql += new Date().getTime() + ",";
+                    sql += roomid + ",";
+
                     sql += wd + ",";
-                    //commandPeriod.setWeekday(wd);
+                    //添加该星期几的周期
+                    int periodcount = 0;
                     for (int i = 0; i < currentRoomPeriodSheet.getOneRoomWeeklyPeriod().size(); i++) {
                         if (wd == currentRoomPeriodSheet.getOneRoomWeeklyPeriod().get(i).getWeekday()) {
                             sql += currentRoomPeriodSheet.getOneRoomWeeklyPeriod().get(i).getStartMinutes() + ",";
                             sql += currentRoomPeriodSheet.getOneRoomWeeklyPeriod().get(i).getEndMinutes() + ",";
                             sql += currentRoomPeriodSheet.getOneRoomWeeklyPeriod().get(i).getTempreature() + ",";
+                            periodcount++;
                         }
+                    }
+                    //补‘0’
+                    for (int i = 15; i > periodcount; i--) {
+                        sql += "0,0,0,";
                     }
 
                     sql = sql.substring(0, sql.length() - 1);
@@ -418,7 +424,7 @@ public class HomeViewModel extends AndroidViewModel {
                     myRepository.updateTDengine(sql);
 
                     try {
-                        Thread.sleep(500);//延迟发送，太快模块接受不了。
+                        Thread.sleep(500);//TODO: 有必要吗？？延迟发送，太快网络接受不了。？？
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
