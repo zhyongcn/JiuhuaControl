@@ -14,6 +14,7 @@ import androidx.room.PrimaryKey;
 
 @Entity(foreignKeys = @ForeignKey(entity = SensorSheet.class, parentColumns = "id",childColumns = "room_name_id"),
  indices = { @Index(value = {"room_name_id"})})
+//(indices = @Index(value={"timestamp", "room_id"}, unique = true))
 public class SensorLongTimeSheet {
 
     @PrimaryKey(autoGenerate = true)

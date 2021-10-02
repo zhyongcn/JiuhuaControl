@@ -4,6 +4,7 @@ package com.jiuhua.jiuhuacontrol.database;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 @Entity

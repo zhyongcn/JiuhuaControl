@@ -133,6 +133,22 @@ public class MyRepository {
                             }).start();
                         }
                     }
+
+                    //请求周期的数据  TODO：暂时不搞
+                    if (sql.contains("homedevice.periods")) {
+                        PeriodSheet[] periodSheets = TDReceptionConverter.toPeriodSheet(response.body());
+                        if (periodSheets != null) {
+                            new Thread(() -> {
+                                try {
+                                    insertPeriodSheet(periodSheets);//这里接收的是数组！！
+                                    Log.d("insert in sqlite", gson.toJson(periodSheets));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }).start();
+                        }
+                    }
+
                     //请求锅炉的数据
                     if (sql.contains("homedevice.boilers")) {
                         EngineSheet[] engineSheets = TDReceptionConverter.toEngineSheet(response.body());
@@ -148,7 +164,8 @@ public class MyRepository {
                         }
                     }
 
-                    //TODO heatpump
+                    //TODO: heatpump
+
                     response.body().show();//检查调试的功能
                 } catch (Exception e) {
                     e.printStackTrace();

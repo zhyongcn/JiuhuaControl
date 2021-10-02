@@ -168,8 +168,8 @@ public class HomeViewModel extends AndroidViewModel {
 
     }
 
+    //去云端获取过去1小时的数据
     public void firstAskTDengine() {
-        //去云端获取过去1小时的数据
         //传感器
         for (BasicInfoSheet basicInfoSheet : allLatestBasicInfoSheets) {
             String sql = "select  * from homedevice.sensors where location = '"
@@ -195,36 +195,13 @@ public class HomeViewModel extends AndroidViewModel {
             myRepository.readTDengine(sql);
         }
 
-        //TODO: 获取周期？？ 有必要？？
+        //获取周期 TODO:  暂时不搞
         //for (BasicInfoSheet basicInfoSheet : allLatestBasicInfoSheets) {
-        //    long ts = 0;
-        //    for (PeriodSheet watershedSheet : allLatestWatershedSheets) {
-        //        if (watershedSheet.getRoomId() == basicInfoSheet.getRoomId()) {
-        //            ts = watershedSheet.getTimeStamp();
-        //        }
-        //    }
-        //    //if (ts < 1600000000) {
-        //    //    String sql = "select  * from homedevice.watersheds where location = '"
-        //    //            + Constants.mqtt_topic_prefix
-        //    //            + basicInfoSheet.getRoomId()   //TODO: 分水器的roomid 还在调整
-        //    //            //+ "' and ts > now - 24h";
-        //    //            + "'";//10万条数据也就一瞬间！
-        //    //    myRepository.readTDengine(sql);
-        //    //}
-        //    //if (ts > 1600000000) {
-        //    //    String sql = "select  * from homedevice.watersheds where location = '"
-        //    //            + Constants.mqtt_topic_prefix
-        //    //            + basicInfoSheet.getRoomId()   //TODO: 分水器的roomid 还在调整
-        //    //            + "' and ts > " + ts + "000";
-        //    //    myRepository.readTDengine(sql);
-        //    //}
-        //
-        //        String sql = "select  * from homedevice.watersheds where location = '"
-        //                + Constants.mqtt_topic_prefix
-        //                + basicInfoSheet.getRoomId()   //TODO: 分水器的roomid 还在调整
-        //                + "' and ts > now - 1h";
-        //                //+ "'";//10万条数据也就一瞬间！
-        //        myRepository.readTDengine(sql);
+        //    String sql = "select  * from homedevice.periods where location = '"
+        //            + Constants.mqtt_topic_prefix
+        //            + basicInfoSheet.getRoomId()
+        //            + "' and ts > now - 1d";
+        //    myRepository.readTDengine(sql);
         //}
     }
 

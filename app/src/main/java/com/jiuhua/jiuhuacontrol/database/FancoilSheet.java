@@ -5,12 +5,13 @@ package com.jiuhua.jiuhuacontrol.database;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 //fixme 添加关联外键，失败了吧！（是不是在线程的问题上，不能在主线程UI线程）
 
-@Entity
+@Entity(indices = @Index(value={"timestamp", "room_id"}, unique = true))
 public class FancoilSheet {
 
     @PrimaryKey(autoGenerate = true)

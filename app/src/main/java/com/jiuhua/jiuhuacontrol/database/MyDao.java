@@ -55,7 +55,7 @@ public interface MyDao {
     /**
      * FancoilSheet的相关方法
      */
-    @Insert
+    @Insert( onConflict = OnConflictStrategy.IGNORE )
     void insertFancoilSheet(FancoilSheet... fancoilSheets); // ... 任意个该类型的参数，可以数组？？
 
     @Query( "DELETE FROM FancoilSheet" )
@@ -69,7 +69,7 @@ public interface MyDao {
     /**
      * WatershedSheet的相关方法
      */
-    @Insert
+    @Insert( onConflict = OnConflictStrategy.IGNORE )
     void insertWatershedSheet(WatershedSheet... watershedSheets); // ... 任意个该类型的参数，可以数组？？
 
     @Query( "DELETE FROM WatershedSheet" )
@@ -83,7 +83,7 @@ public interface MyDao {
     /**
      * EngineSheet的相关方法
      */
-    @Insert
+    @Insert( onConflict = OnConflictStrategy.IGNORE )
     void insertEngineSheet(EngineSheet... engineSheets); // ... 任意个该类型的参数，可以数组？？
 
     @Query( "DELETE FROM EngineSheet" )
@@ -110,7 +110,7 @@ public interface MyDao {
     /**
      * PeroidSheet的相关方法
      */
-    @Insert( onConflict = REPLACE )
+    @Insert( onConflict = OnConflictStrategy.IGNORE )
     void insertPeriodSheet(PeriodSheet... periodSheets);
 
     @Delete
@@ -125,7 +125,7 @@ public interface MyDao {
     /**
      * IndoorLongtimeSheet的相关方法
      */
-    @Insert
+    @Insert( onConflict = OnConflictStrategy.IGNORE )
     void insertSensorLongTimeSheet(SensorLongTimeSheet... sensorLongTimeSheets);
 
     //TODO 提取一周数据

@@ -3,6 +3,7 @@ package com.jiuhua.jiuhuacontrol.database;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
@@ -11,7 +12,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Entity(indices = @Index(value={"timestamp", "room_id"}, unique = true))
 public class PeriodSheet {
 
     @PrimaryKey(autoGenerate = true)
@@ -28,6 +29,17 @@ public class PeriodSheet {
                                     //    @ColumnInfo(name = roomName)//提高了复杂度！
                                     //    @SerializedName("roomName")
                                     //    private String roomName;
+
+
+    //@SerializedName( "deviceType" )
+    //@ColumnInfo( name = "device_type" )
+    ///** FANCOIL 0, FLOORWATERSHED 1, RADIATOR 2, BOILER 3, HEATPUMP 4, DHTSENSOR 5, NTCSENSOR 6, PHONE 7, sendPeriods 8*/
+    //private int deviceType;
+
+    //@ColumnInfo(name = "device_id")
+    //@SerializedName("deviceId")
+    //private String deviceId; //模块的clipId
+
     //存储周期数组
     @ColumnInfo(name = "period")
     @SerializedName("period")
@@ -74,4 +86,5 @@ public class PeriodSheet {
     public void setOneRoomWeeklyPeriod(List<DayPeriod> oneRoomWeeklyPeriod) {
         this.oneRoomWeeklyPeriod = oneRoomWeeklyPeriod;
     }
+
 }

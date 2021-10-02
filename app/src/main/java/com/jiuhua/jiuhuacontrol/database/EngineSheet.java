@@ -4,11 +4,12 @@ package com.jiuhua.jiuhuacontrol.database;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
-@Entity
+@Entity(indices = @Index(value={"timestamp", "room_id"}, unique = true))
 public class EngineSheet {
 
     @PrimaryKey(autoGenerate = true)
