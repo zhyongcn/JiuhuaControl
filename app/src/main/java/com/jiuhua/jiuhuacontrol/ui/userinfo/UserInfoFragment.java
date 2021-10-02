@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jiuhua.jiuhuacontrol.R;
 import com.jiuhua.jiuhuacontrol.database.BasicInfoSheet;
 import com.jiuhua.jiuhuacontrol.databinding.FragmentUserinfoBinding;
+import com.jiuhua.jiuhuacontrol.ui.HomeViewModel;
 
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class UserInfoFragment extends Fragment {
     private boolean isBoiler;
     private RadioButton radioButtonBoiler, radioButtonHeatpump;
 
-    private UserInfoViewModel userInfoViewModel;
+    private HomeViewModel homeViewModel;
     private FragmentUserinfoBinding binding;
 
     Button buttonAddUserInfo;
@@ -65,10 +66,10 @@ public class UserInfoFragment extends Fragment {
         mqtt_publish_topic_prefix = sharedPreferences.getString("mqtt_publish_topic_prefix", "");
         mqtt_client_id = sharedPreferences.getString("mqtt_client_id", "");
 
-        userInfoViewModel = new ViewModelProvider(this).get(UserInfoViewModel.class);
-        userInfoAdapter = new UserInfoAdapter(userInfoViewModel);
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        userInfoAdapter = new UserInfoAdapter(homeViewModel);
         binding = FragmentUserinfoBinding.inflate(LayoutInflater.from(getContext()), null, false); //从绑定类吹气
-        binding.setData(userInfoViewModel);
+        binding.setData(homeViewModel);
         binding.setLifecycleOwner(this);
 
         //增加一个房间
@@ -123,7 +124,7 @@ public class UserInfoFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(userInfoAdapter);
 
-        userInfoViewModel.getAllBasicInfoLive().observe(getViewLifecycleOwner(), new Observer<List<BasicInfoSheet>>() {
+        homeViewModel.getAllBasicInfoLive().observe(getViewLifecycleOwner(), new Observer<List<BasicInfoSheet>>() {
             @Override
             public void onChanged(List<BasicInfoSheet> basicInfoSheets) {
                 userInfoAdapter.setAllBasicInfo(basicInfoSheets);

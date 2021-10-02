@@ -2,17 +2,17 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+            <!--data 数据是否对应？？-->
     <data>
-
         <variable
             name="data"
-            type="com.jiuhua.jiuhuacontrol.ui.userinfo.UserInfoViewModel" />
-
+            type="com.jiuhua.jiuhuacontrol.ui.HomeViewModel" />
     </data>
 
 
     <ScrollView
         android:layout_height="match_parent"
+        android:layout_width="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -62,7 +62,7 @@ public class HomeFragment extends Fragment {
             //int temp = homepageAdapter.getItemCount();
             homepageAdapter.setAllBasicInfo(basicInfoSheets);   //设置数据
             homeViewModel.setAllBasicInfo(basicInfoSheets);
-            homepageAdapter.notifyDataSetChanged();     //没有必要两次去刷新视图
+            homepageAdapter.notifyDataSetChanged();     //去刷新视图
         });
 
         homeViewModel.getAllLatestSensorSheetsLive(Constants.deviceType_DHTsensor).observe(getViewLifecycleOwner(),

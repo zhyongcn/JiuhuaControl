@@ -16,6 +16,7 @@ import com.google.gson.JsonObject;
 import com.jiuhua.jiuhuacontrol.R;
 import com.jiuhua.jiuhuacontrol.database.BasicInfoSheet;
 import com.jiuhua.jiuhuacontrol.Constants;
+import com.jiuhua.jiuhuacontrol.ui.HomeViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,15 +25,15 @@ import java.util.List;
 public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.MyViewHolder> {
 
     private List<BasicInfoSheet> allBasicInfo = new ArrayList<>();
-    private UserInfoViewModel userInfoViewModel;
+    private HomeViewModel homeViewModel;
 
-    public UserInfoAdapter(UserInfoViewModel userInfoViewModel) {
-        this.userInfoViewModel = userInfoViewModel;
+    public UserInfoAdapter(HomeViewModel homeViewModel) {
+        this.homeViewModel = homeViewModel;
     }
 
     //在数据库里面插入一个新的房间，会自动获取主键
     public void addBasicInfo() {
-        userInfoViewModel.insertBasicInfo(new BasicInfoSheet());
+        homeViewModel.insertBasicInfo(new BasicInfoSheet());
     }
 
     public void setAllBasicInfo(List<BasicInfoSheet> allBasicInfo) {
@@ -122,20 +123,11 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.MyView
                     basicInfoSheet.setRadiatorType(holder.editTextRadiatorType.getText().toString());
                     basicInfoSheet.setRadiatorAuto(holder.checkBoxIsRadiatorValveAuto.isChecked());
 
-                    userInfoViewModel.updateBasicInfo(basicInfoSheet);
+                    homeViewModel.updateBasicInfo(basicInfoSheet);
                     Toast.makeText(v.getContext(), "你修改了房间信息", Toast.LENGTH_SHORT).show();
 
-                    //添加校准温湿度的逻辑。发送的MQTTmessage 的qos必须是1，或2，0是不行的。！！
-                    // 接收端的.disable_clean_session = 1 禁止清除会话，可以理解为mqtt的缓存
-                    Gson gson = new Gson();
-                    JsonObject jsonObject = new JsonObject(); //temp object for send temperatureSensorCalibration information.
-                    jsonObject.addProperty("roomId", basicInfoSheet.getRoomId());
-                    jsonObject.addProperty("deviceType", Constants.deviceType_phone);//手机来的命令才接受。DHT，NTC模块接收不在mqttconfig里面？
-                    //假浮点，在手机上转换，减轻模块压力。
-                    jsonObject.addProperty("adjustingTemperature", basicInfoSheet.getTemperatureSensorCalibration() * 10);
-                    String msg = gson.toJson(jsonObject);
-                    //TODO：需要走myRepository里的commandtodevice命令。?? 重启服务, 好像不是必要。
-//                    MQTTService.myPublishToDevice(basicInfoSheet.getRoomId(), msg, 1, false);
+                    homeViewModel.adjustingTemperatureToDevice(basicInfoSheet.getRoomId(),
+                            basicInfoSheet.getTemperatureSensorCalibration() * 10);
 
                 } else {
                     Toast.makeText(v.getContext(), "房间编号必须填写", Toast.LENGTH_SHORT).show();
@@ -150,7 +142,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.MyView
             public void onClick(View v) {
                 BasicInfoSheet basicInfoSheet = new BasicInfoSheet();
                 basicInfoSheet.setId(allBasicInfo.get(k).getId());//删除是通过主键 id 匹配的。
-                userInfoViewModel.deleteBasicInfo(basicInfoSheet);
+                homeViewModel.deleteBasicInfo(basicInfoSheet);
             }
         });
     }

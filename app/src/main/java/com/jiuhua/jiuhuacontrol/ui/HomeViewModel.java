@@ -268,6 +268,20 @@ public class HomeViewModel extends AndroidViewModel {
         CommandFromPhone commandFromPhone = new CommandFromPhone(topic, 1, msg, false);
         myRepository.commandToModule(commandFromPhone);
     }
+    //传送温度校准到模块
+    public void adjustingTemperatureToDevice(int roomid, int adjustingTemperature) {
+        String topic = Constants.mqtt_topic_prefix + roomid;
+
+        Gson gson = new Gson();
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("roomId", roomid);
+        jsonObject.addProperty("deviceType", Constants.deviceType_phone);
+        jsonObject.addProperty("adjustingTemperature", adjustingTemperature);
+        String msg = gson.toJson(jsonObject);
+
+        CommandFromPhone commandFromPhone = new CommandFromPhone(topic, 1, msg, false);
+        myRepository.commandToModule(commandFromPhone);
+    }
 
 
     /**
@@ -412,6 +426,23 @@ public class HomeViewModel extends AndroidViewModel {
     }
 
     //包装 Repository 里面的 Dao 方法
+    public void insertBasicInfo(BasicInfoSheet... basicInfoSheets) {
+        myRepository.insertBasicInfo(basicInfoSheets);
+    }
+
+    public void updateBasicInfo(BasicInfoSheet... basicInfoSheets) {
+        myRepository.updateBasicInfo(basicInfoSheets);
+    }
+
+    public void deleteBasicInfo(BasicInfoSheet... basicInfoSheets) {
+        myRepository.deleteBasicInfo(basicInfoSheets);
+    }
+
+    public LiveData<List<BasicInfoSheet>> getAllBasicInfoLive() {
+        return myRepository.getAllBasicInfoLive();
+    }
+
+    //room
     public void insertRoomName(BasicInfoSheet... basicInfoSheets) {
         myRepository.insertBasicInfo(basicInfoSheets);
     }
@@ -420,17 +451,14 @@ public class HomeViewModel extends AndroidViewModel {
         myRepository.deleteAllBasicInfo();
     }
 
-    public LiveData<List<BasicInfoSheet>> getAllBasicInfoLive() {
-        return myRepository.getAllBasicInfoLive();
-    }
-
-    public LiveData<List<SensorSheet>> getAllLatestSensorSheetsLive(int devicetypeId) {
-        return myRepository.getAllLatestSensorSheetsLive(devicetypeId);
-    }
-
     //获取普通房间的名字
     public String loadRoomName(int roomid) {
         return myRepository.loadRoomName(roomid);
+    }
+
+    //Sensor
+    public LiveData<List<SensorSheet>> getAllLatestSensorSheetsLive(int devicetypeId) {
+        return myRepository.getAllLatestSensorSheetsLive(devicetypeId);
     }
 
 
