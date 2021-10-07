@@ -79,7 +79,7 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //观察是什么意思？？
-        homeViewModel.getAllLatestSensorSheetsLive().observe(getViewLifecycleOwner(),sensorSheets -> {
+        homeViewModel.getAllLatestSensorSheetsLive().observe(getViewLifecycleOwner(), sensorSheets -> {
             homeViewModel.setAllLatestSensorSheets(sensorSheets);//保证viewmodel中的allLatestSensors列表里面有值
         });
         homeViewModel.getAllLatestPeriodSheetsLive().observe(getViewLifecycleOwner(), periodSheets -> {
@@ -321,12 +321,32 @@ public class PeriodSettingFragment extends Fragment implements View.OnClickListe
             case R.id.buttonperiodcomfirm:
                 if (check_daily_fragment_add_to_Weekly_list(clickedWeekday) == 1) {
                     dayPeriod.setDayPeriodName(editTextDayperiodName.getText().toString());
-                    //写入数据库
-                    homeViewModel.insertPeriodSheet(roomId);
-                    //send MQTT message 后台统一使用假浮点
-                    homeViewModel.periodToDevice(roomId, homeViewModel.getCurrentRoomPeriodSheet().getOneRoomWeeklyPeriod());
-                    //TODO: 上传TDengine，(手机的算力够，节约云端的算力。)
-                    homeViewModel.periodToTDengine(roomId, homeViewModel.getCurrentRoomPeriodSheet().getOneRoomWeeklyPeriod());
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //写入数据库
+                            homeViewModel.insertPeriodSheet(roomId, homeViewModel.getCurrentRoomPeriodSheet().getOneRoomWeeklyPeriod());
+                            try {
+                                Thread.sleep(500);//延迟发送，太快模块接受不了。
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            //send MQTT message 云端转发mqtt格式命令
+                            homeViewModel.periodToDevice(roomId, homeViewModel.getCurrentRoomPeriodSheet().getOneRoomWeeklyPeriod());
+                            try {
+                                Thread.sleep(500);//延迟发送，太快模块接受不了。
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            //上传TDengine，(手机的算力够，节约云端的算力。)
+                            homeViewModel.periodToTDengine(roomId, homeViewModel.getCurrentRoomPeriodSheet().getOneRoomWeeklyPeriod());
+                            try {
+                                Thread.sleep(500);//延迟发送，太快模块接受不了。
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
 
                     getActivity().onBackPressed();
                 }

@@ -142,12 +142,33 @@ public class PeriodDeleteFragment extends Fragment implements View.OnClickListen
                 break;
             case R.id.button_period_delete:
                 remove_daily_fragment_from_weekly_list(weekday);
-                //新的周期写入数据库
-                homeViewModel.insertPeriodSheet(roomId);
-                //send MQTT message
-                homeViewModel.periodToDevice(roomId, homeViewModel.getCurrentRoomPeriodSheet().getOneRoomWeeklyPeriod());
-                //TODO: 上传TDengine，(就在手机，节约云端的算力。)
-                homeViewModel.periodToTDengine(roomId, homeViewModel.getCurrentRoomPeriodSheet().getOneRoomWeeklyPeriod());
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //新的周期写入数据库
+                        homeViewModel.insertPeriodSheet(roomId, homeViewModel.getCurrentRoomPeriodSheet().getOneRoomWeeklyPeriod());
+                        try {
+                            Thread.sleep(500);//延迟发送，太快模块接受不了。
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        //send MQTT 云端转发mqtt格式命令
+                        homeViewModel.periodToDevice(roomId, homeViewModel.getCurrentRoomPeriodSheet().getOneRoomWeeklyPeriod());
+                        try {
+                            Thread.sleep(500);//延迟发送，太快模块接受不了。
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        //上传TDengine(就在手机，节约云端的算力。)
+                        homeViewModel.periodToTDengine(roomId, homeViewModel.getCurrentRoomPeriodSheet().getOneRoomWeeklyPeriod());
+                        try {
+                            Thread.sleep(500);//延迟发送，太快模块接受不了。
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }).start();
 
                 getActivity().onBackPressed();
                 break;

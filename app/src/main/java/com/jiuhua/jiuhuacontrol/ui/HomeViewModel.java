@@ -195,7 +195,7 @@ public class HomeViewModel extends AndroidViewModel {
             myRepository.readTDengine(sql);
         }
 
-        //获取周期 TODO:  暂时不搞
+        //获取周期 TODO:暂时不搞
         //for (BasicInfoSheet basicInfoSheet : allLatestBasicInfoSheets) {
         //    String sql = "select  * from homedevice.periods where location = '"
         //            + Constants.mqtt_topic_prefix
@@ -307,11 +307,10 @@ public class HomeViewModel extends AndroidViewModel {
     }
 
     //周期插入数据库
-    public void insertPeriodSheet(int roomId) {
-        currentRoomPeriodSheet.setId(currentRoomPeriodSheet.getId() + allLatestPeriodSheets.size());
-        //id是从数据库里取出的，加上有几个房间，不会冲掉数据。id不同，数据库认为不是一个数据
+    public void insertPeriodSheet(int roomId, List<DayPeriod> dayPeriods) {
         currentRoomPeriodSheet.setRoomId(roomId);
         currentRoomPeriodSheet.setTimeStamp(new Date().getTime() / 1000);  //这个方法得到的是毫秒，this method return ms。
+        currentRoomPeriodSheet.setOneRoomWeeklyPeriod(dayPeriods);
         myRepository.insertPeriodSheet(currentRoomPeriodSheet);
     }
 
@@ -371,7 +370,7 @@ public class HomeViewModel extends AndroidViewModel {
         Gson gson = new Gson();
 
         currentRoomPeriodSheet.setRoomId(roomid);
-        currentRoomPeriodSheet.setTimeStamp(new Date().getTime());
+        currentRoomPeriodSheet.setTimeStamp(new Date().getTime()/1000);
         currentRoomPeriodSheet.setOneRoomWeeklyPeriod(dayPeriods);
 
         new Thread(new Runnable() {
@@ -388,7 +387,7 @@ public class HomeViewModel extends AndroidViewModel {
                     }
                     sql += " USING periods TAGS ('";
                     sql += location + "', NULL, NULL) VALUES (";
-                    sql += new Date().getTime() + ",";
+                    sql += new Date().getTime() + "000,";
                     sql += roomid + ",";
 
                     sql += wd + ",";
