@@ -12,7 +12,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(indices = @Index(value={"timestamp", "room_id"}, unique = true))
+//@Entity(indices = @Index(value={"timestamp"}, unique = true))
+@Entity
 public class PeriodSheet {
 
     @PrimaryKey(autoGenerate = true)

@@ -109,8 +109,9 @@ public interface MyDao {
 
     /**
      * PeroidSheet的相关方法
+     * TODO: 没有索引，不知道为什么重复？？ 使用上可以。
      */
-    @Insert( onConflict = OnConflictStrategy.IGNORE )
+    @Insert( onConflict = OnConflictStrategy.REPLACE )
     void insertPeriodSheet(PeriodSheet... periodSheets);
 
     @Delete
