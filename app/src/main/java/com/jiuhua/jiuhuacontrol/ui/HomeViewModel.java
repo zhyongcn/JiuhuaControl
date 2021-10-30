@@ -288,7 +288,7 @@ public class HomeViewModel extends AndroidViewModel {
      * 包装 myRepository 里的方法：
      */
     public LiveData<List<SensorSheet>> getAllLatestSensorSheetsLive() {
-        return myRepository.getAllLatestSensorSheetsLive(Constants.deviceType_DHTsensor);
+        return myRepository.getAllLatestSensorSheetsLive();
     }
 
     public LiveData<List<FancoilSheet>> getAllLatestFancoilSheetsLive() {
@@ -454,11 +454,5 @@ public class HomeViewModel extends AndroidViewModel {
     public String loadRoomName(int roomid) {
         return myRepository.loadRoomName(roomid);
     }
-
-    //Sensor
-    public LiveData<List<SensorSheet>> getAllLatestSensorSheetsLive(int devicetypeId) {
-        return myRepository.getAllLatestSensorSheetsLive(devicetypeId);
-    }
-
 
 }

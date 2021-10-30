@@ -65,7 +65,7 @@ public class HomeFragment extends Fragment {
             homepageAdapter.notifyDataSetChanged();     //去刷新视图
         });
 
-        homeViewModel.getAllLatestSensorSheetsLive(Constants.deviceType_DHTsensor).observe(getViewLifecycleOwner(),
+        homeViewModel.getAllLatestSensorSheetsLive().observe(getViewLifecycleOwner(),
                 new Observer<List<SensorSheet>>() {
                     @Override
                     public void onChanged(List<SensorSheet> sensorSheets) {

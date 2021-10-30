@@ -48,9 +48,12 @@ public interface MyDao {
     void deleteAllSensorSheet();
 
     @SuppressWarnings( RoomWarnings.CURSOR_MISMATCH )  //TODO  每次编译都出错，能正常运行，太烦了，才加上的。
-    @Query( "SELECT * , MAX(timeStamp)  FROM SensorSheet WHERE device_type = :devicetypeId GROUP BY room_id" )
-        //only can use LiveData<> !   这里添加了Max（timestamp）一列，但是IndoorDB里面没有。
-    LiveData<List<SensorSheet>> loadLatestSensorSheetsLive(int devicetypeId);
+            //@Query( "SELECT * , MAX(timeStamp)  FROM SensorSheet WHERE device_type = :devicetypeId GROUP BY room_id" )
+            //only can use LiveData<> !   这里添加了Max（timestamp）一列，但是IndoorDB里面没有。
+            //LiveData<List<SensorSheet>> loadLatestSensorSheetsLive(int devicetypeId);
+    //**** Try 不使用deviceID ****
+    @Query( "SELECT * , MAX(timeStamp)  FROM SensorSheet  GROUP BY room_id" )
+    LiveData<List<SensorSheet>> loadLatestSensorSheetsLive();
 
     /**
      * FancoilSheet的相关方法

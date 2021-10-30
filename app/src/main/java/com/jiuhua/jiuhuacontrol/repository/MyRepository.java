@@ -269,9 +269,11 @@ public class MyRepository {
     }
 
     //SENSOR 获取房间传感器的全部信息
-    public LiveData<List<SensorSheet>> getAllLatestSensorSheetsLive(int devicetypeId) {
+    //public LiveData<List<SensorSheet>> getAllLatestSensorSheetsLive(int devicetypeId) {
+    public LiveData<List<SensorSheet>> getAllLatestSensorSheetsLive() {
         //获取房间的最新信息指定了参数设备类型，继续包装下去，让调用者决定设备的类型。
-        allLatestSensorSheetsLive = myDao.loadLatestSensorSheetsLive(devicetypeId);
+        //allLatestSensorSheetsLive = myDao.loadLatestSensorSheetsLive(devicetypeId);
+        allLatestSensorSheetsLive = myDao.loadLatestSensorSheetsLive();
         //一般查询系统会自动安排在非主线程，不需要自己写。其他的需要自己写非主线程。？？right？？
         return allLatestSensorSheetsLive;
     }
