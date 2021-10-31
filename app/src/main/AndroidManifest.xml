@@ -16,7 +16,7 @@
         android:icon="@drawable/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
-        android:label="热泵无MQTT"
+        android:label="热泵两联供"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".MainActivity"
