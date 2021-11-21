@@ -26,6 +26,7 @@ public interface Constants {
     int deviceType_phone = 7;
     int deviceType_sendperiod = 8;
     int deviceType_mqttconfig = 9;
+    int deviceType_toFancoils = 10;
 
     int Sunday = 0;
     int Monday = 1;
@@ -35,6 +36,7 @@ public interface Constants {
     int Friday = 5;
     int Saturday = 6;
 
-    String mqtt_topic_prefix = "86518/yuxiuhuayuan/12-1-101/room";
+    //String mqtt_topic_prefix = "86518/yuxiuhuayuan/12-1-101/room";
+    String mqtt_topic_prefix = "86518/xiangyifuyuan/5-1-502/room";
 
 }

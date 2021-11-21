@@ -210,13 +210,13 @@ public class HomeViewModel extends AndroidViewModel {
      * ***改变了需要改变的参数，其他参数不动。***
      */
     //传送房间设置状态
-    public void roomstateToDevice(int roomid, int roomstate) {
+    public void roomstateToDevice(int roomid, int roomstate, int deviceType) {
         String topic = Constants.mqtt_topic_prefix + roomid;
 
         Gson gson = new Gson();
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("roomId", roomid);
-        jsonObject.addProperty("deviceType", Constants.deviceType_phone);//手机来的命令才接受。DHT，NTC模块接收不在mqttconfig里面？
+        jsonObject.addProperty("deviceType", deviceType);//手机来的命令才接受。DHT，NTC模块接收不在mqttconfig里面？
         jsonObject.addProperty("roomState", roomstate);
         String msg = gson.toJson(jsonObject);
 
@@ -225,13 +225,13 @@ public class HomeViewModel extends AndroidViewModel {
     }
 
     //传送风速设置按钮
-    public void fanSpeedToDevice(int roomid, int fanSpeed) {
+    public void fanSpeedToDevice(int roomid, int fanSpeed, int deviceType) {
         String topic = Constants.mqtt_topic_prefix + roomid;
 
         Gson gson = new Gson();
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("roomId", roomid);
-        jsonObject.addProperty("deviceType", Constants.deviceType_phone);//手机来的命令才接受。DHT，NTC模块接收不在mqttconfig里面？
+        jsonObject.addProperty("deviceType", deviceType);//TODO: 这是一个不好的设计，取巧了。
         jsonObject.addProperty("settingFanSpeed", fanSpeed);
         String msg = gson.toJson(jsonObject);
 
@@ -240,13 +240,13 @@ public class HomeViewModel extends AndroidViewModel {
     }
 
     //传送设置温度
-    public void temperatureToDevice(int roomid, int temp) {
+    public void temperatureToDevice(int roomid, int temp, int deviceType) {
         String topic = Constants.mqtt_topic_prefix + roomid;
 
         Gson gson = new Gson();
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("roomId", roomid);
-        jsonObject.addProperty("deviceType", Constants.deviceType_phone);
+        jsonObject.addProperty("deviceType", deviceType);
         jsonObject.addProperty("settingTemperature", temp);
         String msg = gson.toJson(jsonObject);
 
@@ -255,13 +255,13 @@ public class HomeViewModel extends AndroidViewModel {
     }
 
     //传送设定湿度
-    public void humidityToDevice(int roomid, int humidity) {
+    public void humidityToDevice(int roomid, int humidity, int deviceType) {
         String topic = Constants.mqtt_topic_prefix + roomid;
 
         Gson gson = new Gson();
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("roomId", roomid);
-        jsonObject.addProperty("deviceType", Constants.deviceType_phone);
+        jsonObject.addProperty("deviceType", deviceType);
         jsonObject.addProperty("settingHumidity", humidity);
         String msg = gson.toJson(jsonObject);
 
