@@ -13,12 +13,12 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/summary"
         tools:context=".ui.indoor.IndoorFragment">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#25FFCE3B"
             android:orientation="vertical">
 
             <TextView
