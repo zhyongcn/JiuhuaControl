@@ -43,6 +43,11 @@ public class HomeViewModel extends AndroidViewModel {
     WatershedSheet currentlyWatershedSheet = new WatershedSheet();
     PeriodSheet currentRoomPeriodSheet;  //currently room`s one weekly period.
 
+    //构造方法
+    public HomeViewModel(@NonNull Application application) {
+        super(application);
+        this.myRepository = MyRepository.getInstance(application);
+    }
 
     //变量 getter & setter 方法
     public void setCurrentlyRoomId(int currentlyRoomId) {
@@ -113,6 +118,7 @@ public class HomeViewModel extends AndroidViewModel {
         return currentlyRoomId;
     }
 
+
     //当前所有传感器的状态以及当前房间的传感器状态
     public void setAllLatestSensorSheets(List<SensorSheet> allLatestSensorSheetsLive) {
         this.allLatestSensorSheets = allLatestSensorSheetsLive;
@@ -158,14 +164,6 @@ public class HomeViewModel extends AndroidViewModel {
             currentRoomPeriodSheet.setRoomId(currentlyRoomId);
             currentRoomPeriodSheet.setOneRoomWeeklyPeriod(new ArrayList<>());
         }
-    }
-
-    //构造方法
-    public HomeViewModel(@NonNull Application application) {
-        super(application);
-        this.myRepository = MyRepository.getInstance(application);
-
-
     }
 
     //去云端获取过去1小时的数据
@@ -268,6 +266,7 @@ public class HomeViewModel extends AndroidViewModel {
         CommandFromPhone commandFromPhone = new CommandFromPhone(topic, 1, msg, false);
         myRepository.commandToModule(commandFromPhone);
     }
+
     //传送温度校准到模块
     public void adjustingTemperatureToDevice(int roomid, int adjustingTemperature) {
         String topic = Constants.mqtt_topic_prefix + roomid;
@@ -299,6 +298,7 @@ public class HomeViewModel extends AndroidViewModel {
     public LiveData<List<WatershedSheet>> getAllLatestWatershedSheetsLive() {
         return myRepository.getAllLatestWatershedSheetsLive();
     }
+
 
     //***以下 period 周期相关***
     //从本地数据库获取最新的周期信息

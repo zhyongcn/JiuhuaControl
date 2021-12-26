@@ -21,7 +21,7 @@
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/menu_service" />
         <item
-            android:id="@+id/nav_partsstore"
+            android:id="@+id/upgradeFragment"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/menu_store" />
     </group>

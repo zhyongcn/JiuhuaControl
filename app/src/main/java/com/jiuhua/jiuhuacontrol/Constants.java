@@ -36,7 +36,13 @@ public interface Constants {
     int Friday = 5;
     int Saturday = 6;
 
-    //String mqtt_topic_prefix = "86518/yuxiuhuayuan/12-1-101/room";
-    String mqtt_topic_prefix = "86518/xiangyifuyuan/5-1-502/room";
+    String mqtt_topic_prefix = "86518/yuxiuhuayuan/12-1-101/room";
+    //String mqtt_topic_prefix = "86518/xiangyifuyuan/5-1-502/room";
+    String upgradeinfo_url = "http://81.68.136.113:8080/upgrade/versioninfo";
+
+    String UPGRADE_API_DOMAIN_DEBUG = "http://rapapi.org/mockjs/21104";
+    String UPGRADE_API_DOMAIN_RELEASE = "http://81.68.136.113:8080/upgrade/android.apk";
+
+    int UPGRADE_DELAY_TIME = 1000; //在首页延迟1s启动检测升级
 
 }

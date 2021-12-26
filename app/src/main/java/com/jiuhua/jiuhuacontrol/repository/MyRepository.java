@@ -5,21 +5,18 @@ import android.util.Base64;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.google.gson.Gson;
 import com.jiuhua.jiuhuacontrol.CommandFromPhone;
-import com.jiuhua.jiuhuacontrol.CommandPeriod;
-import com.jiuhua.jiuhuacontrol.Constants;
 import com.jiuhua.jiuhuacontrol.database.BasicInfoSheet;
 import com.jiuhua.jiuhuacontrol.database.EngineSheet;
 import com.jiuhua.jiuhuacontrol.database.FancoilSheet;
 import com.jiuhua.jiuhuacontrol.database.MyDao;
 import com.jiuhua.jiuhuacontrol.database.MyDatabase;
-import com.jiuhua.jiuhuacontrol.database.SensorSheet;
 import com.jiuhua.jiuhuacontrol.database.PeriodSheet;
+import com.jiuhua.jiuhuacontrol.database.SensorSheet;
 import com.jiuhua.jiuhuacontrol.database.WatershedSheet;
-import com.jiuhua.jiuhuacontrol.ui.HomeViewModel;
+import com.jiuhua.jiuhuacontrol.ui.upgrade.AppVersionInfo;
 
 import java.util.List;
 
@@ -49,6 +46,8 @@ public class MyRepository {
 
     private Retrofit retrofit;
     private CloudServer cloudServer;
+
+    final AppVersionInfo[] appVersionInfos = {new AppVersionInfo()};
 
 
     private MyRepository(Context context) {
@@ -91,6 +90,7 @@ public class MyRepository {
             @Override
             public void onResponse(Call<TDReception> call, Response<TDReception> response) {
                 try {//回来的数据不稳定，保护一下。
+
                     //请求传感器的数据
                     if (sql.contains("homedevice.sensors")) {
                         SensorSheet[] sensorSheetArray = TDReceptionConverter.toSensorSheet(response.body());
@@ -164,7 +164,7 @@ public class MyRepository {
                         }
                     }
 
-                    //TODO: heatpump
+                    //TODO: heatpump  暂时不搞
 
                     response.body().show();//检查调试的功能
                 } catch (Exception e) {
@@ -223,6 +223,27 @@ public class MyRepository {
             }
 
         });
+    }
+
+    //检查app升级的信息
+    public void upgrade(String fullurl) {
+        //统一使用这个cloudserver，网络获取也在这里（架构上清晰）
+        Call<AppVersionInfo> call = cloudServer.reposForUpgrade(fullurl);
+        call.enqueue(new Callback<AppVersionInfo>() {
+            @Override
+            public void onResponse(Call<AppVersionInfo> call, Response<AppVersionInfo> response) {
+                System.out.println("获取升级信息 success :) ok!  message is: " + response.body());
+                //以前的配置，retrofit2会自己转换。
+                appVersionInfos[0] = response.body();
+                //System.out.println("versioninfos[0].url  is: " + appVersionInfos[0].getDownloadUrl());
+            }
+
+            @Override
+            public void onFailure(Call<AppVersionInfo> call, Throwable t) {
+                System.out.println("获取升级信息 失败 :) ok!   failmessage is: " + t.toString());
+            }
+        });
+
     }
 
 
@@ -336,8 +357,6 @@ public class MyRepository {
     public LiveData<List<PeriodSheet>> getAllLatestPeriodSheetsLive() {
         return allLatestPeriodSheetsLive;
     }
-
-
 
 
 }

@@ -4,10 +4,10 @@ android {
     compileSdkVersion 30
     defaultConfig {
         applicationId "com.jiuhua.jiuhua_heatpump_simple"
-        minSdkVersion 22
+        minSdkVersion 22  //lollipop 5.1 棒棒糖
         targetSdkVersion 30
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures {
@@ -24,6 +24,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    buildToolsVersion '31.0.0 rc2'
 }
 
 dependencies {
@@ -73,5 +74,8 @@ dependencies {
 
     implementation project(':esptouch')
     implementation project(':esptouch-v2')
+
+    // upgrade框架，此依赖已包含下载框架。好像不可用，还是使用方法不对？？
+//    implementation 'com.github.thjolin321.android-upgrader:library:v1.0.0'
 
 }

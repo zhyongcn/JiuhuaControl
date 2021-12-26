@@ -182,7 +182,7 @@ public class IndoorFragment extends Fragment {
                     break;
                 case Constants.roomState_MANUAL:
                     binding.showFloorheatRunningModel.setText("运行模式                 手动模式");
-                    binding.showFloorheatRunningModel.setTextColor(0xFFFF0000);
+                    //binding.showFloorheatRunningModel.setTextColor(0xFFFF0000);
                     break;
                 case Constants.roomState_AUTO:
                     binding.showFloorheatRunningModel.setText("运行模式                 自动模式");

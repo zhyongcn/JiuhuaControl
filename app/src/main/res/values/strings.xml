@@ -21,7 +21,7 @@
     <string name="image">底纹图片</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="upgrade_fragment">现在没有更新！</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -35,7 +35,7 @@
     <string name="menu_equipment">配件</string>
     <string name="menu_esptouch">配置联网信息</string>
     <string name="menu_service">待建功能</string>
-    <string name="menu_store">待建功能</string>
+    <string name="menu_store">检查更新</string>
     <string name="communicate">Communicate</string>
     <string name="menu_share">待建功能</string>
     <string name="menu_send">待建功能</string>

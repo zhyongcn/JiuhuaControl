@@ -1,10 +1,12 @@
 package com.jiuhua.jiuhuacontrol.repository;
 
 import com.jiuhua.jiuhuacontrol.CommandFromPhone;
+import com.jiuhua.jiuhuacontrol.ui.upgrade.AppVersionInfo;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Url;
@@ -18,4 +20,8 @@ public interface CloudServer {
 
     @POST
     Call<String> reposForCommand(@Url String fullurl, @Body CommandFromPhone commandFromPhone);
+
+    @GET
+    Call<AppVersionInfo> reposForUpgrade(@Url String fullurl);
+
 }
