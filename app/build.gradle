@@ -4,7 +4,7 @@ android {
     compileSdkVersion 30
     defaultConfig {
         applicationId "com.jiuhua.jiuhua_heatpump_simple"
-        minSdkVersion 22  //lollipop 5.1 棒棒糖
+        minSdkVersion 21  //lollipop 5.1 棒棒糖
         targetSdkVersion 30
         versionCode 1
         versionName "1.0.0"

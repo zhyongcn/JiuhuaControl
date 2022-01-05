@@ -1,22 +1,30 @@
 package com.jiuhua.jiuhuacontrol.ui.upgrade;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.jiuhua.jiuhuacontrol.BuildConfig;
@@ -31,8 +39,6 @@ public class UpgradeFragment extends Fragment implements AppUpgrade {
     private final String TAG = getClass().getName();
     boolean isInit;
     private Context appContext;
-    //private DownloadReceiver downloaderReceiver = new DownloadReceiver();
-    //private NotificationClickReceiver notificationClickReceiver = new NotificationClickReceiver();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,12 +54,6 @@ public class UpgradeFragment extends Fragment implements AppUpgrade {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-        //TODO 检查 myRepository 的versions【0】，if null 显示现在没有更新。
-        //TODO 如果有，点击更新。
-        DownloadManager downloadManager = (DownloadManager) getContext().getSystemService(
-                Context.DOWNLOAD_SERVICE);
-
         init(appContext);
 
         return inflater.inflate(R.layout.fragment_upgrade, container, false);
@@ -67,14 +67,6 @@ public class UpgradeFragment extends Fragment implements AppUpgrade {
 
     @Override
     public void init(Context context) {
-        // App更新及增量更新使用示例, 框架不工作？？？
-        //Upgrader.with().start(new ApkUpdateBean.Builder()
-        //        .newApkUrl("完整apk下载链接")
-        //        .newApkVersionCode(2)
-        //        // 可选，可增多个，增量更新时使用
-        //        .addApkPatchBean(new ApkPatchBean(1, "增量文件链接"))
-        //        .build());
-
 
         if (isInit) {
             return;
@@ -82,17 +74,10 @@ public class UpgradeFragment extends Fragment implements AppUpgrade {
 
         appContext = context.getApplicationContext();
         isInit = true;
-        //appContext.registerReceiver(downloaderReceiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-        //appContext.registerReceiver(notificationClickReceiver, new IntentFilter(DownloadManager.ACTION_NOTIFICATION_CLICKED));
         //这里下载了个app
         DownloadUtils.builder()
                 .setContext(this.getContext())
-                .setLister(new IDownloadlister() {
-                    @Override
-                    public void success(Uri uri) {
-                        installApk();
-                    }
-                })
+                .setLister(uri -> installApk())
                 .download();
 
     }
@@ -102,65 +87,8 @@ public class UpgradeFragment extends Fragment implements AppUpgrade {
         if (!isInit) {
             return;
         }
-        //appContext.unregisterReceiver(downloaderReceiver);  //注销广播接收器
-        //appContext.unregisterReceiver(notificationClickReceiver);   //注销广播接收器
         isInit = false;
         appContext = null;
-    }
-
-    //@Override
-    //public void checkLatestVersion(Activity activity) {
-    //    //TODO something...
-    //}
-    //
-    //@Override
-    //public void checkLatestVersionBackground() {
-    //    //TODO something...
-    //}
-    //
-    //@Override
-    //public void foundLatestVersion(Activity activity) {
-    //    //TODO something...
-    //}
-
-
-    //private void moveApk(String apkName, String path) {
-    //
-    //    File file = new File(path);
-    //
-    //    if (file.exists()) {
-    //        file.delete();
-    //        moveApk(apkName, path);
-    //    } else {
-    //        try {
-    //            file.createNewFile();
-    //            //这里不一定是getAssets，下载的目录不同，我们是公共的download文件夹
-    //            Path p = Paths.get(path+apkName);
-    //            BufferedInputStream bis = new BufferedInputStream(Files.readAllBytes(p));
-    //            FileOutputStream fos = new FileOutputStream(file);
-    //            int len;
-    //            byte[] buff = new byte[1024 * 6];
-    //            while ((len = bis.read(buff)) != -1) {
-    //                fos.write(buff, 0, len);
-    //            }
-    //            fos.flush();    //先冲刷，
-    //            bis.close();    //再关闭输入
-    //            fos.close();    //最后再关闭输出写入的流
-    //        } catch (IOException e) {
-    //            e.printStackTrace();
-    //        }
-    //    }
-    //}
-
-
-    //方法的目的是检查是否已经安装了这个app
-    private boolean detectAPP(String packageName) {
-        List<String> app = new ArrayList<>();
-        List<PackageInfo> installedPackages = appContext.getPackageManager().getInstalledPackages(0);
-        for (int i = 0; i < installedPackages.size(); i++) {
-            app.add(installedPackages.get(i).packageName.toLowerCase());//都需要转化为小写来比较。
-        }
-        return app.contains(packageName.toLowerCase());
     }
 
 
@@ -169,116 +97,105 @@ public class UpgradeFragment extends Fragment implements AppUpgrade {
      */
     private void installApk() {
 
-        File apkfile = new File(Environment.getExternalStorageDirectory(), "downloadtest.apk");
-        //if (!apkfile.exists()) {
+        File apkfile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                "downloadtest.apk");
+        if (!apkfile.exists()) {  //预防没有安装包也跳转??
+            return;
+        }
+        //if (!apkfile.isFile()) {   //和上面的方法相同吗？？
         //    return;
         //}
 
+        /**
+         * Oreo 巧克力饼干 　 API　２７　　Android８.１
+         * 　　　　　　　　　　API　２６　　Android８.０
+         * Nougat　牛轧糖　API２５　Android７.１
+         * 　　　　　　　　 API２４　　Android７.０
+         * Marshmallow　   棉花糖　　 API２３　  Android６.０
+         * Lollipop　　　棒棒糖　　API２２　Android５.１
+         * 　　　　　　　　　　　　　API２１　Android５.０
+         */
+
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
-        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        //兼容 android 6.0
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        //Android的各版本判断：
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            //大于&等于 Android6.0 都需要权限
+            String[] permissions = new String[]{
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            };
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-
-                Uri contentUri = FileProvider.getUriForFile(appContext, BuildConfig.APPLICATION_ID + ".ui.upgrade", apkfile);
-                //FileProvider.getUriForFile()
+                //大于&等于 Android7.0做法：都需要FileProvider，
+                Uri contentUri = FileProvider.getUriForFile(appContext,
+                        "com.jiuhua.jiuhuacontrol.ui.upgrade.MyFileProvider", apkfile);
                 intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
 
-                //兼容 android 7.0
-                //if (android.os.Build.VERSION.SDK_INT >= 25) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    //Android8.0：做法  需要每次授权允许未知来源，& 唤起安装界面。
                     boolean hasInstallPermission = appContext.getPackageManager().canRequestPackageInstalls();
                     if (!hasInstallPermission) {
                         //请求安装未知应用来源的权限
-                        ActivityCompat.requestPermissions((Activity) appContext, new String[]{Manifest.permission.REQUEST_INSTALL_PACKAGES}, 6665);
-                        //TODO 为什么没有操作fileprovder？？
+                        Uri packageURI = Uri.parse("package:" + appContext.getPackageName());
+                        Intent intentForPermission = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, packageURI);
+                        startActivityForResult(intentForPermission, 10001);
+                    } else {
+                        startActivity(intent);
                     }
+
+                }else {
+                    //Android7.0做法
+                    startActivity(intent);
                 }
+
+            } else {
+                //Android6.0的做法：需要动态申请权限，不需要FileProvider。
+                if (appContext.checkSelfPermission(permissions[0]) == PackageManager.PERMISSION_GRANTED &&
+                        ActivityCompat.checkSelfPermission(appContext, permissions[1]) == PackageManager.PERMISSION_GRANTED) {
+                    intent.setDataAndType(Uri.fromFile(apkfile), "application/vnd.android.package-archive");
+                    startActivity(intent);
+                } else {
+                    this.requestPermissions(permissions, 6665);
+                }
+
             }
-            startActivity(intent);
+
         } else {
-            // android 6.0 以下的做法。
-            //moveApk();
+            // android 6.0 以下的做法。  下载的文件在外部公共区域，没有必要再移动了。
             // 通过Intent安装APK文件
-            intent.setDataAndType(Uri.parse("file://" + apkfile.toString()), "application/vnd.android.package-archive");
+            intent.setDataAndType(Uri.parse("file://" + apkfile.toString()),
+                    "application/vnd.android.package-archive");
             startActivity(intent);
         }
 
-        if (appContext.getPackageManager().queryIntentActivities(intent, 0).size() > 0) {
-            appContext.startActivity(intent);
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 6665:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    installApk();
+                }
+                break;
         }
     }
 
-    private void unInstall(String packageName) {
-        Intent intent = new Intent(Intent.ACTION_DELETE);
-        intent.setData(Uri.parse("package:" + packageName));
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 10001) {
+            if (resultCode == RESULT_OK) {
+                installApk();
+            } else {
+                Toast.makeText(appContext, "未打开'安装未知来源'开关,无法安装,请打开后重试", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
-
-    /**
-     * 下载完成的广播  TODO:
-     */
-    //class DownloadReceiver extends BroadcastReceiver {
-    //
-    //    @Override
-    //    public void onReceive(Context context, Intent intent) {
-    //        if (downloader == null) {
-    //            return;
-    //        }
-    //        long completeId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0);
-    //        long downloadTaskId = mAppUpgradePersistent.getDownloadTaskId(context);
-    //        if (completeId != downloadTaskId) {
-    //            return;
-    //        }
-    //
-    //        Query query = new Query();
-    //        query.setFilterById(downloadTaskId);
-    //        Cursor cur;
-    //        cur = downloader.query(query);
-    //        if (!cur.moveToFirst()) {
-    //            return;
-    //        }
-    //
-    //        int columnIndex = cur.getColumnIndex(DownloadManager.COLUMN_STATUS);
-    //        if (DownloadManager.STATUS_SUCCESSFUL == cur.getInt(columnIndex)) {
-    //            String uriString = cur.getString(cur.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
-    //            mHandler.obtainMessage(WHAT_ID_INSTALL_APK, uriString).sendToTarget();
-    //        } else {
-    //            Toast.makeText(context, "xxxApp最新版本失败!", Toast.LENGTH_SHORT).show();
-    //        }
-    //        // 下载任务已经完成，清除
-    //        mAppUpgradePersistent.removeDownloadTaskId(context);
-    //        cur.close();
-    //    }
-    //
-    //}
-
-    /**
-     * 点击通知栏下载项目，下载完成前点击都会进来，下载完成后点击不会进来。TODO:
-     */
-    //class NotificationClickReceiver extends BroadcastReceiver {
-    //    @Override
-    //    public void onReceive(Context context, Intent intent) {
-    //        long[] completeIds = intent.getLongArrayExtra(DownloadManager.EXTRA_NOTIFICATION_CLICK_DOWNLOAD_IDS);
-    //        //正在下载的任务ID
-    //        long downloadTaskId = mAppUpgradePersistent.getDownloadTaskId(context);
-    //        if (completeIds == null || completeIds.length <= 0) {
-    //            openDownloadsPage(appContext);
-    //            return;
-    //        }
-    //
-    //        for (long completeId : completeIds) {
-    //            if (completeId == downloadTaskId) {
-    //                openDownloadsPage(appContext);
-    //                break;
-    //            }
-    //        }
-    //    }
-    //}
-
-
 }

@@ -12,66 +12,38 @@
 
         <TextView
             android:id="@+id/noupgrade"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/upgrade_fragment"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.231"
-            tools:layout_editor_absoluteX="16dp" />
+            app:layout_constraintVertical_bias="0.231" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/upgradegrounp"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="-4dp">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints">
 
             <TextView
                 android:id="@+id/upgradetextview1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="83dp"
+                android:layout_marginBottom="223dp"
                 android:text="有更新"
                 android:textSize="24sp"
-                tools:layout_editor_absoluteX="83dp"
-                tools:layout_editor_absoluteY="244dp" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-            <Button
-                android:id="@+id/button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="现在更新"
-                tools:layout_editor_absoluteX="70dp"
-                tools:layout_editor_absoluteY="452dp" />
-
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="更新内容"
-                android:textSize="20sp"
-                tools:layout_editor_absoluteX="83dp"
-                tools:layout_editor_absoluteY="355dp" />
-
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="放弃更新"
-                tools:layout_editor_absoluteX="226dp"
-                tools:layout_editor_absoluteY="452dp" />
-
-            <TextView
-                android:id="@+id/textView7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="版本号"
-                android:textSize="20sp"
-                tools:layout_editor_absoluteX="83dp"
-                tools:layout_editor_absoluteY="303dp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

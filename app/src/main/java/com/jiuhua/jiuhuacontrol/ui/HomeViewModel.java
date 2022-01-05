@@ -370,7 +370,7 @@ public class HomeViewModel extends AndroidViewModel {
         Gson gson = new Gson();
 
         currentRoomPeriodSheet.setRoomId(roomid);
-        currentRoomPeriodSheet.setTimeStamp(new Date().getTime()/1000);
+        currentRoomPeriodSheet.setTimeStamp(new Date().getTime() / 1000);
         currentRoomPeriodSheet.setOneRoomWeeklyPeriod(dayPeriods);
 
         new Thread(new Runnable() {

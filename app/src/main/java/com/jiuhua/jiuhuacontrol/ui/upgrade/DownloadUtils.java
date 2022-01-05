@@ -73,8 +73,6 @@ public class DownloadUtils {
     }
 
 
-
-
     public DownloadUtils setUrl(String url) {
         this.url = url;
         return this;
