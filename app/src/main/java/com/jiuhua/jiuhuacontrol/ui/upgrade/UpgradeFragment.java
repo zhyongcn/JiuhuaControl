@@ -39,13 +39,14 @@ public class UpgradeFragment extends Fragment implements AppUpgrade {
     private final String TAG = getClass().getName();
     boolean isInit;
     private Context appContext;
+    UpgradeViewModel upgradeViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        UpgradeViewModel homeViewModel = new ViewModelProvider(this).get(UpgradeViewModel.class);
-        homeViewModel.upgrade(Constants.upgradeinfo_url);
+        upgradeViewModel = new ViewModelProvider(this).get(UpgradeViewModel.class);
+        upgradeViewModel.upgrade(Constants.upgradeinfo_url);
 
         appContext = getContext();
     }

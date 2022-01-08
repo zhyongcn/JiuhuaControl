@@ -41,13 +41,15 @@ public class MyRepository {
     LiveData<List<WatershedSheet>> allLatestWatershedSheetsLive;
     LiveData<List<EngineSheet>> allLatestEngineSheetsLive;
     LiveData<List<PeriodSheet>> allLatestPeriodSheetsLive;
+
+    final AppVersionInfo[] appVersionInfos = {new AppVersionInfo()};
+
     MyDao myDao;
     Gson gson = new Gson();
 
     private Retrofit retrofit;
     private CloudServer cloudServer;
 
-    final AppVersionInfo[] appVersionInfos = {new AppVersionInfo()};
 
 
     private MyRepository(Context context) {
@@ -358,5 +360,7 @@ public class MyRepository {
         return allLatestPeriodSheetsLive;
     }
 
-
+    public AppVersionInfo[] getAppVersionInfos() {
+        return appVersionInfos;
+    }
 }
