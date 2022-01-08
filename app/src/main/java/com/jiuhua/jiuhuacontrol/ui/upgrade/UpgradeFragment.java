@@ -3,8 +3,6 @@ package com.jiuhua.jiuhuacontrol.ui.upgrade;
 import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -13,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,20 +23,15 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.jiuhua.jiuhuacontrol.BuildConfig;
 import com.jiuhua.jiuhuacontrol.Constants;
 import com.jiuhua.jiuhuacontrol.R;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
-public class UpgradeFragment extends Fragment implements AppUpgrade {
+public class UpgradeFragment extends Fragment {
     private final String TAG = getClass().getName();
-    boolean isInit;
     private Context appContext;
     UpgradeViewModel upgradeViewModel;
 
@@ -54,42 +48,47 @@ public class UpgradeFragment extends Fragment implements AppUpgrade {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        init(appContext);
 
+        //延时3秒等待网络消息
+        Handler upgradeHandler = new Handler();
+        upgradeHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    AppVersionInfo appVersionInfo = upgradeViewModel.getAppVersionInfo();
+                    int versionCode = appVersionInfo.getVersionCode();
+                    PackageManager packageManager = appContext.getPackageManager();
+                    PackageInfo packageInfo = packageManager.getPackageInfo(appContext.getPackageName(), 0);
+                    if (versionCode > packageInfo.versionCode){
+                        downloadApk(appContext);
+                        Toast.makeText(appContext,"正在下载新版本，请稍等", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(appContext,"现在没有新版本，返回键退出", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, 3000);
+
+        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_upgrade, container, false);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        unInit();
     }
 
-    @Override
-    public void init(Context context) {
-
-        if (isInit) {
-            return;
-        }
+    public void downloadApk(Context context) {
 
         appContext = context.getApplicationContext();
-        isInit = true;
         //这里下载了个app
         DownloadUtils.builder()
                 .setContext(this.getContext())
                 .setLister(uri -> installApk())
                 .download();
 
-    }
-
-    @Override
-    public void unInit() {//解除的目的是什么？
-        if (!isInit) {
-            return;
-        }
-        isInit = false;
-        appContext = null;
     }
 
 
@@ -99,7 +98,7 @@ public class UpgradeFragment extends Fragment implements AppUpgrade {
     private void installApk() {
 
         File apkfile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                "downloadtest.apk");
+                "jiuhuacontrol.apk");
         if (!apkfile.exists()) {  //预防没有安装包也跳转??
             return;
         }
@@ -147,7 +146,7 @@ public class UpgradeFragment extends Fragment implements AppUpgrade {
                         startActivity(intent);
                     }
 
-                }else {
+                } else {
                     //Android7.0做法
                     startActivity(intent);
                 }
@@ -199,4 +198,8 @@ public class UpgradeFragment extends Fragment implements AppUpgrade {
             }
         }
     }
+
+
+
+
 }

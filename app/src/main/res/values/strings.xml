@@ -21,7 +21,7 @@
     <string name="image">底纹图片</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="upgrade_fragment">检查现在有没有更新！</string>
+    <string name="upgrade_fragment">正在检查现在有没有更新。。。</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

@@ -22,7 +22,7 @@ public class DownloadUtils {
 
     private IDownloadlister lister = null;
     //文件名
-    private String fileName = "downloadtest.apk";
+    private String fileName = "jiuhuacontrol.apk";
     //Context
     private Context context;
 
