@@ -131,7 +131,7 @@ public class UpgradeFragment extends Fragment {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 //大于&等于 Android7.0做法：都需要FileProvider，
                 Uri contentUri = FileProvider.getUriForFile(appContext,
-                        "com.jiuhua.jiuhuacontrol.ui.upgrade.MyFileProvider", apkfile);
+                        "com.jiuhua.jiuhuacontrolDEV.ui.upgrade.MyFileProvider", apkfile);
                 intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

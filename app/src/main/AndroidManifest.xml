@@ -28,7 +28,7 @@
 
         <provider
             android:name=".ui.upgrade.MyFileProvider"
-            android:authorities="com.jiuhua.jiuhuacontrol.ui.upgrade.MyFileProvider"
+            android:authorities="com.jiuhua.jiuhuacontrolDEV.ui.upgrade.MyFileProvider"
             android:enabled="true"
             android:exported="true"
             android:grantUriPermissions="true">
