@@ -9,11 +9,12 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Environment;
 
+import com.jiuhua.jiuhuacontrol.Constants;
+
 public class DownloadUtils {
 
     //测试url uniform resource locator，下载链接
-    private String url = "http://81.68.136.113:8080/upgrade/android" +
-            ".apk";
+    private String url = Constants.UPGRADE_URL;
 
     //加.好处是默认隐藏路径
     //private final String FILE_URI = "/storage/emulated/0/Download";
@@ -22,7 +23,7 @@ public class DownloadUtils {
 
     private IDownloadlister lister = null;
     //文件名
-    private String fileName = "jiuhuacontrol.apk";
+    private String fileName = Constants.upgradeFileName;
     //Context
     private Context context;
 

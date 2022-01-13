@@ -9,6 +9,7 @@ public interface Constants {
     int roomState_FEAST = 4;
     int roomState_SLEEP = 5;
     int roomState_OUTSIDE =6;
+    int roomState_OUTLINE =7;
 
     int fanSpeed_STOP = 0;
     int fanSpeed_LOW = 1;
@@ -39,6 +40,8 @@ public interface Constants {
     String mqtt_topic_prefix = "86518/yuxiuhuayuan/12-1-101/room";
     //String mqtt_topic_prefix = "86518/xiangyifuyuan/5-1-502/room";
     String upgradeinfo_url = "http://81.68.136.113:8080/upgrade/versioninfo";
+    String UPGRADE_URL = "http://81.68.136.113:8080/upgrade/heatpumpSimple.apk";
+    String upgradeFileName = "heatpumpSimple.apk";
 
     String UPGRADE_API_DOMAIN_DEBUG = "http://rapapi.org/mockjs/21104";
     String UPGRADE_API_DOMAIN_RELEASE = "http://81.68.136.113:8080/upgrade/android.apk";

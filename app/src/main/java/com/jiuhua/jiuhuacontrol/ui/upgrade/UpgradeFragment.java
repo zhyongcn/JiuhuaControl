@@ -98,7 +98,7 @@ public class UpgradeFragment extends Fragment {
     private void installApk() {
 
         File apkfile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                "jiuhuacontrol.apk");
+                Constants.upgradeFileName);
         if (!apkfile.exists()) {  //预防没有安装包也跳转??
             return;
         }
