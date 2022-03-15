@@ -98,7 +98,7 @@ public class IndoorFragment extends Fragment {
             //以下空调相关显示
             //显示空调设置温度（现在只有一个设置温度）//假浮点需要除以10
             displayAirSetTemperature = homeViewModel.getCurrentlyFancoilSheet().getSettingTemperature() / 10;
-            binding.showAirconditionSettingTemperature.setText("空调设置温度             " + displayAirSetTemperature + "℃");
+            binding.showAirconditionSettingTemperature.setText(displayAirSetTemperature + "℃");
             binding.airconditionSetTemperatureNumber.setText(String.valueOf(accessSetTemperature));
             binding.floorheatTemperatureSetNumber.setText(String.valueOf(accessSetTemperature));
 
@@ -114,25 +114,25 @@ public class IndoorFragment extends Fragment {
             //依据房间的状态改变显示的文字(停止，手动，自动)
             switch (homeViewModel.getCurrentlyFancoilSheet().getRoomStatus()) {
                 case Constants.roomState_OFF: //stop 0, manual 1, auto 2
-                    binding.showAirconditionRunningModel.setText("运行模式                停止模式");
+                    binding.showAirconditionRunningModel.setText("停止模式");
                     break;
                 case Constants.roomState_MANUAL:
-                    binding.showAirconditionRunningModel.setText("运行模式                手动模式");
+                    binding.showAirconditionRunningModel.setText("手动模式");
                     break;
                 case Constants.roomState_AUTO:
-                    binding.showAirconditionRunningModel.setText("运行模式                自动模式");
+                    binding.showAirconditionRunningModel.setText("自动模式");
                     break;
                 case Constants.roomState_OUTSIDE:
-                    binding.showAirconditionRunningModel.setText("运行模式                外出模式");
+                    binding.showAirconditionRunningModel.setText("外出模式");
                     break;
                 case Constants.roomState_SLEEP:
-                    binding.showAirconditionRunningModel.setText("运行模式                睡眠模式");
+                    binding.showAirconditionRunningModel.setText("睡眠模式");
                     break;
                 case Constants.roomState_DEHUMIDITY:
-                    binding.showAirconditionRunningModel.setText("运行模式                除湿模式");
+                    binding.showAirconditionRunningModel.setText("除湿模式");
                     break;
                 case Constants.roomState_FEAST:
-                    binding.showAirconditionRunningModel.setText("运行模式                宴会模式");
+                    binding.showAirconditionRunningModel.setText("宴会模式");
                     break;
                 default:
                     break;
@@ -141,19 +141,19 @@ public class IndoorFragment extends Fragment {
             //风机状态数据驱动显示的文字变化（高中低及自动风）
             switch (homeViewModel.getCurrentlyFancoilSheet().getCurrentFanStatus()) {
                 case Constants.fanSpeed_STOP:
-                    binding.showAirconditionRunningFanspeed.setText("风机状态                   停止");
+                    binding.showAirconditionRunningFanspeed.setText("停止");
                     break;
                 case Constants.fanSpeed_LOW:
-                    binding.showAirconditionRunningFanspeed.setText("风机状态                  低速风");
+                    binding.showAirconditionRunningFanspeed.setText("低速风");
                     break;
                 case Constants.fanSpeed_MEDIUM:
-                    binding.showAirconditionRunningFanspeed.setText("风机状态                  中速风");
+                    binding.showAirconditionRunningFanspeed.setText("中速风");
                     break;
                 case Constants.fanSpeed_HIGH:
-                    binding.showAirconditionRunningFanspeed.setText("风机状态                  高速风");
+                    binding.showAirconditionRunningFanspeed.setText("高速风");
                     break;
                 case Constants.fanSpeed_AUTO:
-                    binding.showAirconditionRunningFanspeed.setText("风机状态                  自动风");
+                    binding.showAirconditionRunningFanspeed.setText("自动风");
                     break;
             }
 
@@ -173,31 +173,31 @@ public class IndoorFragment extends Fragment {
             //显示地暖设置温度（现在只有一个设置温度）
             displayFloorSetTemperature = homeViewModel.getCurrentlyWatershedSheet().getSettingTemperature() / 10;
             binding.floorheatTemperatureSetNumber.setText(String.valueOf(accessSetTemperature));
-            binding.showFloorheatSettingTemperature.setText("地暖设置温度  " + displayFloorSetTemperature + "℃");
+            binding.showFloorheatSettingTemperature.setText(displayFloorSetTemperature + "℃");
 
             //依据房间的状态改变显示的文字(停止，手动，自动)
             switch (homeViewModel.getCurrentlyWatershedSheet().getRoomStatus()) {
                 case Constants.roomState_OFF: //stop 0, manual 1, auto 2
-                    binding.showFloorheatRunningModel.setText("运行模式                 停止模式");
+                    binding.showFloorheatRunningModel.setText("停止模式");
                     break;
                 case Constants.roomState_MANUAL:
-                    binding.showFloorheatRunningModel.setText("运行模式                 手动模式");
+                    binding.showFloorheatRunningModel.setText("手动模式");
                     //binding.showFloorheatRunningModel.setTextColor(0xFFFF0000);
                     break;
                 case Constants.roomState_AUTO:
-                    binding.showFloorheatRunningModel.setText("运行模式                 自动模式");
+                    binding.showFloorheatRunningModel.setText("自动模式");
                     break;
                 case Constants.roomState_OUTSIDE:
-                    binding.showFloorheatRunningModel.setText("运行模式                 外出模式");
+                    binding.showFloorheatRunningModel.setText("外出模式");
                     break;
                 case Constants.roomState_SLEEP:
-                    binding.showFloorheatRunningModel.setText("运行模式                 睡眠模式");
+                    binding.showFloorheatRunningModel.setText("睡眠模式");
                     break;
                 case Constants.roomState_DEHUMIDITY:
-                    binding.showFloorheatRunningModel.setText("运行模式                 除湿模式");
+                    binding.showFloorheatRunningModel.setText("除湿模式");
                     break;
                 case Constants.roomState_FEAST:
-                    binding.showFloorheatRunningModel.setText("运行模式                 宴会模式");
+                    binding.showFloorheatRunningModel.setText("宴会模式");
                     break;
                 default:
                     break;

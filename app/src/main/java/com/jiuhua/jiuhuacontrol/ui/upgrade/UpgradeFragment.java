@@ -199,7 +199,4 @@ public class UpgradeFragment extends Fragment {
         }
     }
 
-
-
-
 }
